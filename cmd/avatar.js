@@ -1,23 +1,49 @@
 const Discord = require("discord.js");
 
-module.exports.run = async (bot, message, args) => {
-    let msgEmbed = new Discord.RichEmbed()
-    .setDescription(":clock1: Sebentar, kato akan mengambil fotomu sebentar, ya!")
-    await message.channel.send(msgEmbed).then(msgEmbed => msgEmbed.delete());
+module.exports.run = async (client, message, args) => {
+  let target_userID = message.guild.members.get(args[0]);
+  let target_author = !args[0];
+  let target_mentions = message.mentions.users.first();
+  let target_server = args[0] === "server";
 
-    let target = message.mentions.members.first() || message.member;
-    
+  if (target_server) {
+    let embed = new Discord.RichEmbed()
+    .setColor("#189764")
+    .setAuthor(message.guild.name, message.guild.iconURL)
+    .setDescription(`[Avatar URL Link](${message.guild.iconURL}?size=2048)`)
+    .setImage(`${message.guild.iconURL}?size=2048`)
+    message.channel.send(embed);
+  };
 
-    let targeticon = (target.displayAvatarURL)
-    let avatarEmbed = new Discord.RichEmbed()
-    .setTitle("Ini avatarnya!")
-    .setImage(targeticon)
-    .setColor("RANDOM")
-    .setTimestamp()
-    .setFooter("BETA Release | ManLord#3143")
+  if (target_mentions) {
+    let embed = new Discord.RichEmbed()
+    .setColor("#189764")
+    .setAuthor(target_mentions.tag, target_mentions.displayAvatarURL)
+    .setDescription(`[Avatar URL Link](${target_mentions.displayAvatarURL})`)
+    .setImage(target_mentions.displayAvatarURL)
+    message.channel.send(embed);
+  };
 
-    await message.channel.send(avatarEmbed);
+  if (target_userID) {
+    let embed = new Discord.RichEmbed()
+    .setColor("#189764")
+    .setAuthor(target_userID.user.tag, target_userID.user.displayAvatarURL)
+    .setDescription(`[Avatar URL Link](${target_userID.user.displayAvatarURL})`)
+    .setImage(target_userID.user.displayAvatarURL)
+    message.channel.send(embed);
+  };
+
+  if (target_author) {
+    let embed = new Discord.RichEmbed()
+    .setColor("#189764")
+    .setAuthor(message.author.tag, message.author.displayAvatarURL)
+    .setDescription(`[Avatar URL Link](${message.author.displayAvatarURL})`)
+    .setImage(message.author.displayAvatarURL)
+    message.channel.send(embed);
+  };
+
 }
+
 
 module.exports.help = {
     name : "avatar"
