@@ -17,8 +17,8 @@ if (!string_message) {
     message.delete().catch(O_o=>{});
     const attachment = new Discord.Attachment(hasil);
     
-    let channel = message.guild.channels.find("name", "event").send(`Kiriman Dari ${message.author} ${attachment}`);
-    
+    let channel = message.guild.channels.find("name", "event").send(attachment);
+    let channel = message.guild.channels.find("name", "event").send(`Kiriman Dari ${nessage.author}`)
     message.channel.send("Gambar Telah Terkirim!")
 };
 
