@@ -12,7 +12,8 @@ module.exports.run = async (bot, message, args) => {
         .addField("Motto", "Bagi Steam Wallet")
         .addField("Terima Kasih Kepada", "Karen-Araragi-Master dan Kato Megumi Fanbase Server")
         .addField("Tim Pengembang", "The OwO Family dan Bot Commander Kato Megumi Fanbase")
-        
+        .setFooter("Stable Release | ManLord#3143")
+        .setAuthor(message.guild.name, message.guild.iconURL)
         return message.channel.send(botembed);
 }
 
