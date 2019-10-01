@@ -1,11 +1,11 @@
 # Usage
 Pertama-tama install terlbih dahulu packagenya
-Package yang dibutuhkan dibot ini :
-1.discord.js
-2.nodemon 
-3.superagent 
-4.moment 
-5.cpu-stat 
+Package yang dibutuhkan dibot ini : 
+discord.js,
+nodemon .
+superagent ,
+moment ,
+cpu-stat ,
 
 Kedua 
 Masukkan prefix dan token kalian 
