@@ -38,6 +38,7 @@ module.exports.run = async (bot, message, args) => {
         .addField("Roles", message.guild.roles.size, true)
         .addField("Tanggal Dibuat   ", `${message.channel.guild.createdAt.toUTCString().substr(0, 16)} (${checkDays(message.channel.guild.createdAt)})`, true)
         .setThumbnail(message.guild.iconURL)
+        .setFooter("Stable Release | ManLord#3143")
     message.channel.send({embed});
 }
 
