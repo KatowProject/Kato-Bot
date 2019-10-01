@@ -9,7 +9,7 @@ cpu-stat ,
 
 Kedua 
 Masukkan prefix dan token kalian 
-bisa lihat di file botconfig.js
+bisa lihat di file botconfig.json
 
 
 Jika sudah semua dilakukan
