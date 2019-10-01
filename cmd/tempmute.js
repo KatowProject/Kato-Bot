@@ -42,14 +42,17 @@ module.exports.run = async (client, message, args) => {
     };
  
   let embed = new Discord.RichEmbed()
-    .setDescription(`Mute executed by ${message.author}`)
+    .setTitle(`Mute | ${mutee.user.username}#${mutee.user.discriminator}`)
     .setColor("#000000")
-    .addField("User", mutee)
-    .addField("in", message.channel)
-    .addField("Waktu", message.createdAt)
+    .addField("User", mutee , true)
+    .addField("Moderator", message.atuhor, true)
     .addField("Durasi", mutetime)
-    .addField("Alasan", reason);
+    .addField("Alasan", reason)
+    .setTimestamp();
  
+
+    
+
   let channel = message.guild.channels.find(c => c.name === "mod-logs");
   if(!channel) return message.reply("Please create a incidents channel first!");
   channel.send(embed);
