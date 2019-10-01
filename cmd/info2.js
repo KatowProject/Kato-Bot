@@ -10,7 +10,8 @@ module.exports.run = async (bot, message, args) => {
         .addField("k!stats", "Melihat Status PC yang menjalankan BOT Kato")
         .addField("k!userinfo", "Melihat Info User")
         .addField("k!serverinfo", "Melihat Info Server")
-        
+        .setFooter("Stable Release | ManLord#3143")
+        .setAuthor(message.guild.name, message.guild.iconURL)
         return message.channel.send(botembed);
 }
 
