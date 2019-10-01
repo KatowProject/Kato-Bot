@@ -5,7 +5,7 @@ const Discord = require("discord.js")
         .setColor("RANDOM")
         .setAuthor(message.guild.name, message.guild.iconURL)
         .addField("k!saran", `Memberi Saran untuk Server ${message.guild.name}`)
-        .addField("k!tempbisu", `Memberi Laporan Untuk Server ${message.guild.name}`)
+        .addField("k!lapor", `Memberi Laporan Untuk Server ${message.guild.name}`)
         return message.channel.send(botembed);
 }
 
