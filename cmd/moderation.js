@@ -12,6 +12,8 @@
         .addField("k!unban" , "Menghapus Status BAN pada sebuah user")
         .addField("k!addrole", "Menambahkan Role kepada User")
         .addField("k!removerole","Menarik/Melepaskan Role kepada User")
+        .setFooter("Stable Release | ManLord#3143")
+        .setAuthor(message.guild.name, message.guild.iconURL)
         return message.channel.send(botembed);
 }
 
