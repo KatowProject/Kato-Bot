@@ -7,7 +7,7 @@ module.exports.run = async (bot, message, args) => {
         .setThumbnail(bicon)
         .setAuthor(message.guild.name, message.guild.iconURL)
         .setAuthor("List Kategori Perintah")
-        .setFooter("BETA Release | ManLord#3143")
+        .setFooter("Stable Release | ManLord#3143")
         .addField("``k!feedbacks``","Kato akan menunjukkan Commands untuk Kebutuhan Feedbacks.")
         .addField("``k!moderasi``", "Kato akan menunjukkan Commands untuk Kebutuhan Moderasi.")
         .addField("``k!info``", "Kato akan menunjukkan Commands yang berhubungan dengan info/biodata.")
