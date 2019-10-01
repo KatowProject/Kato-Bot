@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-    return message.channel.send("https://cdn.discordapp.com/attachments/519859252966457369/594216553860562944/hanura.png")
+const attachment = new Discord.Attachment('https://cdn.discordapp.com/attachments/519859252966457369/598524411095810048/hanura_copy.jpg');
+       
+     message.channel.send(attachment);
 }
 
 module.exports.help = {
