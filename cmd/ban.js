@@ -6,13 +6,6 @@ const { Client, Message, RichEmbed } = require('discord.js');
  * @param {Message} message
  * @param {[]} args
  */
-
-let xdemb = new Discord.RichEmbed()
-.setColor("#00ff00")
-.setTitle("Perintah BAN")
-.addField("Penggunaan:", "k!ban [user] [reason]", true)
-.addField("Contoh:" ,"k!ban @juned spam", true)
-
 module.exports.run = async (client, message, args) => {
     let member = message.mentions.members.first();
     let reason = args.slice(1).join(" ") || "Tidak ada alasan";
@@ -20,7 +13,7 @@ module.exports.run = async (client, message, args) => {
 
     // Ketika tidak ada di mention
     if (!member)
-        return message.reply(xdemb);
+        return message.reply('tag user yang ingin di :hammer:');
 
     // Ketika usernamenya sama ama yang di mention
     if (member.user.id === message.author.id)
@@ -35,13 +28,29 @@ module.exports.run = async (client, message, args) => {
         return message.reply('Anda tidak bisa membanned staff!');
 
     member.ban({ reason: reason })
-        .then(banMember => {
+        .then((banMember) => {
             message.reply(`Anda berhasil membanned **${banMember.user.username}#${banMember.user.discriminator}** dengan alasan:\n${reason}`);
         })
-        .catch(err => {
+        .catch((err) => {
             message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);
-        });
+    
+    });
+    //log
+    let embed = new Discord.RichEmbed()
+      .setColor("#00ff00")
+      .setTitle(`BAN | ${member.user.username}#${member.user.discriminator}`)
+      .addField("User", member, true)
+      .addField("Moderator", message.author, true)
+      .addField("Alasan", reason)
+      .setTimestamp()
+      .setFooter(`${message.member.id}`, message.guild.iconURL)
+
+    let channel = message.guild.channels.find(c => c.name === "warn-activity");
+  if (!channel) return message.reply("Please create a incidents channel first!");
+  return message.channel.send(embed);
 }
+
+
 
 module.exports.help = {
     name: "ban"
