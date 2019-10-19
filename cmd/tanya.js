@@ -11,15 +11,9 @@ module.exports.run = async (bot, message, args) => {
     let balas = ["Ya." , `Tidak ${badman} ` , "Aku tidak mengetahuinya! :triumph:." , `Tanyakan lagi nanti ${pepeok}.` , `Pertanyaan mu gaje ${pepebruh}. ` , `${paansi}.` ];
 
     let hasil = Math.floor((Math.random() * balas.length));
-    let pertanyaan = args.slice(1).join("");
+    let pertanyaan = args.slice(1).join('');
 
-    let embed = new Discord.RichEmbed()
-    .setAuthor(message.author.tag)
-    .setColor("#RANDOM")
-    .addField("Pertanyaan" , pertanyaan)
-    .addField("Jawaban" , balas[hasil])
-
-    message.channel.send(embed)
+    message.channel.send(balas[hasil])
 }
     
     module.exports.help = {
