@@ -6,14 +6,14 @@ module.exports.run = async (bot, message, args) => {
         
     let botembed = new Discord.RichEmbed()
     let bicon = bot.user.displayAvatarURL
-    .setColor("#985ce7")
+    .setColor("#46cb18")
     .setThumbnail(bicon)
     .setAuthor(message.guild.name, message.guild.iconURL)
     .setTitle(`Kato-Bot | Bot Local ${santai} `)
-    .addField(` :tools: **Moderasi** :tools:`, "`k!moderasi`", true)
-    .addField(` :mega:  **Feedbacks** :mega:  `, "`k!feedbacks`", true)
-    .addField(`:information_source:  **Info** :information_source: `, "k!Info", true)
-    .addField(` ${haha} **Fun** ${haha} ` , "k!fun" , true)
+    .addField(`  **Moderasi** :tools:`, "`k!moderasi`", true)
+    .addField(` **Feedbacks** :mega:  `, "`k!feedbacks`", true)
+    .addField(` **Info** :information_source: `, "`k!Info`", true)
+    .addField(` **Fun** ${haha} ` , "`k!fun`" , true)
     
       
 
