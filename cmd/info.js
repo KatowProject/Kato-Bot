@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
         let bicon = bot.user.displayAvatarURL;
         let botembed = new Discord.RichEmbed()
-        .setColor("RANDOM")
+        .setColor("#985ce7")
         .setThumbnail(bicon)
         .addField("Nama", "Kato Megumi")
         .addField("Tanggal Lahir", "23 September")
