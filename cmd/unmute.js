@@ -36,7 +36,7 @@ await message.guild.member(userID).removeRole(roleMuted.id);
 // log
 let embed = new Discord.RichEmbed()
 .setTitle(`Mute | ${mutee.user.username}#${mutee.user.discriminator}`)
-.setColor("#RANDOM")
+.setColor("#985ce7")
 .addField("User", mutee , true)
 .addField("Moderator", message.author, true)
 .setTimestamp()
