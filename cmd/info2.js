@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports.run = async (bot, message, args) => {
     let uicon = bot.user.displayAvatarURL;
     let botembed = new Discord.RichEmbed()
-    .setColor("RANDOM")
+    .setColor("#985ce7")
         .setThumbnail(uicon)
         .addField("k!about", "Melihat Tentang BOT Kato")
         .addField("k!avatar", "Melihat Avatar seseorang")
