@@ -27,7 +27,7 @@ module.exports.run = async (bot, message, args) => {
     };
     const embed = new Discord.RichEmbed()
         .setAuthor(message.guild.name, message.guild.iconURL)
-        .setColor(`RANDOM`)
+        .setColor(`#985ce7`)
         .addField("Nama", message.guild.name, true)
         .addField("ID", message.guild.id, true)
         .addField("Pemilik", `${message.guild.owner.user.username}#${message.guild.owner.user.discriminator}`, true)
