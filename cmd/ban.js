@@ -37,7 +37,7 @@ module.exports.run = async (client, message, args) => {
     });
     //log
     let embed = new Discord.RichEmbed()
-      .setColor("#00ff00")
+      .setColor("#985ce70")
       .setTitle(`BAN | ${member.user.username}#${member.user.discriminator}`)
       .addField("User", member, true)
       .addField("Moderator", message.author, true)
