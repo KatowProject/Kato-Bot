@@ -1,16 +1,19 @@
 const Discord = require("discord.js");
 
+var haha = "<:haha:556730216504885249>"
+var santai = "<:santai:586185795128262686>"
 module.exports.run = async (bot, message, args) => {
-        let bicon = bot.user.displayAvatarURL;
-        let botembed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setThumbnail(bicon)
-        .setAuthor(message.guild.name, message.guild.iconURL)
-        .setAuthor("List Kategori Perintah")
-        .setFooter("Stable Release | ManLord#3143")
-        .addField("``k!feedbacks``","Kato akan menunjukkan Commands untuk Kebutuhan Feedbacks.")
-        .addField("``k!moderasi``", "Kato akan menunjukkan Commands untuk Kebutuhan Moderasi.")
-        .addField("``k!info``", "Kato akan menunjukkan Commands yang berhubungan dengan info/biodata.")
+        
+    let botembed = new Discord.RichEmbed()
+    let bicon = bot.user.displayAvatarURL
+    .setColor("#46cb18")
+    .setThumbnail(bicon)
+    .setAuthor(message.guild.name, message.guild.iconURL)
+    .setTitle(`Kato-Bot | Bot Local ${santai} `)
+    .addField(` :tools: **Moderasi** :tools:`, "`k!moderasi`", true)
+    .addField(` :mega:  **Feedbacks** :mega:  `, "`k!feedbacks`", true)
+    .addField(`:information_source:  **Info** :information_source: `, "k!Info", true)
+    .addField(` ${haha} **Fun** ${haha} ` , "k!fun" , true)
     
       
 
