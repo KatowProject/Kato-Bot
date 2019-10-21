@@ -5,7 +5,7 @@ module.exports.run = async (client, message, args) => {
     message.delete().catch(O_o=>{});
 
     let embed = new Discord.RichEmbed()
-    .setColor("RANDOM")
+    .setColor("#985ce7")
     .addField("Masukan Dari : ", message.author, true)
     .addField("Isi", saran)
     .setFooter(`ID: ${message.member.id}`, message.guild.iconURL)
