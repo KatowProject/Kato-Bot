@@ -1,4 +1,4 @@
-
+// Note : Agar tidak terjadinya kebocoran informasi , jadikan cmd ini sebagai owner only atau yang berhubungan saja
 const Discord = require('discord.js');
 const awasAdaToken = ["Token: kontol"];
 
