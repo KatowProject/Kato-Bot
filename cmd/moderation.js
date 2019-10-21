@@ -8,12 +8,12 @@
         .addField("k!tempbisu", "Membisukan Sebuah User dengan Durasi")
         .addField("k!kick", "Menendang Sebuah User")
         .addField("k!ban" , "Mengeluarkan Sebuah User Sepenuhnya")
+        .addField("k!elm" , "Memberikan Role ELM")
+        .addField("k!unelm" , "Melepaskan Role ELM")
         .addField("k!unmute" , "Menghilangkan Status Bisu")
         .addField("k!unban" , "Menghapus Status BAN pada sebuah user")
         .addField("k!addrole", "Menambahkan Role kepada User")
         .addField("k!removerole","Menarik/Melepaskan Role kepada User")
-        .setFooter("Stable Release | ManLord#3143")
-        .setAuthor(message.guild.name, message.guild.iconURL)
         return message.channel.send(botembed);
 }
 
