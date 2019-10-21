@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args) => {
     let embed = new Discord.RichEmbed()
     .setAuthor(user.username + '#' + user.discriminator, user.displayAvatarURL)
         .setDescription(`${user}`)
-        .setColor(`RANDOM`)
+        .setColor(`#985ce7`)
         .setThumbnail(`${user.displayAvatarURL}`)
         .addField('Joined at:', `${masuk}`)
         .addField('Status:', user.presence.status, true)
