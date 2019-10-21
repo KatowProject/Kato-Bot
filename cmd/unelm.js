@@ -26,7 +26,7 @@ korban.removeRole(berimute.id).then(() => {
 
 let embed = new Discord.RichEmbed()
 .setTitle(`UNELM | ${korban.user.username}#${korban.user.discriminator}`)
-.setColor("#RANDOM")
+.setColor("#985ce7")
 .addField("User", korban , true)
 .addField("Moderator", message.author, true)
 .setTimestamp()
