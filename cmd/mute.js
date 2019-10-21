@@ -22,7 +22,7 @@ mutee.addRole(muterole.id).then(() => {
 
 let embed = new Discord.RichEmbed()
 .setTitle(`Mute | ${mutee.user.username}#${mutee.user.discriminator}`)
-.setColor("#RANDOM")
+.setColor("#985ce7")
 .addField("User", mutee , true)
 .addField("Moderator", message.author, true)
 .addField("Alasan", reason, true)
