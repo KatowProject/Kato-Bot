@@ -13,6 +13,8 @@
     "discord.js": "^11.5.1",
     "komada": "^0.21.1",
     "moment": "^2.24.0",
+    "nekos.life": "^2.0.4",
+    "request": "^2.88.0",
     "superagent": "^5.0.5"
   }
 }
