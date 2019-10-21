@@ -28,7 +28,7 @@ module.exports.run = async (bot, message, args) => {
       .catch(error => message.reply(`Oh tidak, kato tidak bisa mendendangnya karena of : ${error}`));
 
       let embed = new Discord.RichEmbed()
-      .setColor("#00ff00")
+      .setColor("#985ce7")
       .setTitle(`Kick | ${member.user.tag}`)
       .addField("User", member, true)
       .addField("Moderator", message.author, true)
