@@ -28,7 +28,7 @@ mutee.addRole(berimute.id).then(() => {
 
 let embed = new Discord.RichEmbed()
 .setTitle(`ELM | ${mutee.user.username}#${mutee.user.discriminator}`)
-.setColor("#RANDOM")
+.setColor("#985ce7")
 .addField("User", mutee , true)
 .addField("Moderator", message.author, true)
 .addField("Alasan", reason, true)
