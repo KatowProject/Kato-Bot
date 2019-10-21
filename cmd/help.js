@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
         
     let botembed = new Discord.RichEmbed()
     let bicon = bot.user.displayAvatarURL
-    .setColor("#46cb18")
+    .setColor("#985ce7")
     .setThumbnail(bicon)
     .setAuthor(message.guild.name, message.guild.iconURL)
     .setTitle(`Kato-Bot | Bot Local ${santai} `)
