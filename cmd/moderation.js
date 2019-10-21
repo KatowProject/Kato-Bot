@@ -2,7 +2,7 @@
 
     module.exports.run = async (bot, message, args) => {
         let botembed = new Discord.RichEmbed()
-        .setColor("RANDOM")
+        .setColor("#985ce7")
         .setAuthor(message.guild.name, message.guild.iconURL)
         .addField("k!bisu", "Membisukan Sebuah User")
         .addField("k!tempbisu", "Membisukan Sebuah User dengan Durasi")
