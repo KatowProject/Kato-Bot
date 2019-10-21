@@ -6,7 +6,7 @@ var santai = "<:santai:586185795128262686>";
 
 module.exports.run = async (bot, message, args) => {
         let botembed = new Discord.RichEmbed()
-        .setColor("RANDOM")
+        .setColor("#985ce7")
         .setAuthor(message.guild.name, message.guild.iconURL)
         .addField("Klaim Role Santai", "Mengakses Channel yang telah disediakan Server")
         .addField("Cara Mendapatkannya", `React ${santai} untuk mendapatkannya `)
