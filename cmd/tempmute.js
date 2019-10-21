@@ -43,7 +43,7 @@ module.exports.run = async (client, message, args) => {
  
   let embed = new Discord.RichEmbed()
     .setTitle(`Mute | ${mutee.user.username}#${mutee.user.discriminator}`)
-    .setColor("#000000")
+    .setColor("#985ce7")
     .addField("User", mutee , true)
     .addField("Moderator", message.atuhor, true)
     .addField("Durasi", mutetime)
