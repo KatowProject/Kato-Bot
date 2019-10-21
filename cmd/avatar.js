@@ -8,7 +8,7 @@ module.exports.run = async (client, message, args) => {
 
   if (target_server) {
     let embed = new Discord.RichEmbed()
-    .setColor("#189764")
+    .setColor("#985ce7")
     .setAuthor(message.guild.name, message.guild.iconURL)
     .setDescription(`[Avatar URL Link](${message.guild.iconURL}?size=2048)`)
     .setImage(`${message.guild.iconURL}?size=2048`)
@@ -17,7 +17,7 @@ module.exports.run = async (client, message, args) => {
 
   if (target_mentions) {
     let embed = new Discord.RichEmbed()
-    .setColor("#189764")
+    .setColor("#985ce7")
     .setAuthor(target_mentions.tag, target_mentions.displayAvatarURL)
     .setDescription(`[Avatar URL Link](${target_mentions.displayAvatarURL})`)
     .setImage(target_mentions.displayAvatarURL)
@@ -26,7 +26,7 @@ module.exports.run = async (client, message, args) => {
 
   if (target_userID) {
     let embed = new Discord.RichEmbed()
-    .setColor("#189764")
+    .setColor("#985ce7")
     .setAuthor(target_userID.user.tag, target_userID.user.displayAvatarURL)
     .setDescription(`[Avatar URL Link](${target_userID.user.displayAvatarURL})`)
     .setImage(target_userID.user.displayAvatarURL)
@@ -35,7 +35,7 @@ module.exports.run = async (client, message, args) => {
 
   if (target_author) {
     let embed = new Discord.RichEmbed()
-    .setColor("#189764")
+    .setColor("#985ce7")
     .setAuthor(message.author.tag, message.author.displayAvatarURL)
     .setDescription(`[Avatar URL Link](${message.author.displayAvatarURL})`)
     .setImage(message.author.displayAvatarURL)
