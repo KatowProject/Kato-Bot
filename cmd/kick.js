@@ -1,48 +1,54 @@
-const Discord = require("discord.js")
-module.exports.run = async (bot, message, args) => {
+const Discord = require("discord.js");
+const { Client, Message, RichEmbed } = require('discord.js');
 
-  if (!message.member.hasPermission("KICK_MEMBERS")  && message.author.id !== "291221132256870400") return message.channel.send("Sorry, you don't have permissions to use this!");
-    
-  let xdemb = new Discord.RichEmbed()
-  .setColor("#00ff00")
-  .setTitle("Perintah Kick")
-  .addField("Description:", `Menendang Sebuah User/Member`, true)
-  .addField("Penggunaan:", "k.kick [user] [reason]", true)
-  .addField("Contoh:" ,"k.kick @juned spam")
+/**
+ * @param {Client} client
+ * @param {Message} message
+ * @param {[]} args
+ */
 
+module.exports.run = async (client, message, args) => {
     let member = message.mentions.members.first();
-    if(!member) return message.channel.send(xdemb)
-      
-    if(!member.kickable) 
-      return message.channel.send("Aku tak Bisa Melawannya!");
-    
-    let reason = args.slice(1).join(' ');
-    if(!reason) {
-      res = "Tidak Ada Alasan";
-    }
-    else {
-      res = `${reason}`
-    }
-    
-    await member.kick(reason)
-      .catch(error => message.reply(`Oh tidak, kato tidak bisa mendendangnya karena of : ${error}`));
+    let reason = args.slice(1).join(" ") || "Tidak ada alasan";
+    let author = message.guild.members.get(message.author.id);
 
-      let embed = new Discord.RichEmbed()
-      .setColor("#985ce7")
-      .setTitle(`Kick | ${member.user.tag}`)
-      .addField("User", member, true)
-      .addField("Moderator", message.author, true)
-      .addField("Alasan", res)
-      .setTimestamp()
-      .setFooter(`${message.member.id}`, message.guild.iconURL)
+    // Ketika tidak ada di mention
+    if (!member)
+        return message.reply("Tag user yang ingin ditendang!");
 
-      let channel = message.guild.channels.find(c => c.name === "warn-activity");
+    // Ketika usernamenya sama ama yang di mention
+    if (member.user.id === message.author.id)
+        return message.reply('Anda tidak bisa membanned diri anda sendiri.');
+
+    // Ketika yang membanned adalah member
+    if (!author.hasPermission("ADMINISTRATOR") || !author.hasPermission("MANAGE_GUILD"))
+        return message.reply('Anda tidak memiliki Akses!');
+
+    // Ketika yang dibanned adalah admin/momod
+    if (member.hasPermission("ADMINISTRATOR") || member.hasPermission("MANAGE_GUILD"))
+        return message.reply('Anda tidak bisa membanned staff!');
+
+    member.kick({ reason: reason })
+        .then(kickMember => {
+            message.reply(`Anda berhasil membanned **${kickMember.user.username}#${kickMember.user.discriminator}** dengan alasan:\n${reason}`);
+        })
+        .catch(err => {
+            message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);
+        });
+    let embed = new RichEmbed()
+    .setTitle(`Kick | ${member.user.username}#${member.user.discriminator}`)
+    .setColor("#RANDOM")
+    .addField("User", member , true)
+    .addField("Moderator", message.author, true)
+    .addField("Alasan", reason, true)
+    .setTimestamp()
+    .setFooter(`${message.member.id}`, message.guild.iconURL)
+
+    let channel = message.guild.channels.find(c => c.name === "mod-logs");
   if (!channel) return message.reply("Please create a incidents channel first!");
   channel.send(embed);
 
-    message.delete();
-    
+    }
+module.exports.help = {
+    name: "kick"
 }
-      module.exports.help = {
-        name: "kick"
-      }
