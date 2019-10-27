@@ -1,13 +1,12 @@
 const { RichEmbed } = require("discord.js");
 const client = require("nekos.life")
-const Discord = require("discord.js")
 const { sfw } = new client();
 
 module.exports.run = async (bot, message, args) => {
  let baka = await sfw.baka();
  let member = !args[0];
  if (member) {
-  let embed = new Discord.RichEmbed()
+  let embed = new RichEmbed()
    .setTitle(`${message.guild.member(message.author).displayName} Mengatakan Bodoh! ≡(▔﹏▔)≡`)
    .setColor("#985ce7")
    .setImage(baka.url);
