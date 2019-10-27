@@ -1,4 +1,4 @@
 {
-	"prefix": "insert prefix",
+	"prefix": ["insert prefix in lowercase", "INSERT PREFIX IN UPPERCASE"],
 	"token" : "insert token"
 }
