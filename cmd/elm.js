@@ -40,8 +40,7 @@ let embed = new Discord.RichEmbed()
   if (!channel) return message.reply("Please create a incidents channel first!");
   channel.send(embed);
 
-  let pemindahan = message.guild.channels.find(c => c.name === "ruang-bk");
-  pemindahan.reply("​Selamat datang di #ruang-bk, member yang hanya bisa melihat channel ini artinya sedang dalam hukuman karena telah melanggar sesuatu. Jika anda merasa pernah melakukan sesuatu yang melanggar rules, silahkan beritahu disini agar segera diproses oleh staff dan dapat melanjukan kembali aktivitas chat secara normal.");
+  
 }
 
 module.exports.help = {
