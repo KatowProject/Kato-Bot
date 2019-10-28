@@ -36,7 +36,7 @@ let embed = new Discord.RichEmbed()
 .setFooter(`${message.member.id}`, message.guild.iconURL);
 
 
-  let channel = message.guild.channels.find(c => c.name === "warn-activity");
+  let channel = client.channels.get("438330646537044013");
   if (!channel) return message.reply("Please create a incidents channel first!");
   channel.send(embed);
 
