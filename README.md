@@ -14,4 +14,4 @@ bisa lihat di file botconfig.json
 
 Jika sudah semua dilakukan
 Jalankan dengan command prompt atau sejenisnya
-lalu ketik "nodemon index.js" <br/(
+lalu ketik "nodemon index.js" <br/>
