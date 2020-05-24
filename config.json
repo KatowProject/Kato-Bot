@@ -1,5 +1,8 @@
 {
   "owners": [""],
   "prefix": "k!",
+  "prefix2" : "k.",
+  "GOOGLE_API_KEY" : "",
   "token": ""
+  
 }
