@@ -10,7 +10,7 @@ const { Client, Message, MessageEmbed } = require('discord.js');
     
         try {
     
-        let member = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
+        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         let reason = args.slice(1).join(" ") || "Tidak ada alasan";
         let author = message.guild.members.cache.get(message.author.id);
     

@@ -6,14 +6,12 @@ const Discord = require('discord.js'),
 
 module.exports = (client, message) => {
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
-  
+  require('./ar.js'); require('./nsfw.js');
   let prefix;
   if (message.content.toLowerCase().startsWith(client.config.prefix)) {
     prefix = client.config.prefix; // Cek folder, config.json.
-  } else if (message.content.toLowerCase().startsWith(`<@${client.user.id}> `)) {
-    prefix = `<@${client.user.id}> `
-  } else if (message.content.toLowerCase().startsWith(`<@!${client.user.id}> `)){
-    prefix = `<@!${client.user.id}> `
+  } else if (message.content.toLowerCase().startsWith(client.config.prefix2)) {
+    prefix = client.config.prefix2
   }
   
   // Prefix nya bisa antara di mention, ama antara pake prefix biasa (k!)

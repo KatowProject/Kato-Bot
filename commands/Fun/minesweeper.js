@@ -88,12 +88,12 @@ exports.run = async (client, message, args) => {
 }
 
 exports.conf = {
-  aliases: ["minesweeper"],
+  aliases: ["ms"],
   cooldown: 5
 }
 
 exports.help = {
-  name: 'ms',
+  name: 'minesweeper',
   description: 'bermain minesweeper',
   usage: 'k!ms',
   example: 'k!ms'

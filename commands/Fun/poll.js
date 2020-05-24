@@ -6,8 +6,9 @@ exports.run = async (client, message, args) => {
     var isi = args.join(' ')
 
     let embed = new Discord.MessageEmbed()
-    .setTitle('**Voting**')
+    .setAuthor('Voting')
     .setDescription(isi)
+    .setTitle()   
     .setFooter('Beri Reaksi untuk vote!')
     .setColor("#985ce7")
 

@@ -81,7 +81,7 @@ exports.run = async (client, message, args) => {
   function detailToEmbed (data) {
     const province = data.provinceState !== null ? `${data.provinceState}, ` : ''
     embed
-      .setAuthor(`[${data.iso2}|${data.iso3}] ${province}${data.countryRegion} (${data.lat}, ${data.long})`, '', 'https://github.com/mathdroid/covid-19-api')
+      .setAuthor(`[${data.iso3}] ${province}${data.countryRegion} (${data.lat}, ${data.long})`, '', 'https://github.com/mathdroid/covid-19-api')
       .setDescription(`Terakhir diperbaharui pada ${moment(data.lastUpdate).utcOffset(8).locale('id').format('dddd, DD-MM-YYYY HH:mm:ss')}.`)
       .addField('Kasus Dikonfirmasi: ', `${numeralFormat(data.confirmed)} orang`, true)
       .addField('Sembuh: ', `${numeralFormat(data.recovered)} orang (${((data.recovered / data.confirmed) * 100).toFixed(2)}%)`, true)

@@ -3,13 +3,15 @@ const Kato = require("./handler/ClientBuilder.js");
 const client = new Kato({ disableEveryone: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const recent = new Set();
 
-require("./handler/module.js")(client);
-require("./handler/Event.js")(client);  
+//Music Bot
+const {Player} = require('discord-player')
+const player  = new Player(client, client.config.GOOGLE_API_KEY)
+client.player = player;
+client.emoji  = require('./commands/Music/emoji.json')
+client.warna  = require('./commands/Music/colors.json')
 
-client.on("message", async message =>{
-  require('./handler/srcv2/ar.js')(client,message);
-  require('./handler/srcv2/NSFW.js')(client,message)
-})
+require("./handler/module.js")(client);
+require("./handler/Event.js")(client);
 
 client.package = require("./package.json")
 client.on("warn", console.warn);
@@ -17,8 +19,7 @@ client.on("error", console.error);
 client.on("disconnect", () => console.log("Disconnected."));
 client.on("reconnecting", () => console.log("Reconnecting."));
 
-const {token} = require('./config.json') //token
-client.login(token).catch(console.error);
+client.login(client.config.token).catch(console.error);
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", reason.stack || reason);

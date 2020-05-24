@@ -13,7 +13,7 @@ exports.run = async (client, message, args) => {
         // Attachment ID
         let gAttachment = message_id.attachments.map(file => file.id);
         // Get Attachment ID
-        let attachment_id = message_id.attachments.cache.get(`${gAttachment}`);
+        let attachment_id = message_id.attachments.get(`${gAttachment}`);
         // URL Images
         let attached = `${attachment_id.url}`;
 
