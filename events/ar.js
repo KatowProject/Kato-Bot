@@ -2,7 +2,7 @@ const {MessageEmbed , Attachment} = require('discord.js')
 module.exports = (client, message) => {
 let pedo = new MessageEmbed()
 .setColor('#985ce7')
-.setImage("https://archaes.github.io/assets/img/pedo.png")
+.setImage("https://cdn.discordapp.com/attachments/519859252966457369/641765228987809802/FB_IMG_1571834909693.png")
 if (message.content.toLowerCase() === 'pedo') { 
       message.channel.send(pedo);
   } 
@@ -10,7 +10,7 @@ if (message.content.toLowerCase() === 'pedo') {
 {
 let ngaca = new MessageEmbed()
 .setColor('#985ce7')
-.setImage("https://archaes.github.io/assets/img/ngaca.png")
+.setImage("https://media.discordapp.net/attachments/447408276628307969/714442765311803472/Screenshot_2020-05-25-18-40-09-59.png")
 if (message.content.toLowerCase() === 'ngaca') {
   message.channel.send(ngaca)
 } 
