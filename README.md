@@ -3,6 +3,8 @@
 
 Sebuah template yang dibuat oleh ray#1337 (331265944363991042) dan dikhususkan untuk Discord Bot private saja, yaitu Kato (Bot Khas Perkumpulan Orang Santai)
 
+> Santai kok, bisa dipake buat diserver kamu juga kok. <3
+
 ## Hak Cipta
 Projek ini dilindungi oleh **Attribution-ShareAlike 4.0 International** yang dimana penggunanya boleh menggunakan, mendistribusikan, menampilkan, bahkan
 memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/apresiasi selama penggunaan.__
@@ -14,16 +16,16 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 
 ## Pemilik
 Owner:  <br>
-ManLord#3143 <br>
+**ManLord#3143** <br>
 <br>
 Creator:  <br>
-ray#1337 <br>
+**ray#1337** <br>
 <br>
 Bot Commander :  <br>
-Stellarz_Munn#4554 <br>
-Exceelish#5332 <br>
-hana#6188 <br>
-Carl#5803 <br>
+**Stellarz_Munn#4554** <br>
+**Exceelish#5332** <br>
+**hana#6188** <br>
+**Carl#5803** <br>
 
 
 ## Instalasi
@@ -31,10 +33,10 @@ Carl#5803 <br>
 - Install yarn (jika ingin menggunakan `yarn` daripada `npm`) atau install npm
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
-- Edit file `config.json` untuk memasukan prefix, owner dan tokennya.
+- Edit file `config.json` untuk memasukan prefix, owner/pemilik bot/admin bot ID dan tokennya.
 
 ## Penggunaan
-ketik di terminal `node index.js` untuk menjalankan bot-nya.
+Ketik di terminal `node index.js` untuk menjalankan bot-nya.
 
 ## Arigatou-Gozaimasu~
 Terimakasih!
