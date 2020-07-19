@@ -11,7 +11,7 @@ exports.run = async (client, message, args) => {
 
 
         mutee.roles.add(role).then(() => {
-            message.channel.send(`${mutee.user.tag} telah selesai di mute.\nAlasan : Menghina Kato`)
+            message.channel.send(`${mutee.user.tag} telah selesai diberi \`Kool-E\`.\nAlasan : Menghina Kato`)
         })
 
         let embed = new Discord.MessageEmbed()
@@ -23,6 +23,10 @@ exports.run = async (client, message, args) => {
             .setFooter(`${message.member.id}`, message.guild.iconURL);
 
         client.channels.cache.get("438330646537044013").send(embed);
+
+        setTimeout(() => {
+            mutee.roles.remove(role)
+        }, 900000);
 
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);

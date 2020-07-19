@@ -10,7 +10,7 @@ module.exports = async (client, message) => {
         let status = await afk.fetch(mentioned.id);
 
         if (status) {
-            message.reply(`**${mentioned.user.tag}** saat ini sedang AFK\n**Alasan: ${status}**`).then(
+            message.reply(`**${mentioned.user.tag}** saat ini sedang AFK\nAlasan: ${status}`).then(
                 d => d.delete({ timeout: 7000 })
             );
         }
@@ -21,5 +21,5 @@ module.exports = async (client, message) => {
             d => d.delete({ timeout: 7000 })
         )
         afk.delete(message.author.id)
-    }
+    };
 }

@@ -50,7 +50,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: ["profile"],
-  cooldown: 5
+  cooldown: 7
 }
 
 exports.help = {

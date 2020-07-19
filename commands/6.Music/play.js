@@ -3,7 +3,15 @@ const moment = require('moment');
 const { result } = require('lodash');
 
 exports.run = async (client, message, args) => {
+  if (message.channel.id === "447408276628307969") return;
   try {
+
+    if (!message.member.voice.channel) return message.channel.send({
+      embed: {
+        color: client.warna.error,
+        description: `${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`
+      }
+    })
 
     //Permintaan Lagu dan Nama Permintaan
     let requestedBy = client.users.cache.get(message.author.id)

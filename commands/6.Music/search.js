@@ -3,11 +3,18 @@ const fs = require("fs");
 const { error } = require("console");
 
 module.exports.run = async (client, message, args) => {
+    if (message.channel.id === "447408276628307969") return;
+    if (!message.member.voice.channel) return message.channel.send({
+        embed: {
+            color: client.warna.error,
+            description: `${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`
+        }
+    })
 
     let search = await client.player.searchTracks(args.join(' '), true)
     // Sends an embed with the 10 first songs
     const embed = new Discord.MessageEmbed().setColor(client.warna.success)
-        .setDescription(search.map((t, i) => `**${i + 1} -** ${t.name}`).join("\n"))
+        .setDescription(search.map((t, i) => `**${i + 1} -** [${t.name}](${t.url})`).join("\n"))
         .setFooter("Send the number of the track you want to play!");
     message.channel.send(embed);
     // Wait for user answer
@@ -18,6 +25,7 @@ module.exports.run = async (client, message, args) => {
     }).catch((err) => {
         message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!')
     })
+
     const index = parseInt(response.first().content);
     let track = search[index - 1];
     // Then play the song

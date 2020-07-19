@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
+    if (message.channel.id === "447408276628307969") return;
     if (!message.member.voice.channel) return message.channel.send({
       embed: {
         color: client.warna.error,

@@ -2,6 +2,8 @@ const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
+  if (message.channel.id === "447408276628307969") return;
+
   let prefix = client.config.prefix;
 
   if (!args[0]) {

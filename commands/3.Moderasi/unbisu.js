@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
     let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
     mutee.roles.remove(role).then(() => {
-      message.channel.send(`${mutee.user.tag} telah selesai diunbisu!`).catch(() => console.log('oke'))
+      message.channel.send(`${mutee.user.tag} telah selesai diunbisu!`)
     })
 
     let embed = new Discord.MessageEmbed()
