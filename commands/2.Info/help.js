@@ -9,7 +9,12 @@ exports.run = async (client, message, args) => {
   if (!args[0]) {
     let module = client.helps.array();
     if (!client.config.owners.includes(message.author.id)) module = module.filter(x => !x.hide)
-    const embed = new MessageEmbed().setColor(client.warna.kato).setTimestamp().setFooter(`© 2020, Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, client.user.avatarURL).setDescription(`Ketik \`${client.config.prefix}help [command] / ${client.config.prefix2}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`).setTitle('Kato-Bot Command List')
+    const embed = new MessageEmbed()
+    .setColor(client.warna.kato)
+    .setTimestamp()
+    .setFooter(`© 2020, Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, client.user.avatarURL)
+    .setDescription(`Ketik \`${client.config.prefix}help [command] / ${client.config.prefix2}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
+    .setTitle(`${client.user.username}-Bot Command List`)
 
     for (const mod of module) {
       embed.addField(`${mod.name}`, mod.cmds.map(x => `\`${x}\``).join(' . '));

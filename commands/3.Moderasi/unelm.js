@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
-    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return message.channel.send('Kamu tidak Mempunyai Akses!');
+    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
     if (!message.guild.me.hasPermission(["MANAGE_ROLES", "ADMINISTRATOR"])) return message.channel.send("Aku tidak mempunyai akses!");
 
     let korban = message.mentions.members.first() || message.guild.members.cache.get(args[0]);

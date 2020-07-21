@@ -10,7 +10,7 @@ module.exports = async (client, message) => {
         let status = await afk.fetch(mentioned.id);
 
         if (status) {
-            message.reply(`**${mentioned.user.tag}** saat ini sedang AFK\nAlasan: ${status}`).then(
+            message.reply(`**${mentioned.user.tag}** saat ini sedang AFK\nAlasan: ${status}`, {disableMentions: 'all'}).then(
                 d => d.delete({ timeout: 7000 })
             );
         }

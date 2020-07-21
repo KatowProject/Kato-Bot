@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
-  if (!message.guild.members.cache.get(message.author.id)) return;
+  if (message.author.id !== "458342161474387999") return;
 
   try {
     let string_message = args.slice(0).join(" ");

@@ -2,11 +2,11 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
-    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return message.channel.send('Kamu tidak Mempunyai Akses!');
+    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
     if (!message.guild.me.hasPermission("MUTE_MEMBERS")) return message.channel.send("Aku tidak mempunyai akses!");
 
     let elm = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-    if (!elm) return message.channel.send("tag user yang ingin di elm!");
+    if (!elm) return;
 
     let reason = args.slice(1).join(" ");
     if (!reason) reason = "tidak ada alasan";

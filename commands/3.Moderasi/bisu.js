@@ -2,11 +2,11 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
-    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return message.channel.send('Kamu tidak Mempunyai Akses!');
+    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
     if (!message.guild.me.hasPermission(["MANAGE_ROLES", "ADMINISTRATOR"])) return message.channel.send("Aku tidak mempunyai akses!");
 
-    const mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-    if (!mutee) return message.channel.send("Tag user yang ingin di bisukan!");
+    let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+    if (!mutee) return;
     let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
 
@@ -14,8 +14,8 @@ exports.run = async (client, message, args) => {
     if (!reason) reason = "tidak diberi alasan";
 
     mutee.roles.add(role).then(() => {
-      message.channel.send(`${mutee.user.tag} telah selesai di mute.\n Alasan : ${reason}`).catch(() => console.log('oke'))
-    })
+      message.channel.send(`${mutee.user.tag} telah selesai di mute.\n Alasan : ${reason}`)
+    });
 
     let embed = new Discord.MessageEmbed()
       .setAuthor(`MUTE | ${mutee.user.tag}`)

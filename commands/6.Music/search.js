@@ -1,6 +1,5 @@
 const Discord = require("discord.js")
 const fs = require("fs");
-const { error } = require("console");
 
 module.exports.run = async (client, message, args) => {
     if (message.channel.id === "447408276628307969") return;

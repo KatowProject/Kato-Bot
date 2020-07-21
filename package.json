@@ -1,6 +1,6 @@
 {
   "name": "kato-pos",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Discord Bot Template, only for Perkumpulan Orang Santai.",
   "main": "index.js",
   "scripts": {
@@ -31,5 +31,21 @@
   "engines": {
     "node": "12.x"
   },
-  "license": "cc-by-sa-4.0"
+  "license": "CC-BY-SA-4.0",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KatowProject/Kato-Bot.git"
+  },
+  "keywords": [
+    "bot",
+    "moderation",
+    "music",
+    "fun"
+  ],
+  "author": "KatowProject-ManLord#3143",
+  "bugs": {
+    "url": "https://github.com/KatowProject/Kato-Bot/issues"
+  },
+  "homepage": "https://github.com/KatowProject/Kato-Bot#readme"
 }
