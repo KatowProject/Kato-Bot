@@ -31,7 +31,7 @@ Carl#5803 <br>
 - Install yarn (jika ingin menggunakan `yarn` daripada `npm`)
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
-- Edit file `config.json` untuk memasukan prefix, owner dan tokennya.
+- Edit file `config/config.json` untuk memasukan prefix, owner dan tokennya.
 
 ### Penggunaan
 ketik di terminal `node index.js` untuk menjalankan bot-nya.
@@ -41,4 +41,4 @@ ketik di terminal `node index.js` untuk menjalankan bot-nya.
 Terimakasih!
 
 ## Selamat Mencoba.
-![](https://cdn.discordapp.com/avatars/578144365009043466/33b26ccfdcac6980c859cf5f8f12730d.png?size=256)
+![](https://cdn.discordapp.com/attachments/519859252966457369/735280356441456641/4c64e343e788251fb15dac0f4c557337.gif)
