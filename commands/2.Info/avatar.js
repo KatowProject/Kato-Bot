@@ -10,8 +10,8 @@ exports.run = async (client, message, args) => {
       let embed = new Discord.MessageEmbed()
         .setColor(client.warna.kato)
         .setAuthor(message.guild.name, message.guild.iconURL())
-        .setDescription(`[Avatar URL Link](${message.guild.iconURL({ size: 2048, dynamic: true })})`)
-        .setImage(`${message.guild.iconURL({ size: 2048, dynamic: true })}`)
+        .setDescription(`[Avatar URL Link](${message.guild.iconURL({ size: 4096, dynamic: true })})`)
+        .setImage(`${message.guild.iconURL({ size: 4096, dynamic: true })}`)
       message.channel.send(embed);
     }
     else
@@ -19,8 +19,8 @@ exports.run = async (client, message, args) => {
         let embed = new Discord.MessageEmbed()
           .setColor(client.warna.kato)
           .setAuthor(target_mentions.tag, target_mentions.displayAvatarURL())
-          .setDescription(`[Avatar URL Link](${target_mentions.displayAvatarURL({ size: 2048, dynamic: true })})`)
-          .setImage(target_mentions.displayAvatarURL({ size: 2048, dynamic: true }))
+          .setDescription(`[Avatar URL Link](${target_mentions.displayAvatarURL({ size: 4096, dynamic: true })})`)
+          .setImage(target_mentions.displayAvatarURL({ size: 4096, dynamic: true }))
         message.channel.send(embed);
       }
       else
@@ -28,8 +28,8 @@ exports.run = async (client, message, args) => {
           let embed = new Discord.MessageEmbed()
             .setColor(client.warna.kato)
             .setAuthor(target_userID.user.tag, target_userID.user.displayAvatarURL())
-            .setDescription(`[Avatar URL Link](${target_userID.user.displayAvatarURL({ size: 2048, dynamic: true })})`)
-            .setImage(target_userID.user.displayAvatarURL({ size: 2048, dynamic: true }))
+            .setDescription(`[Avatar URL Link](${target_userID.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
+            .setImage(target_userID.user.displayAvatarURL({ size: 4096, dynamic: true }))
           message.channel.send(embed);
         }
         else
@@ -37,8 +37,8 @@ exports.run = async (client, message, args) => {
             let embed = new Discord.MessageEmbed()
               .setColor("#985ce7")
               .setAuthor(message.author.tag, message.author.displayAvatarURL())
-              .setDescription(`[Avatar URL Link](${message.author.displayAvatarURL({ size: 2048, dynamic: true })})`)
-              .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))
+              .setDescription(`[Avatar URL Link](${message.author.displayAvatarURL({ size: 4096, dynamic: true })})`)
+              .setImage(message.author.displayAvatarURL({ size: 4096, dynamic: true }))
 
             message.channel.send(embed)
           }
@@ -50,7 +50,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: ["profile"],
-  cooldown: 5
+  cooldown: 7
 }
 
 exports.help = {

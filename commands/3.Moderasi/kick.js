@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
 
         // Ketika tidak ada di mention
         if (!member)
-            return message.reply("Tag user yang ingin ditendang!");
+            return;
 
         // Ketika usernamenya sama ama yang di mention
         if (member.user.id === message.author.id)
@@ -23,7 +23,7 @@ exports.run = async (client, message, args) => {
 
         // Ketika yang membanned adalah member
         if (!author.hasPermission("KICK_MEMBERS"))
-            return message.reply('Anda tidak memiliki Akses!');
+            return;
 
         // Ketika yang dibanned adalah admin/momod
         if (member.hasPermission("KICK_MEMBERS"))

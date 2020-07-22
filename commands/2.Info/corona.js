@@ -59,7 +59,7 @@ exports.run = async (client, message, args) => {
             dataInput = `Sembuh: ${numeralFormat(da.recovered)} orang (${da.recoveredPercentage}%)`
             break
           case 'death':
-            dataInput = `Tewas: ${numeralFormat(da.deaths)} orang (${da.deathsPercentage}%)`
+            dataInput = `Meninggal: ${numeralFormat(da.deaths)} orang (${da.deathsPercentage}%)`
             break
         }
         str += strTmp(
@@ -86,7 +86,7 @@ exports.run = async (client, message, args) => {
         .addField('Kasus Dikonfirmasi: ', `${numeralFormat(data.confirmed)} orang`, true)
         .addField('Sembuh: ', `${numeralFormat(data.recovered)} orang (${((data.recovered / data.confirmed) * 100).toFixed(2)}%)`, true)
         .addField('Hidup: ', `${numeralFormat(data.active)} orang (${((data.active / data.confirmed) * 100).toFixed(2)}%)`, true)
-        .addField('Tewas: ', `${numeralFormat(data.deaths)} orang (${((data.deaths / data.confirmed) * 100).toFixed(2)}%)`, true)
+        .addField('Meninggal: ', `${numeralFormat(data.deaths)} orang (${((data.deaths / data.confirmed) * 100).toFixed(2)}%)`, true)
     }
 
     async function awaitResponsesNegara(data) {
@@ -199,7 +199,7 @@ exports.run = async (client, message, args) => {
     }
 
     // Untuk Mati
-    if (typeof argv.tewas === 'boolean' || typeof argv.t === 'boolean') {
+    if (typeof argv.Meninggal === 'boolean' || typeof argv.t === 'boolean') {
       embed.setAuthor('Top 10 Negara dengan Persentase Mati Terbanyak', '', 'https://github.com/mathdroid/covid-19-api')
       await axios.get(`${url}/deaths`)
         .then(data => {
@@ -239,7 +239,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 10
 }
 
 exports.help = {

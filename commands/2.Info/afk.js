@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-
 let db = require('quick.db')
 
 exports.run = async (client, message, args) => {
@@ -7,11 +6,13 @@ exports.run = async (client, message, args) => {
         const status = new db.table('AFKs')
         let afk = await status.fetch(message.author.id)
 
+        //ignore AFK
+        let reason = args.join(' ').toString()
+
         if (!afk) {
-            message.channel.send(`**${message.author.tag}** telah AFK! \n **Alasan:** ${args.join(' ') ? args.join(' ') : "AFK"}.`)
-            status.set(message.author.id, args.join(' ') || 'AFK')
+            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' })
+            status.set(message.author.id, reason || 'AFK')
         } else {
-            message.reply('Kato telah mencabut status AFK mu!')
             status.delete(message.author.id)
         }
 
@@ -27,7 +28,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: ["away"],
-    cooldown: 5
+    cooldown: 10
 }
 
 exports.help = {

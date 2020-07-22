@@ -2,19 +2,22 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
-    if (!args[0]) return message.reply("isi teks terlebih dahulu!")
+
+    var saran = args.join(' ')
+    if (saran.length <= 10) return message.reply('Penggunaan harus lebih dari 10 karakter!').then(t => t.delete({ timeout: 5000 }))
+
     message.delete()
 
     let embed = new Discord.MessageEmbed()
       .setColor(client.warna.kato)
       .setAuthor(message.guild.name, message.guild.iconURL())
       .addField("Laporan Dari : ", message.author, true)
-      .addField("Isi : ", args.join(' '))
+      .addField("Isi : ", saran)
       .setFooter(`${message.author.tag} (ID : ${message.author.id})`)
 
     //eksekusi
     message.guild.channels.cache.find(guild => guild.name === "feedbacks").send(embed);
-    message.channel.send("Laporan kamu sudah dikirim!");
+    message.reply("Laporan kamu sudah terkirim!").then(t => t.delete({ timeout: 5000 }));
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
@@ -24,7 +27,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 30
 }
 
 exports.help = {

@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
+  if (message.channel.id === "447408276628307969") return;
   try {
     if (!message.member.voice.channel) return message.channel.send(`${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`)
 
