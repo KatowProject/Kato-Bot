@@ -1,5 +1,4 @@
 const Discord = require("discord.js")
-const fs = require("fs")
 
 module.exports.run = async (client, message, args) => {
 
@@ -19,31 +18,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.surrounding;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             surrounding: true
         });
-
-        message.channel.send("Surrounding telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                surrounding: false
-            });
-
-            message.channel.send('Surrounding telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Surround telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            surrounding: false
+        });
+        message.channel.send("Efek Surround telah dinonaktifkan!");
+    };
 
 }
 
@@ -53,8 +39,8 @@ exports.conf = {
 }
 
 exports.help = {
-    name: 'surrounding',
-    description: 'menberikan efek surrounding pada musik',
-    usage: 'k@surrounding <on/off>',
-    example: 'k@surrounding on'
+    name: 'surround',
+    description: 'menberikan efek surround pada musik',
+    usage: 'surrounding',
+    example: 'surrounding'
 }

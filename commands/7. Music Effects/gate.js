@@ -17,29 +17,29 @@ module.exports.run = async (client, message, args) => {
         }
     })
 
-    const bb = client.player.getQueue(message.guild.id).filters.bassboost;
+    const bb = client.player.getQueue(message.guild.id).filters.gate;
     if (!bb) {
         client.player.setFilters(message.guild.id, {
-            bassboost: true
+            gate: true
         });
-        message.channel.send("Efek Bassboost telah diaktifkan!");
+        message.channel.send("Efek Gate telah diaktifkan!");
     } else {
         client.player.setFilters(message.guild.id, {
-            bassboost: false
+            gate: false
         });
-        message.channel.send("Efek Bassboost telah dinonaktifkan!");
+        message.channel.send("Efek Gate telah dinonaktifkan!");
     }
 
 }
 
 exports.conf = {
-    aliases: ["bb"],
+    aliases: [],
     cooldown: 5
 }
 
 exports.help = {
-    name: 'bassboost',
-    description: 'memberi efek bassboost pada musik',
-    usage: 'bassboost [<true/false>]',
-    example: 'bassboost'
+    name: 'gate',
+    description: 'memberi efek gate pada musik',
+    usage: 'gate [<true/false>]',
+    example: 'gate'
 }

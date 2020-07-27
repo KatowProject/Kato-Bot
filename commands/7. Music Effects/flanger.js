@@ -17,29 +17,29 @@ module.exports.run = async (client, message, args) => {
         }
     })
 
-    const bb = client.player.getQueue(message.guild.id).filters.bassboost;
+    const bb = client.player.getQueue(message.guild.id).filters.flanger;
     if (!bb) {
         client.player.setFilters(message.guild.id, {
-            bassboost: true
+            flanger: true
         });
-        message.channel.send("Efek Bassboost telah diaktifkan!");
+        message.channel.send("Efek Flanger telah diaktifkan!");
     } else {
         client.player.setFilters(message.guild.id, {
-            bassboost: false
+            flanger: false
         });
-        message.channel.send("Efek Bassboost telah dinonaktifkan!");
+        message.channel.send("Efek Flanger telah dinonaktifkan!");
     }
 
 }
 
 exports.conf = {
-    aliases: ["bb"],
+    aliases: [],
     cooldown: 5
 }
 
 exports.help = {
-    name: 'bassboost',
-    description: 'memberi efek bassboost pada musik',
-    usage: 'bassboost [<true/false>]',
-    example: 'bassboost'
+    name: 'flanger',
+    description: 'memberi efek flanger pada musik',
+    usage: 'flanger [<true/false>]',
+    example: 'flanger'
 }
