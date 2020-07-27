@@ -41,4 +41,4 @@ ketik di terminal `node index.js` untuk menjalankan bot-nya.
 Terimakasih!
 
 ## Selamat Mencoba.
-[!](https://cdn.discordapp.com/attachments/447408276628307969/724230831224127529/4c64e343e788251fb15dac0f4c557337.gif)
+![](https://cdn.discordapp.com/attachments/447408276628307969/724230831224127529/4c64e343e788251fb15dac0f4c557337.gif)
