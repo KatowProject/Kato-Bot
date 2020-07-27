@@ -19,31 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.normalizer;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             normalizer: true
         });
-
-        message.channel.send("Normalizer telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                normalizer: false
-            });
-
-            message.channel.send('Normalizer telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Normalizer telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            normalizer: false
+        });
+        message.channel.send("Efek Normalizer telah dinonaktifkan!");
+    }
 
 }
 
@@ -55,6 +42,6 @@ exports.conf = {
 exports.help = {
     name: 'normalizer',
     description: 'memberikan efek normalizer pada musik',
-    usage: 'k@normalizer <on/off>',
-    example: 'k@normalizer on'
+    usage: 'normalizer',
+    example: 'normalizer'
 }

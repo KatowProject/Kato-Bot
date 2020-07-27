@@ -19,32 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.subboost;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             subboost: true
         });
-
-        message.channel.send("Subboost telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                subboost: false
-            });
-
-            message.channel.send('Subboost telah dinonaktifkan!')
-        };
-
+        message.channel.send("Efek Subboost telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            subboost: false
+        });
+        message.channel.send("Efek Subboost telah dinonaktifkan!");
+    };
 }
 
 exports.conf = {
@@ -55,6 +41,6 @@ exports.conf = {
 exports.help = {
     name: 'subboost',
     description: 'menberikan efek subboost pada musik',
-    usage: 'k@subboost <on/off>',
-    example: 'k@subboost on'
+    usage: 'subboost',
+    example: 'subboost'
 }

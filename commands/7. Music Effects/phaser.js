@@ -19,32 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.phaser;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             phaser: true
         });
-
-        message.channel.send("Phaser telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                phaser: false
-            });
-
-            message.channel.send('Phaser telah dinonaktifkan!')
-        };
-
+        message.channel.send("Efek Phaser telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            phaser: false
+        });
+        message.channel.send("Efek Phaser telah dinonaktifkan!");
+    }
 }
 
 exports.conf = {
@@ -55,6 +41,6 @@ exports.conf = {
 exports.help = {
     name: 'phaser',
     description: 'memberikan efek phaser pada musik',
-    usage: 'k@phaser <on/off>',
-    example: 'k@phaser on'
+    usage: 'phaser',
+    example: 'phaser'
 }

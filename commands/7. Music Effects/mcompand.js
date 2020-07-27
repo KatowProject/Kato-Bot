@@ -17,17 +17,17 @@ module.exports.run = async (client, message, args) => {
         }
     })
 
-    const bb = client.player.getQueue(message.guild.id).filters.bassboost;
+    const bb = client.player.getQueue(message.guild.id).filters.mcompand;
     if (!bb) {
         client.player.setFilters(message.guild.id, {
-            bassboost: true
+            mcompand: true
         });
-        message.channel.send("Efek Bassboost telah diaktifkan!");
+        message.channel.send("Efek Mcompand telah diaktifkan!");
     } else {
         client.player.setFilters(message.guild.id, {
-            bassboost: false
+            mcompand: false
         });
-        message.channel.send("Efek Bassboost telah dinonaktifkan!");
+        message.channel.send("Efek Mcompand telah dinonaktifkan!");
     }
 
 }
@@ -38,8 +38,8 @@ exports.conf = {
 }
 
 exports.help = {
-    name: 'bassboost',
-    description: 'memberi efek bassboost pada musik',
-    usage: 'bassboost [<true/false>]',
-    example: 'bassboost'
+    name: 'mcompand',
+    description: 'memberi efek mcompand pada musik',
+    usage: 'mcompand [<true/false>]',
+    example: 'mcompand'
 }

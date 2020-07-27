@@ -19,31 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.pulsator;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             pulsator: true
         });
-
-        message.channel.send("Pulsator telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                pulsator: false
-            });
-
-            message.channel.send('Pulsator telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Pulsator telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            pulsator: false
+        });
+        message.channel.send("Efek Pulsator telah dinonaktifkan!");
+    };
 
 }
 
@@ -55,6 +42,6 @@ exports.conf = {
 exports.help = {
     name: 'pulsator',
     description: 'menberikan efek pulsator pada musik',
-    usage: 'k@pulsator <on/off>',
-    example: 'k@pulsator on'
+    usage: 'pulsator',
+    example: 'pulsator'
 }

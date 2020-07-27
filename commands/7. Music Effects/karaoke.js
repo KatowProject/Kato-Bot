@@ -16,29 +16,20 @@ module.exports.run = async (client, message, args) => {
             description: `${client.emoji.error} | Tidak ada musik yang diputar!`
         }
     })
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
 
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
 
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.karaoke;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             karaoke: true
         });
-
-        message.channel.send("karaoke telah diaktifkan!");
-    } else
-
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                karaoke: false
-            });
-
-            message.channel.send('karaoke telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Karaoke telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            karaoke: false
+        });
+        message.channel.send("Efek Karaoke telah dinonaktifkan!");
+    }
 
 }
 

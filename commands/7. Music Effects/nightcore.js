@@ -19,31 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.nightcore;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             nightcore: true
         });
-
-        message.channel.send("Nigthcore telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                nightcore: false
-            });
-
-            message.channel.send('Nigthcore telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Nightcore telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            nightcore: false
+        });
+        message.channel.send("Efek Nightcore telah dinonaktifkan!");
+    }
 
 }
 
@@ -55,6 +42,6 @@ exports.conf = {
 exports.help = {
     name: 'nightcore',
     description: 'memberikan efek nightcore pada musik',
-    usage: 'k@nightcore <on/off>',
-    example: 'k@nightcore on'
+    usage: 'nightcore',
+    example: 'nightcore'
 }
