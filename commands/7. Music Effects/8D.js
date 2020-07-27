@@ -43,7 +43,7 @@ module.exports.run = async (client, message, args) => {
 }
 
 exports.conf = {
-    aliases: ["bb"],
+    aliases: ["dd"],
     cooldown: 5
 }
 

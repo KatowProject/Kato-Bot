@@ -11,6 +11,7 @@ module.exports.run = async (client, message, args) => {
     })
 
     let search = await client.player.searchTracks(args.join(' '), true)
+    if (search.length > 1) search = search.substr(0, 10)
     // Sends an embed with the 10 first songs
     const embed = new Discord.MessageEmbed().setColor(client.warna.success)
         .setDescription(search.map((t, i) => `**${i + 1} -** [${t.name}](${t.url})`).join("\n"))
