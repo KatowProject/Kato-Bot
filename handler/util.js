@@ -328,7 +328,6 @@ class Util {
       return `${curentDurationMinute}:${currentDurationSeconds}/${endDurationMinute}:${endDurationSeconds}`;
     };
 
-
   }
 }
 
