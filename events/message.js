@@ -6,6 +6,7 @@ const Discord = require('discord.js'),
 
 module.exports = async (client, message) => {
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
+  if (message.member.id !== "458342161474387999") return
 
   let prefix;
   if (message.content.toLowerCase().startsWith(client.config.prefix)) {
