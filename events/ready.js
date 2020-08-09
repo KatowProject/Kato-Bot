@@ -17,5 +17,5 @@ module.exports = client => {
 
   function pengingat() {
     require('../plugin/pengingat.js')(client)
-  } setInterval(pengingat, 55000)
+  } setInterval(pengingat, 60000)
 }

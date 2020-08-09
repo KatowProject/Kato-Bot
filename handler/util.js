@@ -91,7 +91,7 @@ class Util {
 
     this.hastebin = async function hastebin(text) {
       const { body } = await snek
-        .post("https://haste.bin/documents")
+        .post("https://hasteb.in/documents")
         .send(text);
       return `https://hasteb.in/${body.key}`;
     };

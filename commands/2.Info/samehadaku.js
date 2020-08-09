@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
-
+    if (client.config.channel.includes(message.channel.id)) return;
 
     let anime = args.join('-')
     if (anime.length < 1) return message.reply('Berikan judulnya!')
@@ -89,7 +89,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: ["same"],
-    cooldown: 5
+    cooldown: 25
 }
 
 exports.help = {

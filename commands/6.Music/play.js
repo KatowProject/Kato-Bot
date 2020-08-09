@@ -1,9 +1,8 @@
 const Discord = require('discord.js')
 const moment = require('moment');
-const { result } = require('lodash');
 
 exports.run = async (client, message, args) => {
-  if (message.channel.id === "447408276628307969") return;
+  if (client.config.channel.includes(message.channel.id)) return;
   try {
 
     if (!message.member.voice.channel) return message.channel.send({
@@ -14,7 +13,7 @@ exports.run = async (client, message, args) => {
     })
 
     //Permintaan Lagu dan Nama Permintaan
-    let requestedBy = client.users.cache.get(message.author.id)
+    let requestedBy = `\`${client.users.cache.get(message.author.id).tag}\`` || message.author
     let queue = args.join(" ");
 
     if (!queue) return message.channel.send({
@@ -34,8 +33,8 @@ exports.run = async (client, message, args) => {
       message.channel.send({
         embed: {
           color: client.warna.success,
-          description: `${client.emoji.success} **|** [${song.name}](${song.url}) **Added to the queue!** \n\n Durasi: \`${song.duration}\`\n\n Permintaan : \`${song.requestedBy}\`\n\n Author: \`${song.author}\``,
-          thumbnail: { url: song.thumbnail }
+          description: `${client.emoji.success} **|** [${song.name}](${song.url}) **Added to the queue!** \n\n Durasi: \`${song.duration}\`\n\n Permintaan : ${song.requestedBy}\n\n Author: \`${song.author}\``,
+          thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
         }
       });
 
@@ -46,8 +45,8 @@ exports.run = async (client, message, args) => {
       message.channel.send({
         embed: {
           color: client.warna.success,
-          description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \nDurasi : ${song.duration}\n \nPermintaan : ${song.requestedBy}`,
-          thumbnail: { url: song.thumbnail }
+          description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \nDurasi : \`${song.duration}\`\n \nPermintaan : ${song.requestedBy}`,
+          thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
         }
       })
 
@@ -72,7 +71,7 @@ exports.run = async (client, message, args) => {
                 color: client.warna.success,
                 description: `${client.emoji.music} |  Now Repeating : \n [${oldTrack.name}](${oldTrack.url})\n \nDurasi : ${oldTrack.duration}\n \nPermintaan : ${oldTrack.requestedBy}`,
                 thumbnail: {
-                  url: oldTrack.thumbnail
+                  url: oldTrack.thumbnail.replace('hqdefault', 'maxresdefault')
                 }
               }
             });
@@ -82,7 +81,7 @@ exports.run = async (client, message, args) => {
               embed: {
                 color: client.warna.success,
                 description: `${client.emoji.music} | Now Playing : \n [${newTrack.name}](${newTrack.url})\n \nDurasi : ${newTrack.duration}\n \nPermintaan : ${newTrack.requestedBy}`,
-                thumbnail: newTrack.thumbnail
+                thumbnail: newTrack.thumbnail.replace('hqdefault', 'maxresdefault')
               }
             })
           }
