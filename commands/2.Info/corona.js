@@ -91,7 +91,8 @@ exports.run = async (client, message, args) => {
 
     async function awaitResponsesNegara(data) {
       const _data = lodash(data)
-      const province = _data.map('provinceState').value()
+      let province = _data.map('provinceState').value()
+      if (province.length > 2000) province = province.slice(0, 150)
       const msgProvince = await message.channel.send(province.join(', '))
       const msgBeforeSearch = await message.channel.send('Di antara provinsi tersebut, yang mana ingin anda ketahui secara detail informasinya? (Symbol Sensitive)')
       await message.channel.awaitMessages(

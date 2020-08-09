@@ -6,6 +6,7 @@ let os = require('os')
 let cpuStat = require("cpu-stat");
 
 exports.run = async (client, message, args) => {
+  if (client.config.channel.includes(message.channel.id)) return;
   try {
     let cpuLol;
     cpuStat.usagePercent(function (err, percent) {
