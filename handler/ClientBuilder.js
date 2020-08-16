@@ -1,6 +1,7 @@
 const { Client, Collection } = require("discord.js");
 const { Player } = require('discord-player')
 const Util = require("./util.js");
+const Kato = require('./mangaReader')
 
 module.exports = class katopos extends Client {
   constructor(opt) {
@@ -14,6 +15,8 @@ module.exports = class katopos extends Client {
     this.aliases = new Collection();
     this.recent = new Set();
     this.player = new Player(new Client())
+    this.manga = new Kato(this)
+
 
   }
 };
