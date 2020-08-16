@@ -29,7 +29,7 @@ module.exports.run = async (client, message, args) => {
     const index = parseInt(response.first().content);
     let track = search[index - 1];
     // Then play the song
-    let requestedBy = message.author
+    let requestedBy = client.users.cache.get(message.author.id).tag
     let playing = client.player.isPlaying(message.guild.id)
 
     if (playing) {

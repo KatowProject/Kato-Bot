@@ -2,10 +2,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
-  if (!message.channel.nsfw) return
-  else {
-    if (message.channel.id === '604660186593886229') return
-  };
+  if (!['710431360954794004'].includes(message.channel.id)) return;
   let rl = args[0] === "3d";
   let dm = args[0] === "2d";
 

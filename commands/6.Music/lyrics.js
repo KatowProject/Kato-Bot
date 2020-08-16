@@ -27,7 +27,7 @@ module.exports.run = async (client, message, args) => {
         await message.channel.send(embed);
         let embede = new Discord.MessageEmbed()
             .setColor(client.warna.kato)
-            .setDescription(data.lirik.slice(2048, 9999))
+            .setDescription(data.lirik.slice(2048, 4096))
         await message.channel.send(embede)
 
     } else {

@@ -1,0 +1,362 @@
+
+const Discord = require('discord.js');
+
+class Kato {
+    constructor(client) {
+        this.client = client;
+    }
+
+    getPopular(query, message) {
+        return new Promise(async (fullfill, reject) => {
+            try {
+                let get = await require('node-superfetch').get(`http://localhost:3000/api/manga/popular/${query}`)
+                var data_array = [];
+                const json = get.body.manga_list
+
+                json.forEach((array, i) => {
+                    data_array.push(`**${i + 1}**. **${array.title}**\nEndpoint: \`${array.endpoint.split('-').join(' ')}\``)
+                })
+
+                let page = 1
+                data_array = this.client.util.chunk(data_array, 10)
+                let embed = new Discord.MessageEmbed()
+                    .setColor(this.client.warna.kato)
+                    .setTitle('Manga Populer')
+                    .setDescription(data_array[page - 1])
+                    .setThumbnail('https://cdn.discordapp.com/attachments/496983030993518592/743505238811607140/246587775008212.webp')
+                    .setFooter('Cara membaca k!read <endpoint>')
+                message.channel.send(embed);
+                fullfill();
+            } catch (err) {
+                reject(err)
+            }
+        })
+
+    }
+
+    getDetail(query, message) {
+        return new Promise(async (fullfill, reject) => {
+
+            let get = await require('node-superfetch').get(`http://localhost:3000/api/manga/detail/${query}`)
+
+            try {
+                //genrelist
+                let array = [];
+                let json = get.body.genre_list
+                json.forEach(a => {
+                    array.push(a.genre_name)
+                })
+                //
+                let embed = new Discord.MessageEmbed()
+                    .setColor(this.client.warna.kato)
+                    .setTitle(get.body.title)
+                    .setThumbnail(get.body.thumb)
+                    .addField('Genre', array.join(', '), true)
+                    .addField('Status', get.body.status, true)
+                    .addField('Tipe', get.body.type, true)
+                    .addField('Author', get.body.author)
+                    .addField('Endpoint', get.body.manga_endpoint.split('-').join(' '), true)
+                    .setDescription(get.body.synopsis.slice(0, 2048))
+                let p = await message.channel.send(embed)
+
+                //chapter
+                let chap = [];
+                let json_c = get.body.chapter
+                json_c.forEach((a, i) => {
+                    chap.push(`**${i + 1}**. **${a.chapter_title}**`)
+                })
+                let page = 1;
+
+                chap = this.client.util.chunk(chap_, 10)
+                let embede = new Discord.MessageEmbed()
+                    .setColor(this.client.warna.kato)
+                    .setTitle('Chapter List')
+                    .setDescription(chap_[page - 1])
+                    .setFooter(`Page ${page} of ${chap_.length}`)
+                let r = await message.channel.send(embede)
+                await r.react("⬅");
+                await r.react("♻");
+                await r.react("➡");
+
+                const backwardsFilter = (reaction, user) =>
+                    reaction.emoji.name === `⬅` && user.id === message.author.id;
+                const deleteFilter = (reaction, user) =>
+                    reaction.emoji.name === `♻` && user.id === message.author.id;
+                const forwardsFilter = (reaction, user) =>
+                    reaction.emoji.name === `➡` && user.id === message.author.id;
+
+
+                const backwards = r.createReactionCollector(backwardsFilter);
+                const deletes = r.createReactionCollector(deleteFilter);
+                const forwards = r.createReactionCollector(forwardsFilter);
+
+                backwards.on('collect', (f) => {
+                    if (page === 1) return;
+                    page--;
+                    embede.setDescription(chap_[page - 1]);
+                    embede.setFooter(`Page ${page} of ${chap_.length}`)
+                    r.edit(embede);
+
+                })
+
+                forwards.on("collect", (f) => {
+                    if (page == chap.length) return;
+                    page++;
+                    embede.setDescription(chap_[page - 1]);
+                    embede.setFooter(`Page ${page} of ${chap_.length}`);
+                    r.edit(embede);
+                });
+
+                deletes.on('collect', (f) => {
+                    r.delete()
+                    p.delete()
+                })
+
+                fullfill();
+            } catch (err) {
+                reject(err)
+            }
+
+        })
+
+    }
+
+    getBySearch(query, message) {
+        return new Promise(async (fullfill, reject) => {
+            try {
+                //get data manga
+                let get = await require('node-superfetch').get(`http://localhost:3000/api/cari/${query}`)
+                //
+
+                //get result
+                const json = get.body
+                var data_array = [];
+                json.forEach((a, i) => {
+                    data_array.push(`**${i + 1}.** **${a.title}**\n\`Endpoint: ${a.endpoint.split('-').join(' ')}\``)
+                });
+                //
+
+                //get await endpoint
+                const json_e = get.body
+                var data_endpoint = [];
+                json_e.forEach((a, i) => {
+                    data_endpoint.push(a.endpoint)
+                });
+
+
+                let embed = new Discord.MessageEmbed()
+                    .setColor(this.client.warna.kato)
+                    .setTitle('Hasil Pencarian')
+                    .setDescription(data_array)
+                    .setFooter('Cara membaca k!read <endpoint>')
+                let r = await message.channel.send(embed);
+                let p = await message.reply('pilih yang ingin dibaca!');
+
+                let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 1000, {
+                    max: 1,
+                    time: 500000,
+                    errors: ["time"]
+                }).catch((err) => {
+                    message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!')
+                })
+
+                const index = parseInt(response.first().content);
+                let t = data_endpoint[index - 1]
+                await r.delete()
+                await p.delete()
+
+                this.getChapList(t, message)
+                fullfill();
+
+            } catch (err) {
+                reject(err)
+            }
+        });
+
+    }
+
+    getChapList(query, message) {
+        return new Promise(async (fullfill, reject) => {
+            let get = await require('node-superfetch').get(`http://localhost:3000/api/manga/detail/${query}`)
+            try {
+                //get Chap
+                let chap = [];
+                let json_c = get.body.chapter
+                json_c.forEach(a => {
+                    chap.push(`**${a.chapter_title}**\n\`Endpoint: ${a.chapter_endpoint.replace('-', ' ')}\``)
+                })
+                let page = 1;
+
+                let chap_ = chap.map((title, i) => {
+                    return `**${i + 1}.** ${title}`
+                });
+                //
+
+                //get endpoint
+                let ep = [];
+                let json_ep = get.body.chapter
+                json_ep.forEach(a => {
+                    ep.push(a.chapter_endpoint)
+                });
+
+
+                chap_ = this.client.util.chunk(chap_, 10)
+                let embede = new Discord.MessageEmbed()
+                    .setColor(this.client.warna.kato)
+                    .setTitle(`${get.body.title} Chapter List`)
+                    .setDescription(chap_[page - 1])
+                    .setFooter(`Page ${page} of ${chap_.length}`)
+                let r = await message.channel.send(embede)
+                let p = await message.reply('pilih yang ingin dibaca!')
+
+                await r.react("👈");
+                await r.react("👉");
+
+
+
+                const backwardsFilter = (reaction, user) =>
+                    reaction.emoji.name === `👈` && user.id === message.author.id;
+                const forwardsFilter = (reaction, user) =>
+                    reaction.emoji.name === `👉` && user.id === message.author.id;
+
+
+
+                const backwards = r.createReactionCollector(backwardsFilter);
+                const forwards = r.createReactionCollector(forwardsFilter);
+
+
+
+                backwards.on('collect', (f) => {
+                    if (page === 1) return;
+                    page--;
+                    embede.setDescription(chap_[page - 1]);
+                    embede.setFooter(`Page ${page} of ${chap_.length}`)
+                    r.edit(embede);
+
+                })
+
+                forwards.on("collect", (f) => {
+                    if (page == chap.length) return;
+                    page++;
+                    embede.setDescription(chap_[page - 1]);
+                    embede.setFooter(`Page ${page} of ${chap_.length}`);
+                    r.edit(embede);
+                });
+
+
+                let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 1000, {
+                    max: 1,
+                    time: 500000,
+                    errors: ["time"]
+                }).catch((err) => {
+                    message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!')
+                })
+
+                const index = parseInt(response.first().content);
+                let t = ep[index - 1]
+                await r.delete()
+                await p.delete()
+                this.getReadEmbed(t, message)
+
+                fullfill();
+            } catch (err) {
+                reject(err)
+            }
+        })
+    }
+
+    getReadEmbed(query, message) {
+        return new Promise(async (fullfill, reject) => {
+            try {
+                let get = await require('node-superfetch').get(`http://localhost:3000/api/chapter/${query}`)
+                let gambar = [];
+                let pagination = 1;
+                let json = get.body.chapter_image;
+
+
+                json.forEach((a, i) => {
+                    gambar.push(`${a.chapter_image_link}`)
+                })
+
+                try {
+                    let embed = new Discord.MessageEmbed()
+                        .setColor(this.client.warna.kato)
+                        .setTitle('Manga Reader')
+                        .setImage(gambar[0])
+                        .setFooter(`Page ${pagination} of ${gambar.length}`)
+                    let r = await message.channel.send(embed)
+
+                    await r.react("🤛");
+                    await r.react("👈");
+                    await r.react("♻");
+                    await r.react("👉");
+                    await r.react("🤜")
+
+
+                    const backwardsFiveFilter = (reaction, user) =>
+                        reaction.emoji.name === '🤛' && user.id === message.author.id;
+                    const backwardsFilter = (reaction, user) =>
+                        reaction.emoji.name === `👈` && user.id === message.author.id;
+                    const deleteFilter = (reaction, user) =>
+                        reaction.emoji.name === `♻` && user.id === message.author.id;
+                    const forwardsFilter = (reaction, user) =>
+                        reaction.emoji.name === `👉` && user.id === message.author.id;
+                    const forwardsFiveFilter = (reaction, user) =>
+                        reaction.emoji.name === '🤜' && user.id === message.author.id;
+
+                    const Fivebackwards = r.createReactionCollector(backwardsFiveFilter);
+                    const backwards = r.createReactionCollector(backwardsFilter);
+                    const deletes = r.createReactionCollector(deleteFilter);
+                    const forwards = r.createReactionCollector(forwardsFilter);
+                    const Fiveforwads = r.createReactionCollector(forwardsFiveFilter);
+
+                    Fivebackwards.on('collect', (f) => {
+                        if (pagination <= 5) return;
+                        pagination -= 5;
+                        embed.setImage(gambar[pagination - 1])
+                        embed.setFooter(`Page ${pagination} of ${gambar.length}`)
+                        r.edit(embed);
+                    });
+                    backwards.on('collect', (f) => {
+                        if (pagination === 1) return;
+                        pagination--;
+                        embed.setImage(gambar[pagination - 1]);
+                        embed.setFooter(`Page ${pagination} of ${gambar.length}`)
+                        r.edit(embed);
+
+                    })
+
+                    forwards.on("collect", (f) => {
+                        if (pagination == gambar.length) return;
+                        pagination++;
+                        embed.setImage(gambar[pagination - 1]);
+                        embed.setFooter(`Page ${pagination} of ${gambar.length}`);
+                        r.edit(embed);
+                    });
+
+                    Fiveforwads.on('collect', (f) => {
+                        if (pagination == gambar.length) return;
+                        pagination += 5;
+                        embed.setImage(gambar[pagination - 1]);
+                        embed.setFooter(`Page ${pagination} of ${gambar.length}`)
+                        r.edit(embed);
+                    });
+
+                    deletes.on('collect', (f) => {
+                        r.delete()
+                    });
+
+                } catch (error) {
+                    return message.channel.send(`Something went wrong: ${error.message}`);
+                    // Restart the bot as usual. 
+                }
+                fullfill();
+            } catch (err) {
+                reject(err)
+            }
+        })
+    };
+
+}
+
+module.exports = Kato;
