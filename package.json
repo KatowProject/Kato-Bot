@@ -30,7 +30,7 @@
     "request": "^2.88.2",
     "string-template": "^1.0.0",
     "yargs-parser": "^19.0.1"
-  },
+  }, 
   "engines": {
     "node": "12.x"
   },
