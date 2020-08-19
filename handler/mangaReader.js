@@ -9,7 +9,7 @@ class Kato {
     getPopular(query, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-                let get = await require('node-superfetch').get(`http://localhost:3000/api/manga/popular/${query}`)
+                let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/manga/popular/${query}`)
                 var data_array = [];
                 const json = get.body.manga_list
 
@@ -37,7 +37,7 @@ class Kato {
     getDetail(query, message) {
         return new Promise(async (fullfill, reject) => {
 
-            let get = await require('node-superfetch').get(`http://localhost:3000/api/manga/detail/${query}`)
+            let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/manga/detail/${query}`)
 
             try {
                 //genrelist
@@ -54,8 +54,8 @@ class Kato {
                     .addField('Genre', array.join(', '), true)
                     .addField('Status', get.body.status, true)
                     .addField('Tipe', get.body.type, true)
-                    .addField('Author', get.body.author)
-                    .addField('Endpoint', get.body.manga_endpoint.split('-').join(' '), true)
+                    .addField('Author', get.body.author, true)
+                    .addField('Endpoint', get.body.manga_endpoint, true)
                     .setDescription(get.body.synopsis.slice(0, 2048))
                 let p = await message.channel.send(embed)
 
@@ -67,7 +67,7 @@ class Kato {
                 })
                 let page = 1;
 
-                chap = this.client.util.chunk(chap_, 10)
+                let chap_ = this.client.util.chunk(chap, 10)
                 let embede = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
                     .setTitle('Chapter List')
@@ -125,7 +125,7 @@ class Kato {
         return new Promise(async (fullfill, reject) => {
             try {
                 //get data manga
-                let get = await require('node-superfetch').get(`http://localhost:3000/api/cari/${query}`)
+                let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/cari/${query}`)
                 //
 
                 //get result
@@ -177,18 +177,18 @@ class Kato {
 
     getChapList(query, message) {
         return new Promise(async (fullfill, reject) => {
-            let get = await require('node-superfetch').get(`http://localhost:3000/api/manga/detail/${query}`)
+            let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/manga/detail/${query}`)
             try {
                 //get Chap
                 let chap = [];
                 let json_c = get.body.chapter
                 json_c.forEach(a => {
-                    chap.push(`**${a.chapter_title}**\n\`Endpoint: ${a.chapter_endpoint.replace('-', ' ')}\``)
+                    chap.push(`**${a.chapter_title}**`)
                 })
                 let page = 1;
 
                 let chap_ = chap.map((title, i) => {
-                    return `**${i + 1}.** ${title}`
+                    return `** ${i + 1}.** ${title}`
                 });
                 //
 
@@ -256,7 +256,7 @@ class Kato {
                 let t = ep[index - 1]
                 await r.delete()
                 await p.delete()
-                this.getReadEmbed(t, message)
+                this.getReadEmbed(t, message, query)
 
                 fullfill();
             } catch (err) {
@@ -265,10 +265,10 @@ class Kato {
         })
     }
 
-    getReadEmbed(query, message) {
+    getReadEmbed(query, message, data) {
         return new Promise(async (fullfill, reject) => {
             try {
-                let get = await require('node-superfetch').get(`http://localhost:3000/api/chapter/${query}`)
+                let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/chapter/${query}`)
                 let gambar = [];
                 let pagination = 1;
                 let json = get.body.chapter_image;
@@ -289,6 +289,7 @@ class Kato {
                     await r.react("🤛");
                     await r.react("👈");
                     await r.react("♻");
+                    await r.react('⭕');
                     await r.react("👉");
                     await r.react("🤜")
 
@@ -299,6 +300,8 @@ class Kato {
                         reaction.emoji.name === `👈` && user.id === message.author.id;
                     const deleteFilter = (reaction, user) =>
                         reaction.emoji.name === `♻` && user.id === message.author.id;
+                    const ChapFilter = (reaction, user) =>
+                        reaction.emoji.name === '⭕' && user.id === message.author.id;
                     const forwardsFilter = (reaction, user) =>
                         reaction.emoji.name === `👉` && user.id === message.author.id;
                     const forwardsFiveFilter = (reaction, user) =>
@@ -307,6 +310,7 @@ class Kato {
                     const Fivebackwards = r.createReactionCollector(backwardsFiveFilter);
                     const backwards = r.createReactionCollector(backwardsFilter);
                     const deletes = r.createReactionCollector(deleteFilter);
+                    const chaps = r.createReactionCollector(ChapFilter);
                     const forwards = r.createReactionCollector(forwardsFilter);
                     const Fiveforwads = r.createReactionCollector(forwardsFiveFilter);
 
@@ -317,6 +321,7 @@ class Kato {
                         embed.setFooter(`Page ${pagination} of ${gambar.length}`)
                         r.edit(embed);
                     });
+
                     backwards.on('collect', (f) => {
                         if (pagination === 1) return;
                         pagination--;
@@ -332,6 +337,11 @@ class Kato {
                         embed.setImage(gambar[pagination - 1]);
                         embed.setFooter(`Page ${pagination} of ${gambar.length}`);
                         r.edit(embed);
+                    });
+
+                    chaps.on('collect', async (f) => {
+                        r.delete()
+                        await this.getChapList(data, message)
                     });
 
                     Fiveforwads.on('collect', (f) => {

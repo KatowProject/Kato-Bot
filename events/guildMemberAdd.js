@@ -3,7 +3,7 @@ module.exports = (client, member) => {
         client.channels.cache.get('636553126362742784').send(
             `Hai ${member.user}, Selamat Datang di Server ${member.guild.name}`
         )
-        member.roles.add('510933737194913823')
+        member.roles.add('511177887739543552')
     }
 
 
