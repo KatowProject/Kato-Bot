@@ -1,12 +1,10 @@
 const Discord = require('discord.js'),
   cooldowns = new Discord.Collection(),
-  db = require('quick.db'),
-  request = require('request')
-
+  db = require('quick.db')
 
 module.exports = async (client, message) => {
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
-  if (message.member.id !== "458342161474387999") return
+
 
   let prefix;
   if (message.content.toLowerCase().startsWith(client.config.prefix)) {

@@ -17,6 +17,5 @@ module.exports = class katopos extends Client {
     this.player = new Player(new Client())
     this.manga = new Kato(this)
 
-
   }
 };

@@ -3,7 +3,8 @@ const Discord = require('discord.js');
 exports.run = async (client, message, args) => {
     try {
         let query = args.join('-')
-        if (!query) return message.reply(`Penggunaan \`${client.config.prefix}msearch <query>\``)
+        if (!query) return message.reply(`jika kamu tidak menemukannya coba gunakan \`${client.config.prefix}msearch\` untuk mendapatkannya!`)
+            .then(t => t.delete({ timeout: 5000 }))
         await client.manga.getChapList(query, message);
 
 

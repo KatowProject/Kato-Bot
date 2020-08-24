@@ -1,37 +1,105 @@
 
 const Discord = require('discord.js');
-
+let JSZip = require('jszip')
+let fs = require('fs')
 class Kato {
     constructor(client) {
         this.client = client;
     }
 
-    getPopular(query, message) {
+    getGenre(query, message) {
         return new Promise(async (fullfill, reject) => {
+            //mendapatkan data lebih dari satu 
+            let getOne = await require('node-superfetch').get(`https://api.illyasviel.pw/api/genres/${query}1`)
+            let getTwo = await require('node-superfetch').get(`https://api.illyasviel.pw/api/genres/${query}2`)
+
+            let get = getOne.body.manga_list && getTwo.body.manga_list ? getOne.body.manga_list.concat(getTwo.body.manga_list) : [];
             try {
-                let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/manga/popular/${query}`)
-                var data_array = [];
-                const json = get.body.manga_list
-
-                json.forEach((array, i) => {
-                    data_array.push(`**${i + 1}**. **${array.title}**\nEndpoint: \`${array.endpoint.split('-').join(' ')}\``)
+                //dapatin string judul untuk melihat informasi pada embed
+                let array_title = [];
+                get.forEach((a, i) => {
+                    array_title.push(`**${i + 1}**. **${a.title}**`)
                 })
+                //console.log(array_title)
 
-                let page = 1
-                data_array = this.client.util.chunk(data_array, 10)
+                //supaya enak dilihat gk panjang lebar, difilter dulu jadi per page 10 data
+                let title_chunk = this.client.util.chunk(array_title, 10)
+
+                //dapatin string endpoint buat melanjutkan ke message selanjutnya
+                let array_endpoint = [];
+                get.forEach(a => {
+                    array_endpoint.push(a.endpoint)
+                })
+                //console.log(array_endpoint)
+
+
+                //langsung berikan datanya ke user
+                let pagination = 1
                 let embed = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
-                    .setTitle('Manga Populer')
-                    .setDescription(data_array[page - 1])
-                    .setThumbnail('https://cdn.discordapp.com/attachments/496983030993518592/743505238811607140/246587775008212.webp')
-                    .setFooter('Cara membaca k!read <endpoint>')
-                message.channel.send(embed);
-                fullfill();
+                    .setTitle(`Manga dengan genre ${query.replace('/', '')}`)
+                    .setDescription(title_chunk[pagination - 1])
+                    .setFooter(`Page ${pagination} of ${title_chunk.length}`)
+                let r = await message.channel.send(embed)
+                await r.react('👈')
+                await r.react('👉')
+
+
+
+                const backwardsFilter = (reaction, user) =>
+                    reaction.emoji.name === `👈` && user.id === message.author.id;
+                const forwardsFilter = (reaction, user) =>
+                    reaction.emoji.name === `👉` && user.id === message.author.id;
+
+
+
+                const backwards = r.createReactionCollector(backwardsFilter);
+                const forwards = r.createReactionCollector(forwardsFilter);
+
+
+
+                backwards.on('collect', (f) => {
+                    if (pagination === 1) return;
+                    pagination--;
+                    embed.setDescription(title_chunk[pagination - 1]);
+                    embed.setFooter(`Page ${pagination} of ${title_chunk.length}`)
+                    r.edit(embed);
+
+                })
+
+                forwards.on("collect", (f) => {
+                    if (pagination == title_chunk.length) return;
+                    pagination++;
+                    embed.setDescription(title_chunk[pagination - 1]);
+                    embed.setFooter(`Page ${pagination} of ${title_chunk.length}`);
+                    r.edit(embed);
+                });
+
+                //bot meminta data selanjutnya kepada user untuk melanjutkan
+                let reply = await message.reply('pilih untuk melihat detailnya!')
+                let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 1000, {
+                    max: 1,
+                    time: 100000,
+                    errors: ["time"]
+                }).catch((err) => {
+                    return message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!')
+                        .then(t => {
+                            r.delete()
+                            t.delete({ timeout: 5000 })
+                        })
+                })
+
+                const index = parseInt(response.first().content);
+                let t = array_endpoint[index - 1]
+                await r.delete()
+                await reply.delete()
+                await this.getDetail(t, message)
+
+                fullfill()
             } catch (err) {
                 reject(err)
             }
         })
-
     }
 
     getDetail(query, message) {
@@ -74,6 +142,7 @@ class Kato {
                     .setDescription(chap_[page - 1])
                     .setFooter(`Page ${page} of ${chap_.length}`)
                 let r = await message.channel.send(embede)
+                await message.reply(`Cara untuk membaca, \`${this.client.config.prefix}read <Endpoint>\``)
                 await r.react("⬅");
                 await r.react("♻");
                 await r.react("➡");
@@ -134,6 +203,7 @@ class Kato {
                 json.forEach((a, i) => {
                     data_array.push(`**${i + 1}.** **${a.title}**\n\`Endpoint: ${a.endpoint.split('-').join(' ')}\``)
                 });
+
                 //
 
                 //get await endpoint
@@ -143,7 +213,7 @@ class Kato {
                     data_endpoint.push(a.endpoint)
                 });
 
-
+                if (json.length == 0) return message.reply(`tidak ditemukan komik berjudul \`${query}\``).then(t => t.delete({ timeout: 5000 }));
                 let embed = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
                     .setTitle('Hasil Pencarian')
@@ -154,10 +224,15 @@ class Kato {
 
                 let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 1000, {
                     max: 1,
-                    time: 500000,
+                    time: 100000,
                     errors: ["time"]
                 }).catch((err) => {
-                    message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!')
+                    return message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!')
+                        .then(t => {
+                            r.delete()
+                            t.delete({ timeout: 5000 })
+                            p.delete()
+                        })
                 })
 
                 const index = parseInt(response.first().content);
@@ -183,12 +258,12 @@ class Kato {
                 let chap = [];
                 let json_c = get.body.chapter
                 json_c.forEach(a => {
-                    chap.push(`**${a.chapter_title}**`)
+                    chap.push(a.chapter_title)
                 })
                 let page = 1;
 
                 let chap_ = chap.map((title, i) => {
-                    return `** ${i + 1}.** ${title}`
+                    return `** ${i + 1}.** **${title}**`
                 });
                 //
 
@@ -254,9 +329,10 @@ class Kato {
 
                 const index = parseInt(response.first().content);
                 let t = ep[index - 1]
+                let tt = chap[index - 1]
                 await r.delete()
                 await p.delete()
-                this.getReadEmbed(t, message, query)
+                this.getReadEmbed(t, message, query, tt)
 
                 fullfill();
             } catch (err) {
@@ -265,7 +341,7 @@ class Kato {
         })
     }
 
-    getReadEmbed(query, message, data) {
+    getReadEmbed(query, message, data, judul) {
         return new Promise(async (fullfill, reject) => {
             try {
                 let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/chapter/${query}`)
@@ -290,8 +366,9 @@ class Kato {
                     await r.react("👈");
                     await r.react("♻");
                     await r.react('⭕');
+                    await r.react('💾');
                     await r.react("👉");
-                    await r.react("🤜")
+                    await r.react("🤜");
 
 
                     const backwardsFiveFilter = (reaction, user) =>
@@ -302,6 +379,8 @@ class Kato {
                         reaction.emoji.name === `♻` && user.id === message.author.id;
                     const ChapFilter = (reaction, user) =>
                         reaction.emoji.name === '⭕' && user.id === message.author.id;
+                    const download = (reaction, user) =>
+                        reaction.emoji.name === '💾' && user.id === message.author.id;
                     const forwardsFilter = (reaction, user) =>
                         reaction.emoji.name === `👉` && user.id === message.author.id;
                     const forwardsFiveFilter = (reaction, user) =>
@@ -311,6 +390,7 @@ class Kato {
                     const backwards = r.createReactionCollector(backwardsFilter);
                     const deletes = r.createReactionCollector(deleteFilter);
                     const chaps = r.createReactionCollector(ChapFilter);
+                    const dl = r.createReactionCollector(download);
                     const forwards = r.createReactionCollector(forwardsFilter);
                     const Fiveforwads = r.createReactionCollector(forwardsFiveFilter);
 
@@ -355,6 +435,15 @@ class Kato {
                     deletes.on('collect', (f) => {
                         r.delete()
                     });
+
+                    dl.on('collect', async (f) => {
+                        let embede = new Discord.MessageEmbed()
+                            .setColor(this.client.warna.kato)
+                            .setTitle('Download yang tersedia')
+                            .addField('Download Format zip', `[klik di sini]https://mangadl-katow.herokuapp.com/download/komiku/${query}/zip`)
+                            .addField('Download Format pdf', `[klik di sini]https://mangadl-katow.herokuapp.com/download/komiku/${query}/pdf`)
+                        message.channel.send(embede).then(t => t.delete({ timeout: 10000 }))
+                    })
 
                 } catch (error) {
                     return message.channel.send(`Something went wrong: ${error.message}`);

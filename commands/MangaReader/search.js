@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 exports.run = async (client, message, args) => {
     try {
         let query = args.join(' ')
-        if (!query) return message.reply(`Penggunaan \`${client.config.prefix}msearch <angka>\``)
+        if (query.length < 5) return message.reply('minimal 5 karakter untuk mencarinya!').then(t => t.delete({ timeout: 5000 }))
         await client.manga.getBySearch(query, message);
 
     } catch (error) {
@@ -19,7 +19,7 @@ exports.conf = {
 
 exports.help = {
     name: 'msearch',
-    description: 'Menampilkan doujin secara acak',
-    usage: 'nhen random',
-    example: 'nhen random'
+    description: 'mendapatkan data manga dengan metode pencarian',
+    usage: 'msearch <query>',
+    example: 'msearch <kanojo>'
 }
