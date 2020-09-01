@@ -1,6 +1,5 @@
 
 const Discord = require('discord.js');
-let JSZip = require('jszip')
 let fs = require('fs')
 class Kato {
     constructor(client) {
@@ -440,8 +439,8 @@ class Kato {
                         let embede = new Discord.MessageEmbed()
                             .setColor(this.client.warna.kato)
                             .setTitle('Download yang tersedia')
-                            .addField('Download Format zip', `[klik di sini]https://mangadl-katow.herokuapp.com/download/komiku/${query}/zip`)
-                            .addField('Download Format pdf', `[klik di sini]https://mangadl-katow.herokuapp.com/download/komiku/${query}/pdf`)
+                            .addField('Download Format ZIP', `[klik di sini]https://mangadl-katow.herokuapp.com/download/komiku/${query}zip`)
+                            .addField('Download Format PDF', `[klik di sini]https://mangadl-katow.herokuapp.com/download/komiku/${query}pdf`)
                         message.channel.send(embede).then(t => t.delete({ timeout: 10000 }))
                     })
 

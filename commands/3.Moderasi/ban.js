@@ -32,7 +32,7 @@ exports.run = async (client, message, args) => {
 
     member.ban({ reason: reason })
       .then((banMember) => {
-        message.reply(`Anda berhasil membanned **${banMember.user.tag}** dengan alasan:\n${reason}`);
+        message.reply(`Anda berhasil membanned **${banMember.user.tag}**\nAlasan:\n${reason}\nhttps://media2.giphy.com/media/H99r2HtnYs492/200.gif`);
       })
       .catch((err) => {
         message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);

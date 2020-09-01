@@ -10,11 +10,11 @@ exports.run = async (client, message, args) => {
         if (!mutee) return;
         let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
-        let timeout = args.slice(1)
+        let timeout = args[1]
         if (!timeout) return message.reply('masukkan durasi terlebih dahulu!')
+        let durasi = ms(timeout)
 
-
-        let reason = args.slice(2)
+        let reason = args.slice(2).join(' ')
         if (!reason) reason = "tidak diberi alasan";
 
         mutee.roles.add(role).then(() => {
@@ -22,8 +22,8 @@ exports.run = async (client, message, args) => {
         });
 
         setTimeout(() => {
-            member.roles.remove(role)
-        }, ms(timeout))
+            mutee.roles.remove(role)
+        }, durasi)
 
 
         let embed = new Discord.MessageEmbed()
@@ -31,7 +31,7 @@ exports.run = async (client, message, args) => {
             .setColor(client.warna.kato)
             .addField("User", mutee, true)
             .addField("Moderator", message.author, true)
-            .addField('Durasi', client.util.parseDur(timeout))
+            .addField('Durasi', client.util.parseDur(durasi))
             .addField("Alasan", reason, true)
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL);

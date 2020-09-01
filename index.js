@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const Kato = require("./handler/ClientBuilder.js");
 const client = new Kato({ disableMentions: 'everyone', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const recent = new Set();
+const logs = require('discord-logs')
+logs(client)
 
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);

@@ -12,13 +12,13 @@ exports.run = async (client, message, args) => {
         if (!afk) {
             message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' })
             setTimeout(() => {
-                status.set(message.author.id, reason || 'AFK')
+                status.set(message.author.id, { alasan: reason || 'AFK' })
+                status.add(`${message.author.id}.time`, Date.now())
             }, 7000);
 
         } else {
             status.delete(message.author.id)
         }
-
 
 
     } catch (error) {

@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const neko = require('nekos.life')
 const { nsfw } = new neko()
-const JSZip = require('jszip')
 
 exports.run = async (client, message, args) => {
   try {

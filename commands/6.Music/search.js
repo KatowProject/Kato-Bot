@@ -16,18 +16,20 @@ module.exports.run = async (client, message, args) => {
     const embed = new Discord.MessageEmbed().setColor(client.warna.success)
         .setDescription(search.map((t, i) => `**${i + 1} -** [${t.name}](${t.url})`).join("\n"))
         .setFooter("Send the number of the track you want to play!");
-    message.channel.send(embed);
+    let q = await message.channel.send(embed);
     // Wait for user answer
     let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 15, {
         max: 1,
         time: 20000,
         errors: ["time"]
     }).catch((err) => {
-        message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!')
+        q.delete()
+        message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!').then(t => t.delete({ timeout: 5000 }))
     })
 
     const index = parseInt(response.first().content);
     let track = search[index - 1];
+    await q.delete();
     // Then play the song
     let requestedBy = client.users.cache.get(message.author.id).tag
     let playing = client.player.isPlaying(message.guild.id)
@@ -52,7 +54,7 @@ module.exports.run = async (client, message, args) => {
         message.channel.send({
             embed: {
                 color: client.warna.success,
-                description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \nDurasi : ${song.duration}\n \nPermintaan : ${song.requestedBy}`,
+                description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \n\`Durasi : ${song.duration}\`\n \n\`Permintaan : ${song.requestedBy}\``,
                 thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
             }
         })
