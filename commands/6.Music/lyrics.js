@@ -1,24 +1,45 @@
 const Discord = require("discord.js")
 const fs = require("fs")
+const axios = require('axios')
 
 module.exports.run = async (client, message, args) => {
 
     if (client.config.channel.includes(message.channel.id)) return;
     let query = args.join('-')
     if (!query) return message.reply('Masukkan Permintaan terlebih dahulu!')
-    const fetch = require('node-fetch')
-    const get = await fetch(`https://lyrics-api.powercord.dev/lyrics?input=${query}`, { method: "GET" }).then(res => res.json())
-        .catch((err) => { message.reply(err) })
 
+    let get = await axios.get(`https://lyrics-api.powercord.dev/lyrics?input=${query}`)
+        .catch((err) => { message.reply(err) })
+    get = get.data
 
     let data = {
         artis: get.data[0].artist,
         nama: get.data[0].name,
         lirik: get.data[0].lyrics,
-        gambar: get.data[0].album_art
+        gambar: get.data[0].album_art,
+        url: get.data[0].url
     }
 
-    if (data.lirik.length > 2048) {
+    let chunk = client.util.chunkString(data.lirik, 2048)
+    let first = chunk.shift()
+
+
+    let embed = new Discord.MessageEmbed()
+        .setColor(client.warna.kato)
+        .setAuthor(data.artis, data.gambar, data.url)
+        .setTitle(data.nama)
+        .setDescription(first)
+    await message.channel.send(embed)
+
+    chunk.forEach(a => {
+        let embed = new Discord.MessageEmbed()
+            .setColor(client.warna.kato)
+            .setDescription(a)
+        message.channel.send(embed)
+
+    })
+
+    /*if (data.lirik.length > 2048) {
         let embed = new Discord.MessageEmbed()
             .setColor(client.warna.kato)
             .setAuthor(data.artis, data.gambar)
@@ -38,7 +59,7 @@ module.exports.run = async (client, message, args) => {
             .setDescription(data.lirik)
         await message.channel.send(embed)
     }
-
+    */
 
 
 }

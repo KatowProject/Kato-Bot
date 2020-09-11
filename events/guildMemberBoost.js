@@ -15,6 +15,6 @@ module.exports = async (client, member) => {
         .setColor(client.warna.kato)
         .setAuthor('Member Boost', 'https://cdn.discordapp.com/emojis/638719606738911236.gif')
         .setDescription(`Hai ${member}, terima kasih telah boost di server Perkumpulan Orang Santai ヾ(≧▽≦*)o `)
-        .setThumbnail(p[rstatus])
-    client.channels.cache.get('447408276628307969').send(embed)
+        .setImage(p[rstatus])
+    client.channels.cache.get('753219182967128154').send(embed)
 }

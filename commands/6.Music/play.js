@@ -42,14 +42,27 @@ exports.run = async (client, message, args) => {
       // Else, play the song
       const song = await client.player.play(message.member.voice.channel, queue, requestedBy);
 
-      message.channel.send({
-        embed: {
-          color: client.warna.success,
-          description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \nDurasi : \`${song.duration}\`\n \nPermintaan : ${song.requestedBy}`,
-          thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
-        }
-      })
+      if (song.type === 'playlist') {
+        message.channel.send({
+          embed: {
+            color: client.warna.success,
+            description: `**Menambahkan ${song.tracks.length} lagu ke dalam antrian!**\n
+                          ${client.emoji.music} | Current Playing:\n${song.tracks[0].name}`,
+            thumbnail: {
+              url: song.tracks[0].thumbnail
+            }
+          }
+        })
+      } else {
 
+        message.channel.send({
+          embed: {
+            color: client.warna.success,
+            description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \nDurasi : \`${song.duration}\`\n \nPermintaan : ${song.requestedBy}`,
+            thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
+          }
+        })
+      }
 
       client.player.getQueue(message.guild.id)
         .on('end', () => {

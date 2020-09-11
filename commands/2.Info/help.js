@@ -9,6 +9,7 @@ exports.run = async (client, message, args) => {
   if (!args[0]) {
     let module = client.helps.array();
     if (!client.config.owners.includes(message.author.id)) module = module.filter(x => !x.hide)
+
     const embed = new MessageEmbed()
       .setColor(client.warna.kato)
       .setTimestamp()

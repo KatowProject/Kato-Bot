@@ -16,7 +16,7 @@ module.exports = (client, message) => {
     let embed = new discord.MessageEmbed().setColor(client.warna.kato)
     let jam = new Date().getHours()
     let menit = new Date().getMinutes()
-    let channel = '447408276628307969'
+    let channel = '753219182967128154'
 
     if (jam == 6 && menit == 0) {
         embed.setImage(kato.pagi)
