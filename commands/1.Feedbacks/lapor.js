@@ -17,7 +17,7 @@ exports.run = async (client, message, args) => {
 
     //eksekusi
     message.guild.channels.cache.find(guild => guild.name === "feedbacks").send(embed);
-    message.reply("Laporan kamu sudah terkirim!").then(t => t.delete({ timeout: 5000 }));
+    return message.reply("Laporan kamu sudah terkirim!").then(t => t.delete({ timeout: 5000 }));
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);

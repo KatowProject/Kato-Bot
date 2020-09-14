@@ -146,67 +146,76 @@ exports.run = async (client, message, args) => {
     async function getEpsList(query, message) {
         //ambil data
         let get = await require("node-superfetch").get(`https://samehadaku-rest-api.herokuapp.com/anime/eps/${query}`);
+        get = get.body
 
+        //data mkv
+        let array_mkv = [];
+        mkv(array_mkv);
+        let embed = new Discord.MessageEmbed().setColor(client.warna.kato).setTitle('Format MKV').setAuthor(get.title);
+        for (data of array_mkv) {
+            embed.addField(data.kualitas, `[Klik di sini](${data.link})`, true)
+        };
 
-        let kualitas = {
-            rendah_MKV: get.body.downloadEps[0].data[0].quality,
-            normal_MKV: get.body.downloadEps[0].data[1].quality,
-            tinggi_MKV: get.body.downloadEps[0].data[2].quality,
-            //////////////////////////////////////////
-            rendah_MP4: get.body.downloadEps[1].data[0].quality,
-            normal_MP4: get.body.downloadEps[1].data[1].quality,
-            tinggi_MP4: get.body.downloadEps[1].data[2].quality,
+        await message.channel.send(embed);
+
+        //data mp4
+        let array_mp4 = [];
+        mp4(array_mp4);
+        let embede = new Discord.MessageEmbed().setColor(client.warna.kato).setTitle('Format MP4');
+        for (data of array_mp4) {
+            embede.addField(data.kualitas, `[Klik di sini](${data.link})`, true)
+        };
+
+        await message.channel.send(embede)
+
+        //data x265
+        let array_x265 = [];
+        x265(array_x265);
+        let embeded = new Discord.MessageEmbed().setColor(client.warna.kato).setTitle('Format x265');
+        for (data of array_x265) {
+            embeded.addField(data.kualitas, `[Klik di sini](${data.link})`, true)
+        }
+        await message.channel.send(embeded)
+
+        return message.channel.send('jika formatnya tidak lengkap, maka hanya itu saja yang tersedia resolusinya')
+
+        // ini tempat looping yaaahh
+        function mkv(array) { //mkv
+            //looping data
+            for (let i = 0; i < get.downloadEps[0].data.length; i++) {
+                const e_quality = get.downloadEps[0].data[i].quality //quality
+                const e_link = get.downloadEps[0].data[i].link.zippyshare //link
+                array.push({
+                    kualitas: e_quality,
+                    link: e_link
+                })
+            }
         }
 
-        let drive = {
-            zrendah_MKV: get.body.downloadEps[0].data[0].link.zippyshare,
-            znormal_MKV: get.body.downloadEps[0].data[1].link.zippyshare,
-            ztinggi_MKV: get.body.downloadEps[0].data[2].link.zippyshare,
-            ////////////////////////////////////////////////////
-            zrendah_MP4: get.body.downloadEps[1].data[0].link.zippyshare,
-            znormal_MP4: get.body.downloadEps[1].data[1].link.zippyshare,
-            ztinggi_MP4: get.body.downloadEps[1].data[2].link.zippyshare,
-
-            gdr_MKV: get.body.downloadEps[0].data[0].link.gdrive,
-            gdn_MKV: get.body.downloadEps[0].data[1].link.gdrive,
-            gdt_MKV: get.body.downloadEps[0].data[2].link.gdrive,
-
-            gdr_MP4: get.body.downloadEps[1].data[0].link.gdrive,
-            gdn_MP4: get.body.downloadEps[1].data[1].link.gdrive,
-            gdt_MP4: get.body.downloadEps[1].data[2].link.gdrive,
-
+        //mp4
+        function mp4(array) {
+            //looping data
+            for (let i = 0; i < get.downloadEps[1].data.length; i++) {
+                const e_quality = get.downloadEps[1].data[i].quality; //quality
+                const e_link = get.downloadEps[1].data[i].link.zippyshare; //link
+                array.push({
+                    kualitas: e_quality,
+                    link: e_link
+                })
+            }
         }
-
-        let short = {
-            zippyshare_MKV: `**${kualitas.rendah_MKV}**: [Klik Di sini](${drive.zrendah_MKV})\n**${kualitas.normal_MKV}**: [Klik Di sini](${drive.znormal_MKV})\n**${kualitas.tinggi_MKV}**: [Klik Di sini](${drive.ztinggi_MKV})`,
-            zippyshare_MP4: `**${kualitas.rendah_MP4}**: [Klik Di sini](${drive.zrendah_MP4})\n**${kualitas.normal_MP4}**: [Klik Di sini](${drive.znormal_MP4})\n**${kualitas.tinggi_MP4}**: [Klik Di sini](${drive.ztinggi_MP4})`,
-            gdrive_MKV: `**${kualitas.rendah_MKV}**: [Klik Di sini](${drive.gdr_MKV})\n**${kualitas.normal_MKV}**: [Klik Di sini](${drive.gdn_MKV})\n**${kualitas.tinggi_MKV}**: [Klik Di sini](${drive.gdt_MKV})`,
-            gdrive_MP4: `**${kualitas.rendah_MP4}**: [Klik Di sini](${drive.gdr_MP4})\n**${kualitas.normal_MP4}**: [Klik Di sini](${drive.gdn_MP4})\n**${kualitas.tinggi_MP4}**: [Klik Di sini](${drive.gdt_MP4})`
+        //x265
+        function x265(array) {
+            //looping
+            for (let i = 0; i < get.downloadEps[2].data.length; i++) {
+                const e_quality = get.downloadEps[2].data[i].quality;
+                const e_link = get.downloadEps[2].data[i].link.zippyshare
+                array.push({
+                    kualitas: e_quality,
+                    link: e_link
+                })
+            }
         }
-        try {
-
-            let Dembed = new Discord.MessageEmbed()
-                .setTitle(get.body.title)
-                .addField('ZippyShare (Format MKV)', short.zippyshare_MKV)
-                .addField('ZippyShare (Format MP4)', short.zippyshare_MP4)
-                .setColor(client.warna.kato)
-            await message.channel.send(Dembed)
-
-            let Gembed = new Discord.MessageEmbed()
-                .setDescription(`**Google Drive (Format MKV)**\n ${short.gdrive_MKV}`)
-                .setColor(client.warna.kato)
-            await message.channel.send(Gembed)
-
-            let Geembed = new Discord.MessageEmbed()
-                .setDescription(`**Google Drive (Format MP4)**\n ${short.gdrive_MP4}`)
-                .setColor(client.warna.kato)
-            await message.channel.send(Geembed)
-
-        } catch (error) {
-            return message.channel.send(`Something went wrong: ${error.message}`);
-            // Restart the bot as usual. 
-        }
-
     }
 
 }

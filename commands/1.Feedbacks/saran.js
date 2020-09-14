@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
       message.reply('buatlah channel dengan nama **Feedbacks**!')
     });
 
-    message.reply("Saran kamu sudah terkirim!").then(t => t.delete({ timeout: 5000 }));
+    return message.reply("Saran kamu sudah terkirim!").then(t => t.delete({ timeout: 5000 }));
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
