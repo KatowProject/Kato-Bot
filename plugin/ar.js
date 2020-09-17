@@ -2,16 +2,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = async (client, message) => {
 
-    const embed = new MessageEmbed()
-        .setColor('#985ce7')
-    //message
-    const ar = {
-        kato: `<@${client.user.id}>` && `<@!${client.user.id}>`,
-        everyone: '@everyone',
-        ngaca: 'ngaca',
-        pedo: 'pedo',
-        trumint: 'trumint'
-    }
+    const embed = new MessageEmbed().setColor('#985ce7')
     //link
     const link = {
         pedo: 'https://cdn.discordapp.com/attachments/519859252966457369/641765228987809802/FB_IMG_1571834909693.png',
@@ -21,29 +12,31 @@ module.exports = async (client, message) => {
     }
 
     //trigger 
-    if (message.content.toLowerCase() === ar.kato) {// Ar jika mention Kato
+    if (message.content.toLowerCase() === `<@!${client.user.id}>`) {// Ar jika mention Kato
         embed.setImage(link.ping_kato)
         message.channel.send(embed)
-    } else
+    }
+
+    if (message.content.toLowerCase() === `<@${client.user.id}>`)
         if (message.content.toLowerCase() === ar.everyone) {// Ar jika mention everyone
             if (message.channel.id === '401532703301828610') return
             if (message.channel.id === '653194232462442516') return
             embed.setImage(link.ping_kato)
             message.channel.send(embed)
-        } else
-            if (message.content.toLowerCase() === ar.ngaca) {// Ar jika ketik ngaca
-                embed.setImage(link.ngaca)
-                message.channel.send(embed)
-            } else
-                if (message.content.toLowerCase() === ar.pedo) {// Ar jika ketik pedo
-                    embed.setImage(link.pedo)
-                    message.channel.send(embed)
-                } else
-                    if (message.content.toLowerCase() === ar.trumint) {// Ar jika ketik trumint
-                        let rstatus = Math.floor(Math.random() * link.trumint.length)
-                        embed.setImage(link.trumint[rstatus])
-                        message.channel.send(embed)
-                    }
+        }
+    if (message.content.toLowerCase() === 'ngaca') {// Ar jika ketik ngaca
+        embed.setImage(link.ngaca)
+        message.channel.send(embed)
+    }
+    if (message.content.toLowerCase() === 'pedo') {// Ar jika ketik pedo
+        embed.setImage(link.pedo)
+        message.channel.send(embed)
+    }
+    if (message.content.toLowerCase() === 'trumint') {// Ar jika ketik trumint
+        let rstatus = Math.floor(Math.random() * link.trumint.length)
+        embed.setImage(link.trumint[rstatus])
+        message.channel.send(embed)
+    }
 
 
 }

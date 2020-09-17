@@ -3,10 +3,7 @@ const neko = require('nekos.life')
 const { nsfw } = new neko()
 
 exports.run = async (client, message, args) => {
-  if (!message.channel.nsfw) return
-  else {
-    if (message.channel.id === '604660186593886229') return
-  };
+  if (!['710431360954794004'].includes(message.channel.id)) return;
   try {
     const genre = [nsfw.bJ(), nsfw.blowJob()]
     const random = genre[Math.floor(Math.random() * genre.length)];

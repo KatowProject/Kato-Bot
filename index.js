@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 const Kato = require("./handler/ClientBuilder.js");
-const client = new Kato({ disableEveryone: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const client = new Kato({ disableMentions: 'everyone', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const recent = new Set();
+const logs = require('discord-logs')
+logs(client)
 
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
@@ -28,18 +30,3 @@ process.on("uncaughtException", err => {
     console.error("true");
   }
 });
-
-//////////Welcomer Log/////////////////////////
-
-client.on('guildMemberAdd', member => {
-  if (member.guild.id !== "510846217945743380") return;
-
-  client.channels.cache.get('636553126362742784').send(`Hai ${member}, Selamat datang di Server ${member.guild.name}!`)
-  member.roles.add('511177887739543552')
-})
-
-client.on('guildMemberRemove', member => {
-  if (member.guild.id !== "510846217945743380") return;
-
-  client.channels.cache.get('636553126362742784').send(`${member} telah keluar dari Server!`)
-})

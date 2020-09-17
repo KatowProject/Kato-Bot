@@ -1,27 +1,37 @@
 const Discord = require("discord.js")
 const fs = require("fs");
-const { error } = require("console");
 
 module.exports.run = async (client, message, args) => {
+    if (client.config.channel.includes(message.channel.id)) return;
+    if (!message.member.voice.channel) return message.channel.send({
+        embed: {
+            color: client.warna.error,
+            description: `${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`
+        }
+    })
 
     let search = await client.player.searchTracks(args.join(' '), true)
+    if (search.length > 1) search = search.slice(0, 15)
     // Sends an embed with the 10 first songs
     const embed = new Discord.MessageEmbed().setColor(client.warna.success)
-        .setDescription(search.map((t, i) => `**${i + 1} -** ${t.name}`).join("\n"))
+        .setDescription(search.map((t, i) => `**${i + 1} -** [${t.name}](${t.url})`).join("\n"))
         .setFooter("Send the number of the track you want to play!");
-    message.channel.send(embed);
+    let q = await message.channel.send(embed);
     // Wait for user answer
-    let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content < 20, {
+    let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 15, {
         max: 1,
         time: 20000,
         errors: ["time"]
     }).catch((err) => {
-        message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!')
+        q.delete()
+        message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!').then(t => t.delete({ timeout: 5000 }))
     })
+
     const index = parseInt(response.first().content);
     let track = search[index - 1];
+    await q.delete();
     // Then play the song
-    let requestedBy = message.author
+    let requestedBy = client.users.cache.get(message.author.id).tag
     let playing = client.player.isPlaying(message.guild.id)
 
     if (playing) {
@@ -33,7 +43,7 @@ module.exports.run = async (client, message, args) => {
             embed: {
                 color: client.warna.success,
                 description: `${client.emoji.success} **|** [${song.name}](${song.url}) **Added to the queue!** \n\n Durasi: \`${song.duration}\`\n\n Permintaan : \`${song.requestedBy}\`\n\n Author: \`${song.author}\``,
-                thumbnail: { url: song.thumbnail }
+                thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
             }
         });
 
@@ -44,8 +54,8 @@ module.exports.run = async (client, message, args) => {
         message.channel.send({
             embed: {
                 color: client.warna.success,
-                description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \nDurasi : ${song.duration}\n \nPermintaan : ${song.requestedBy}`,
-                thumbnail: { url: song.thumbnail }
+                description: `${client.emoji.music} | Now Playing : \n [${song.name}](${song.url})\n \n\`Durasi : ${song.duration}\`\n \n\`Permintaan : ${song.requestedBy}\``,
+                thumbnail: { url: song.thumbnail.replace('hqdefault', 'maxresdefault') }
             }
         })
 
@@ -70,7 +80,7 @@ module.exports.run = async (client, message, args) => {
                             color: client.warna.success,
                             description: `${client.emoji.music} |  Now Repeating : \n [${oldTrack.name}](${oldTrack.url})\n \nDurasi : ${oldTrack.duration}\n \nPermintaan : ${oldTrack.requestedBy}`,
                             thumbnail: {
-                                url: oldTrack.thumbnail
+                                url: oldTrack.thumbnail.replace('hqdefault', 'maxresdefault')
                             }
                         }
                     });
@@ -80,7 +90,7 @@ module.exports.run = async (client, message, args) => {
                         embed: {
                             color: client.warna.success,
                             description: `${client.emoji.music} | Now Playing : \n [${newTrack.name}](${newTrack.url})\n \nDurasi : ${newTrack.duration}\n \nPermintaan : ${newTrack.requestedBy}`,
-                            thumbnail: newTrack.thumbnail
+                            thumbnail: newTrack.thumbnail.replace('hqdefault', 'maxresdefault')
                         }
                     })
                 }

@@ -1,11 +1,10 @@
 const Discord = require('discord.js'),
   cooldowns = new Discord.Collection(),
-  db = require('quick.db'),
-  request = require('request')
-
+  db = require('quick.db')
 
 module.exports = async (client, message) => {
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
+
 
   let prefix;
   if (message.content.toLowerCase().startsWith(client.config.prefix)) {
@@ -13,8 +12,8 @@ module.exports = async (client, message) => {
   } else if (message.content.toLowerCase().startsWith(client.config.prefix2)) {
     prefix = client.config.prefix2
   }
-  require('./ar.js')(client, message)
-  require('./afk.js')(client, message)
+  require('../plugin/ar.js')(client, message)
+  require('../plugin/afk.js')(client, message)
 
   //Prefix nya bisa antara di mention, ama antara pake prefix biasa (k!)
 

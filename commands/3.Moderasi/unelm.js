@@ -1,24 +1,32 @@
 const Discord = require('discord.js');
+const db = require('quick.db');
 
 exports.run = async (client, message, args) => {
   try {
-    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return message.channel.send('Kamu tidak Mempunyai Akses!');
+    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
     if (!message.guild.me.hasPermission(["MANAGE_ROLES", "ADMINISTRATOR"])) return message.channel.send("Aku tidak mempunyai akses!");
 
     let korban = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!korban) return message.channel.send("tag user yang ingin di unelm!");
 
+    //cari data
+    let data = new db.table('ELMs')
+    let elm = await data.fetch(korban.user.id)
+    if (elm === null) return;
+    let elm_role = data.get(korban.user.id)
 
-    let psantai = message.guild.roles.cache.get("647778783314837507");
-    korban.roles.add(psantai)
+    for (let i = 0; i < elm_role.length; i++) {
+      korban.roles.add(elm_role[i])
+    }
 
     let ELM = message.guild.roles.cache.get("505004825621168128");
-
     korban.roles.remove(ELM).then(() => {
       message.delete()
 
       message.channel.send(`**${korban.user.username}#${korban.user.discriminator}** telah selesai di unelm.`)
     })
+
+    await data.delete(korban.user.id)
 
     let embed = new Discord.MessageEmbed()
       .setAuthor(`UNELM | ${korban.user.tag}`)

@@ -19,31 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulai efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.treble;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             treble: true
         });
-
-        message.channel.send("Treble telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                treble: false
-            });
-
-            message.channel.send('Treble telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Treble telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            treble: false
+        });
+        message.channel.send("Efek Treble telah dinonaktifkan!");
+    }
 
 }
 
@@ -55,6 +42,6 @@ exports.conf = {
 exports.help = {
     name: 'treble',
     description: 'menberikan efek treble pada musik',
-    usage: 'k@treble <on/off>',
-    example: 'k@treble on'
+    usage: 'treble',
+    example: 'treble'
 }

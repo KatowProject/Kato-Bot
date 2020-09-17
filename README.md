@@ -9,6 +9,7 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 
 ## Creative Commons Licenses
 **This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms.** This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects
+
 [![Creative Commons](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-sa/4.0/ "Redirect to Creative Commons")
 
 ## Pemilik
@@ -30,7 +31,7 @@ Carl#5803 <br>
 - Install yarn (jika ingin menggunakan `yarn` daripada `npm`)
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
-- Edit file `config.json` untuk memasukan prefix, owner dan tokennya.
+- Edit file `config/config.json` untuk memasukan prefix, owner dan tokennya.
 
 ### Penggunaan
 ketik di terminal `node index.js` untuk menjalankan bot-nya.
@@ -40,4 +41,4 @@ ketik di terminal `node index.js` untuk menjalankan bot-nya.
 Terimakasih!
 
 ## Selamat Mencoba.
-![](https://cdn.discordapp.com/avatars/578144365009043466/33b26ccfdcac6980c859cf5f8f12730d.png?size=256)
+![](https://cdn.discordapp.com/attachments/519859252966457369/735280356441456641/4c64e343e788251fb15dac0f4c557337.gif)

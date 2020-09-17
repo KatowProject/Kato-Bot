@@ -13,11 +13,11 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 10
 }
 
 exports.help = {
-  name: 'tindas',
+  name: 'jawa',
   description: 'tindas',
   usage: 'tindas',
   example: 'tindas'

@@ -91,7 +91,7 @@ class Util {
 
     this.hastebin = async function hastebin(text) {
       const { body } = await snek
-        .post("https://haste.bin/documents")
+        .post("https://hasteb.in/documents")
         .send(text);
       return `https://hasteb.in/${body.key}`;
     };
@@ -103,6 +103,17 @@ class Util {
       }
       return temp;
     };
+
+    this.chunkString = function chunkString(str, size) {
+      const numChunks = Math.ceil(str.length / size)
+      const chunks = new Array(numChunks)
+
+      for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+        chunks[i] = str.substr(o, size)
+      }
+
+      return chunks
+    }
 
     this.timeString = function timeString(seconds, forceHours = false) {
       const hours = Math.floor(seconds / 3600);
@@ -327,7 +338,6 @@ class Util {
         current().seconds < 10 ? `0${current().seconds}` : current().seconds;
       return `${curentDurationMinute}:${currentDurationSeconds}/${endDurationMinute}:${endDurationSeconds}`;
     };
-
 
   }
 }

@@ -19,32 +19,18 @@ module.exports.run = async (client, message, args) => {
     })
 
     //mainkan tombolnya sterrr
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
-
-
-    //mulaikan efeknya
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.tremolo;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             tremolo: true
         });
-
-        message.channel.send("Tremolo telah diaktifkan!");
-    } else
-        //matikan efeknya
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                tremolo: false
-            });
-
-            message.channel.send('Tremolo telah dinonaktifkan!')
-        };
-
+        message.channel.send("Efek Tremolo telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            tremolo: false
+        });
+        message.channel.send("Efek Tremolo telah dinonaktifkan!");
+    }
 }
 
 exports.conf = {
@@ -55,6 +41,6 @@ exports.conf = {
 exports.help = {
     name: 'tremolo',
     description: 'menberikan efek tremolo pada musik',
-    usage: 'k@tremolo <on/off>',
-    example: 'k@tremolo on'
+    usage: 'tremolo',
+    example: 'tremolo'
 }

@@ -2,6 +2,7 @@ const { Util } = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
+    if (client.config.channel.includes(message.channel.id)) return;
     if (!message.member.voice.channel) return message.channel.send({
       embed: {
         color: client.warna.error,
@@ -19,11 +20,11 @@ exports.run = async (client, message, args) => {
     })
 
     const q = queue.tracks.map((track, i) => {
-      return `${i + 1} . [${track.name}](${track.url}) - **${track.author}**`
+      return `${i + 1} . [${track.name}](${track.url}) (${track.duration}) - **${track.requestedBy}**`
     }).join('\n');
 
     let current = await client.player.nowPlaying(message.guild.id)
-    current = `▶ | **${current.name}** - **${current.author}**\n` || 'tidak ada antrian'
+    current = `▶ | **${current.name}** - **${current.author}** (${current.duration}) - [**${current.requestedBy}**]\n` || 'tidak ada antrian'
     current += q
     let chunks = client.util.splitEmbedDescription(current, "\n");
     let total = chunks.length;

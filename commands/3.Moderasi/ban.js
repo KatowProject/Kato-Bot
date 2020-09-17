@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
 
     // Ketika tidak ada di mention
     if (!member)
-      return message.reply('tag user yang ingin di :hammer:');
+      return;
 
     // Ketika usernamenya sama ama yang di mention
     if (member.user.id === message.author.id)
@@ -24,7 +24,7 @@ exports.run = async (client, message, args) => {
 
     // Ketika yang membanned adalah member
     if (!author.hasPermission("BAN_MEMBERS"))
-      return message.reply('Anda adalah member biasa, anda tidak bisa menggunakan command ini!');
+      return;
 
     // Ketika yang dibanned adalah admin/momod
     if (member.hasPermission("BAN_MEMBERS"))
@@ -32,7 +32,7 @@ exports.run = async (client, message, args) => {
 
     member.ban({ reason: reason })
       .then((banMember) => {
-        message.reply(`Anda berhasil membanned **${banMember.user.tag}** dengan alasan:\n${reason}`);
+        message.reply(`Anda berhasil membanned **${banMember.user.tag}**\nAlasan:\n${reason}\nhttps://media2.giphy.com/media/H99r2HtnYs492/200.gif`);
       })
       .catch((err) => {
         message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);

@@ -6,7 +6,7 @@ exports.run = async (client, message, args) => {
     if (!args[0]) return message.channel.send(" Tidak bisa menghapus pesan yang kau inginkan!")
     message.delete
     message.channel.bulkDelete(args[0]).then(() => {
-      message.channel.send(`:ok_hand: ${args[0]} Pesan telah terhapus!`).then(message => message.delete(5000));
+      message.channel.send(`:ok_hand: ${args[0]} Pesan telah terhapus!`).then(message => message.delete({ timeout: 5000 }));
     });
 
   } catch (error) {

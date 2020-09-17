@@ -16,29 +16,20 @@ module.exports.run = async (client, message, args) => {
             description: `${client.emoji.error} | Tidak ada musik yang diputar!`
         }
     })
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
 
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
 
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.vaporwave;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             vaporwave: true
         });
-
         message.channel.send("Efek Vaporwave telah diaktifkan!");
-    } else
-
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                vaporwave: false
-            });
-
-            message.channel.send('Efek Vaporwave telah dinonaktifkan!')
-        };
+    } else {
+        client.player.setFilters(message.guild.id, {
+            vaporwave: false
+        });
+        message.channel.send("Efek Vaporwave telah dinonaktifkan!");
+    }
 
 }
 
@@ -50,6 +41,6 @@ exports.conf = {
 exports.help = {
     name: 'vaporwave',
     description: 'menberikan efek vaporwave pada musik',
-    usage: 'k@vaporwave <on/off>',
-    example: 'k@vaporwave on'
+    usage: 'vaporwave',
+    example: 'vaporwave'
 }

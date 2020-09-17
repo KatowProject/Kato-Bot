@@ -16,29 +16,19 @@ module.exports.run = async (client, message, args) => {
             description: `${client.emoji.error} | Tidak ada musik yang diputar!`
         }
     })
-    if (!args[0]) return;
-    let on = args[0] === "on"
-    let off = args[0] === "off"
 
-    if (on) {
-        let channel = client.player.getQueue(message.guild.id)
-
-        channel = client.player.setFilters(message.guild.id, {
+    const bb = client.player.getQueue(message.guild.id).filters.bassboost;
+    if (!bb) {
+        client.player.setFilters(message.guild.id, {
             bassboost: true
         });
-
-        message.channel.send("Bassboost telah diaktifkan!");
-    } else
-
-        if (off) {
-            let channel = client.player.getQueue(message.guild.id)
-
-            channel = client.player.setFilters(message.guild.id, {
-                bassboost: false
-            });
-
-            message.channel.send('Bassboost telah dinonaktifkan!')
-        };
+        message.channel.send("Efek Bassboost telah diaktifkan!");
+    } else {
+        client.player.setFilters(message.guild.id, {
+            bassboost: false
+        });
+        message.channel.send("Efek Bassboost telah dinonaktifkan!");
+    }
 
 }
 
@@ -50,6 +40,6 @@ exports.conf = {
 exports.help = {
     name: 'bassboost',
     description: 'memberi efek bassboost pada musik',
-    usage: 'k@bassboost <on/off>',
-    example: 'k@bassboost on'
+    usage: 'bassboost [<true/false>]',
+    example: 'bassboost'
 }

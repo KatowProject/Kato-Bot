@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const moment = require('moment');
 
 exports.run = async (client, message, args) => {
-  let user = message.mentions.users.first() || message.author
+  let user = message.mentions.users.first() || message.author || messsage.guild.members.cache.get(args[0])
 
   if (user.presence.status === "dnd") user.presence.status = "Do Not Disturb";
   if (user.presence.status === "idle") user.presence.status = "Idle";
@@ -26,7 +26,7 @@ exports.run = async (client, message, args) => {
   let createdate = moment.utc(user.createdAt).format("dddd, MMMM Do YYYY, HH:mm:ss");
   let joindate = moment.utc(member.joinedAt).format("dddd, MMMM Do YYYY, HH:mm:ss");
   let status = user.presence.status;
-  let avatar = user.avatarURL({ size: 2048 });
+  let avatar = user.avatarURL({ size: 4096 });
 
   const embed = new Discord.MessageEmbed()
     .setAuthor(user.tag, avatar)

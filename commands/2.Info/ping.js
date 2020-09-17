@@ -1,6 +1,9 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
+
+  if (client.config.channel.includes(message.channel.id)) return;
+
   try {
     const m = await message.channel.send("Pinging..."); // Make sure the async is written, top of the client.on("message", ...)
     const embed = new Discord.MessageEmbed()

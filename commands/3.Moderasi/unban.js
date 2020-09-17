@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
 
     message.guild.members.unban(member)
       .then(k => {
-        message.reply(`Anda berhasil melepas banned dari **${member.tag}**!`);
+        message.reply(`Anda berhasil melepas banned dari **${member}**!`);
       })
       .catch(err => {
         message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);

@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
-  if (!message.member.hasPermission('MANAGE_GUILDS')) return;
+  if (message.author.id !== "458342161474387999") return;
+
   try {
     let string_message = args.slice(0).join(" ");
     if (string_message == "") string_message = " ";
