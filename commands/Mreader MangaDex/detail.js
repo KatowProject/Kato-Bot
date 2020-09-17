@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
     try {
-        let query = args.join('-')
+        let query = args.join(' ')
         if (!query) return message.reply('Permintaan gagal!').then(t => t.delete({ timeout: 5000 }))
-        await client.manga.getDetail(query, message);
+        await client.mangadex.getInformation(query, message);
 
 
     } catch (error) {
@@ -19,8 +19,8 @@ exports.conf = {
 }
 
 exports.help = {
-    name: 'info',
+    name: 'minfo',
     description: 'Melihat Info Manga',
-    usage: 'info <endpoint>',
-    example: 'nhen <endpoint>'
+    usage: 'minfo <endpoint>',
+    example: 'minfo <endpoint>'
 }

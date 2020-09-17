@@ -1,10 +1,10 @@
 
 const Discord = require('discord.js');
-let fs = require('fs')
-class Kato {
+class Komiku {
     constructor(client) {
         this.client = client;
     }
+
 
     getGenre(query, message) {
         return new Promise(async (fullfill, reject) => {
@@ -457,4 +457,4 @@ class Kato {
 
 }
 
-module.exports = Kato;
+module.exports = Komiku;

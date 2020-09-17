@@ -177,7 +177,7 @@ exports.run = async (client, message, args) => {
         }
         await message.channel.send(embeded)
 
-        return message.channel.send('jika formatnya tidak lengkap, maka hanya itu saja yang tersedia resolusinya')
+        return message.channel.send('jika formatnya tidak lengkap, maka hanya itu saja yang tersedia resolusinya').then(t => t.delete({ timeout: 5000 }))
 
         // ini tempat looping yaaahh
         function mkv(array) { //mkv

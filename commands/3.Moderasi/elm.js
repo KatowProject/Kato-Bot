@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-
+const db = require('quick.db');
 exports.run = async (client, message, args) => {
   try {
     if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
@@ -10,12 +10,19 @@ exports.run = async (client, message, args) => {
 
     let reason = args.slice(1).join(" ");
     if (!reason) reason = "tidak ada alasan";
-    // buat copot role
-    let copotsantai = message.guild.roles.cache.find(r => r.name === "Santai");
-    await elm.roles.remove(copotsantai)
 
+    //simpen data
+    let data = new db.table('ELMs')
+    await data.set(elm.user.id, elm._roles)
+    console.log('sudah masuk ke db')
+
+    //copot role
+    for (let i = 0; i < elm._roles.length; i++) {
+      elm.roles.remove(elm._roles[i])
+    }
+
+    //pasang role
     let berimute = message.guild.roles.cache.find(r => r.name === "ELM");
-    // buat copot role
     await elm.roles.add(berimute).then(() => {
       message.delete()
       message.channel.send(`**${elm.user.tag}** telah selesai di ELM.\n Alasan : ${reason}`)

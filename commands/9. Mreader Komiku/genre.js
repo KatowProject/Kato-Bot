@@ -25,6 +25,7 @@ exports.run = async (client, message, args) => {
             .setColor(client.warna.kato)
             .setTitle('Genre List')
             .setDescription(title_chunk[pagination - 1])
+            .setFooter(`Page 1 of ${title_chunk.length}`)
         let g = await message.channel.send(embed)
         await g.react('👈')
         await g.react('👉')
@@ -80,7 +81,7 @@ exports.run = async (client, message, args) => {
         //console.log(p)
 
         //sekarang lanjut ambil data
-        await client.manga.getGenre(p, message)
+        await client.komiku.getGenre(p, message)
 
 
 
@@ -96,8 +97,8 @@ exports.conf = {
 }
 
 exports.help = {
-    name: 'genre',
-    description: 'Menampilkan doujin secara acak',
-    usage: 'nhen random',
-    example: 'nhen random'
+    name: 'kgenre',
+    description: 'genre list',
+    usage: 'genre',
+    example: 'genre'
 }

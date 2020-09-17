@@ -15,8 +15,10 @@
     "discord-player": "^2.3.1",
     "discord.js": "^12.3.1",
     "discord.js-minesweeper": "^1.0.6",
+    "file-type": "^15.0.1",
     "got": "^11.5.2",
     "lodash": "^4.17.19",
+    "mangadex-full-api": "^3.10.0",
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
     "ms": "^2.1.2",
@@ -26,6 +28,7 @@
     "os": "^0.1.1",
     "quick.db": "^7.1.1",
     "random-puppy": "^1.1.0",
+    "saucenao": "0.0.2",
     "string-template": "^1.0.0",
     "yargs-parser": "^19.0.1"
   },
