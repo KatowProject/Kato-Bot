@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
-    let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/genres`)
+    let get = await require('node-superfetch').get(`http://206.189.91.238/api/genres`)
     try {
         //mendapatkan data title untuk informasi pada embed
         let array_title = [];

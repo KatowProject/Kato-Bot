@@ -5,7 +5,7 @@ exports.run = async (client, message, args) => {
         let query = args.join(' ')
         if (!query) return message.reply(`jika kamu tidak menemukannya coba gunakan \`${client.config.prefix}msearch\` untuk mendapatkannya!`)
             .then(t => t.delete({ timeout: 5000 }))
-        await client.mangadex.getChapterList(query, 'GB', message)
+        await client.mangadex.getInformation(query, 'GB', message)
 
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
