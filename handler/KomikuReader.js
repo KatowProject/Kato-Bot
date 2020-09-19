@@ -9,8 +9,8 @@ class Komiku {
     getGenre(query, message) {
         return new Promise(async (fullfill, reject) => {
             //mendapatkan data lebih dari satu 
-            let getOne = await require('node-superfetch').get(`https://api.illyasviel.pw/api/genres/${query}1`)
-            let getTwo = await require('node-superfetch').get(`https://api.illyasviel.pw/api/genres/${query}2`)
+            let getOne = await require('node-superfetch').get(`http://206.189.91.238/api/genres/${query}1`)
+            let getTwo = await require('node-superfetch').get(`http://206.189.91.238/api/genres/${query}2`)
 
             let get = getOne.body.manga_list && getTwo.body.manga_list ? getOne.body.manga_list.concat(getTwo.body.manga_list) : [];
             try {
@@ -104,7 +104,7 @@ class Komiku {
     getDetail(query, message) {
         return new Promise(async (fullfill, reject) => {
 
-            let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/manga/detail/${query}`)
+            let get = await require('node-superfetch').get(`http://206.189.91.238/api/manga/detail/${query}`)
 
             try {
                 //genrelist
@@ -193,7 +193,7 @@ class Komiku {
         return new Promise(async (fullfill, reject) => {
             try {
                 //get data manga
-                let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/cari/${query}`)
+                let get = await require('node-superfetch').get(`http://206.189.91.238/api/cari/${query}`)
                 //
 
                 //get result
@@ -251,7 +251,7 @@ class Komiku {
 
     getChapList(query, message) {
         return new Promise(async (fullfill, reject) => {
-            let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/manga/detail/${query}`)
+            let get = await require('node-superfetch').get(`http://206.189.91.238/api/manga/detail/${query}`)
             try {
                 //get Chap
                 let chap = [];
@@ -343,7 +343,7 @@ class Komiku {
     getReadEmbed(query, message, data, judul) {
         return new Promise(async (fullfill, reject) => {
             try {
-                let get = await require('node-superfetch').get(`https://api.illyasviel.pw/api/chapter/${query}`)
+                let get = await require('node-superfetch').get(`http://206.189.91.238/api/chapter/${query}`)
                 let gambar = [];
                 let pagination = 1;
                 let json = get.body.chapter_image;

@@ -38,3 +38,4 @@ ketik di terminal `node index.js` untuk menjalankan bot-nya.
 
 <p align="center"><font size = "5">Selamat Mencoba! </font><br></p>
 <p align="center"><img src="https://cdn.discordapp.com/attachments/519859252966457369/735280356441456641/4c64e343e788251fb15dac0f4c557337.gif" /></p>
+ 

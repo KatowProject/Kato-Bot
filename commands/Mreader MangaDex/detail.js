@@ -4,7 +4,7 @@ exports.run = async (client, message, args) => {
     try {
         let query = args.join(' ')
         if (!query) return message.reply('Permintaan gagal!').then(t => t.delete({ timeout: 5000 }))
-        await client.mangadex.getInformation(query, message);
+        await client.mangadex.getInformation(query, 'GB', message);
 
 
     } catch (error) {
