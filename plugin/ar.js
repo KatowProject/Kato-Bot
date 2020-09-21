@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = async (client, message) => {
 
-    const embed = new MessageEmbed().setColor('#985ce7')
+    const embed = new MessageEmbed().setColor(client.warna.kato)
     let ar = [
         {
             name: 'pedo',
@@ -13,7 +13,7 @@ module.exports = async (client, message) => {
             link: ['https://cdn.discordapp.com/attachments/447408276628307969/714442765311803472/Screenshot_2020-05-25-18-40-09-59.png']
         },
         {
-            name: '<@' + '>',
+            name: '<@' + client.user.id + '>',
             link: ['https://cdn.discordapp.com/attachments/519859252966457369/702365347721773116/kato_ping.gif']
         },
         {
