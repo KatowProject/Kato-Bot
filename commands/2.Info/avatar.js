@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
   let userID = message.guild.members.cache.get(args[0])
   let self = !args[0]
   let server = args[0] === "server"
-
+  let nickname = message.guild.members.find(member=>member.nickname === args[0])
   //embed
   let embed = new Discord.MessageEmbed().setColor(client.warna.kato)
 
@@ -31,6 +31,11 @@ exports.run = async (client, message, args) => {
     embed.setAuthor(message.guild.name, message.guild.iconURL())
     embed.setDescription(`[Avatar URL Link](${message.guild.iconURL({ size: 4096, dynamic: true })})`)
     embed.setImage(message.guild.iconURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
+  } else;
+   if (nickname) {
+    embed.setAuthor(nickname.tag, nickname.displayAvatarURL({ size: 4096, dynamic: true }))   //author embed
+    embed.setDescription(`[Avatar URL](${nickname.displayAvatarURL({ size: 4096, dynamic: true })})`) //redirect to avatar link
+    embed.setImage(nickname.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png')) //image of avatar
   }
 
   return message.channel.send(embed); //send this message to user
