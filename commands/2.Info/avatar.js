@@ -44,7 +44,7 @@ exports.run = async (client, message, args) => {
     embed.setDescription(`[Avatar URL](${find.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
     embed.setImage(find.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
     return message.channel.send(embed);
-  } else return message.channel.send('tidak ada permintaan yang sesuai').then(t => t.delete({ timeout: 5000 }));
+  } else return; //Fikri : Gw mending di ignore aja daripada makan processing power lagi
 
 
 };
@@ -58,6 +58,6 @@ exports.conf = {
 exports.help = {
   name: 'avatar',
   description: 'melihat avatar',
-  usage: 'avatar [@mention | userID | server]>',
+  usage: 'avatar [@mention | userID | server | nickname]>',
   example: 'avatar @juned'
 }
