@@ -10,14 +10,14 @@ module.exports = async (client, message) => {
   if (message.content.toLowerCase().startsWith(client.config.prefix)) {
     prefix = client.config.prefix; // Cek folder, config.json.
   } else if (message.content.toLowerCase().startsWith(client.config.prefix2)) {
-    prefix = client.config.prefix2
+    prefix = client.config.prefix2;
   }
   require('../plugin/ar.js')(client, message)
   require('../plugin/afk.js')(client, message)
 
   //Prefix nya bisa antara di mention, ama antara pake prefix biasa (k!)
 
-  if (!message.content.startsWith(prefix)) return;
+  if (!message.content.toLowerCase().startsWith(prefix)) return;
 
   let args = message.content.slice(prefix.length).trim().split(/ +/g);
   let msg = message.content.toLowerCase();
