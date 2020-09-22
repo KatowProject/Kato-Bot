@@ -7,7 +7,10 @@ exports.run = async (client, message, args) => {
   let userID = message.guild.members.cache.get(args[0])
   let self = !args[0]
   let server = args[0] === "server"
-  let nickname = message.guild.members.find(member=>member.nickname === args[0])
+  let find = message.channel.guild.members.cache.find(a => {
+    return a.nickname === args.join(' ') ? a.nickname === args.join(' ') : a.user.username === args.join(' ')
+  })
+
   //embed
   let embed = new Discord.MessageEmbed().setColor(client.warna.kato)
 
@@ -16,29 +19,34 @@ exports.run = async (client, message, args) => {
     embed.setAuthor(mention.tag, mention.displayAvatarURL({ size: 4096, dynamic: true }))   //author embed
     embed.setDescription(`[Avatar URL](${mention.displayAvatarURL({ size: 4096, dynamic: true })})`) //redirect to avatar link
     embed.setImage(mention.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png')) //image of avatar
+    return message.channel.send(embed); //send this message to user
   } else;
   if (userID) {
     embed.setAuthor(userID.user.tag, userID.user.displayAvatarURL({ size: 4096, dynamic: true }))
     embed.setDescription(`[Avatar URL](${userID.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
     embed.setImage(userID.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
+    return message.channel.send(embed); //send this message to user
   } else;
   if (self) {
     embed.setAuthor(message.author.tag, message.author.displayAvatarURL({ size: 4096, dynamic: true }))
     embed.setDescription(`[Avatar URL](${message.author.displayAvatarURL({ size: 4096, dynamic: true })})`)
     embed.setImage(message.author.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
+    return message.channel.send(embed); //send this message to user
   } else;
   if (server) {
     embed.setAuthor(message.guild.name, message.guild.iconURL())
     embed.setDescription(`[Avatar URL Link](${message.guild.iconURL({ size: 4096, dynamic: true })})`)
     embed.setImage(message.guild.iconURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
+    return message.channel.send(embed); //send this message to user
   } else;
-   if (nickname) {
-    embed.setAuthor(nickname.tag, nickname.displayAvatarURL({ size: 4096, dynamic: true }))   //author embed
-    embed.setDescription(`[Avatar URL](${nickname.displayAvatarURL({ size: 4096, dynamic: true })})`) //redirect to avatar link
-    embed.setImage(nickname.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png')) //image of avatar
-  }
+  if (find) {
+    embed.setAuthor(find.user.tag, find.user.displayAvatarURL({ size: 4096, dynamic: true }))
+    embed.setDescription(`[Avatar URL](${find.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
+    embed.setImage(find.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
+    return message.channel.send(embed);
+  } else return message.channel.send('tidak ada permintaan yang sesuai').then(t => t.delete({ timeout: 5000 }));
 
-  return message.channel.send(embed); //send this message to user
+
 };
 
 exports.conf = {
