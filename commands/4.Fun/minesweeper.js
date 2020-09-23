@@ -84,17 +84,17 @@ exports.run = async (client, message, args) => {
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.
-  }
-}
+  };
+};
 
 exports.conf = {
   aliases: ["ms"],
   cooldown: 5
-}
+};
 
 exports.help = {
   name: 'minesweeper',
   description: 'bermain minesweeper',
   usage: 'k!ms',
   example: 'k!ms'
-}
+};

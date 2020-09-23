@@ -16,17 +16,17 @@ exports.run = async (client, message, args) => {
         .addField('SGD', 'SG$' + api.rates.SGD, true)
         .setFooter('Date: ' + api.date)
 
-    message.channel.send(embed)
+    message.channel.send(embed);
 }
 
 exports.conf = {
     aliases: [],
     cooldown: 5
-}
+};
 
 exports.help = {
     name: 'money',
     description: 'currency',
     usage: 'money',
     example: 'money'
-}
+};

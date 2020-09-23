@@ -7,14 +7,21 @@ exports.run = async (client, message, args) => {
   let userID = message.guild.members.cache.get(args[0])
   let self = !args[0]
   let server = args[0] === "server"
+  const userRegex = new RegExp(args.join("|"), "i");
   let find = message.channel.guild.members.cache.find(a => {
-    return a.nickname === args.join(' ') ? a.nickname === args.join(' ') : a.user.username === args.join(' ')
+    return userRegex.test(a.nickname) ? userRegex.test(a.nickname) : userRegex.test(a.user.username);
   })
 
   //embed
   let embed = new Discord.MessageEmbed().setColor(client.warna.kato)
 
   //get avatar and send to user
+  if (find) {
+    embed.setAuthor(find.user.tag, find.user.displayAvatarURL({ size: 4096, dynamic: true }))
+    embed.setDescription(`[Avatar URL](${find.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
+    embed.setImage(find.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
+    return message.channel.send(embed);
+  } else;
   if (mention) {
     embed.setAuthor(mention.tag, mention.displayAvatarURL({ size: 4096, dynamic: true }))   //author embed
     embed.setDescription(`[Avatar URL](${mention.displayAvatarURL({ size: 4096, dynamic: true })})`) //redirect to avatar link
@@ -38,12 +45,6 @@ exports.run = async (client, message, args) => {
     embed.setDescription(`[Avatar URL Link](${message.guild.iconURL({ size: 4096, dynamic: true })})`)
     embed.setImage(message.guild.iconURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
     return message.channel.send(embed); //send this message to user
-  } else;
-  if (find) {
-    embed.setAuthor(find.user.tag, find.user.displayAvatarURL({ size: 4096, dynamic: true }))
-    embed.setDescription(`[Avatar URL](${find.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
-    embed.setImage(find.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
-    return message.channel.send(embed);
   } else return; //Fikri : Gw mending di ignore aja daripada makan processing power lagi
 
 

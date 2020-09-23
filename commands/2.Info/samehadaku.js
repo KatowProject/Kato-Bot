@@ -107,7 +107,7 @@ exports.run = async (client, message, args) => {
             .addField('Status', get.data.detail.Status, true)
             .addField('Studio', get.data.detail.Studio, true)
             .addField('Season', get.data.detail.Season, true)
-            .addField('Sinonim', get.data.detail.Synonyms, true)
+            .addField('Sinonim', get.data.detail.Synonyms ? get.data.detail.Synonyms : 'tidak tersedia', true)
         let dEmbed = await message.channel.send(embed);
 
         let embed2 = new Discord.MessageEmbed()
@@ -166,7 +166,7 @@ exports.run = async (client, message, args) => {
             embede.addField(data.kualitas, `[Klik di sini](${data.link})`, true)
         };
 
-        await message.channel.send(embede)
+        await message.channel.send(embede);
 
         //data x265
         let array_x265 = [];
@@ -175,7 +175,7 @@ exports.run = async (client, message, args) => {
         for (data of array_x265) {
             embeded.addField(data.kualitas, `[Klik di sini](${data.link})`, true)
         }
-        await message.channel.send(embeded)
+        await message.channel.send(embeded);
 
         return message.channel.send('jika formatnya tidak lengkap, maka hanya itu saja yang tersedia resolusinya').then(t => t.delete({ timeout: 5000 }))
 

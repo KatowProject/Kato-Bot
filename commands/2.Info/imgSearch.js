@@ -27,10 +27,10 @@ exports.run = async (client, message, args) => {
                 .setTitle(`Hasil Pencarian \`${args.join(' ')}\``)
                 .setImage(results[pagination - 1])
                 .setFooter(`Image ${pagination} of ${results.length} images`)
-            let r = await message.channel.send(embed)
-            r.react('👈')
-            r.react('♻')
-            r.react('👉')
+            let r = await message.channel.send(embed);
+            r.react('👈');
+            r.react('♻');
+            r.react('👉');
 
             const backwardsFilter = (reaction, user) =>
                 reaction.emoji.name === `👈` && user.id === message.author.id;
@@ -53,7 +53,7 @@ exports.run = async (client, message, args) => {
             })
 
             deletes.on('collect', (f) => {
-                r.delete()
+                r.delete();
             })
 
             forwards.on("collect", (f) => {
@@ -64,7 +64,7 @@ exports.run = async (client, message, args) => {
                 r.edit(embed);
             });
 
-        }
+        };
 
 
 

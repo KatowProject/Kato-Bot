@@ -41,17 +41,17 @@ exports.run = async (client, message, args) => {
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.
-  }
-}
+  };
+};
 
 exports.conf = {
   aliases: ["p"],
   cooldown: 5
-}
+};
 
 exports.help = {
   name: 'say',
   description: 'katakan sesuatu maka aku akan mengikutinya!',
   usage: 'k!say [isi]',
   example: 'k!say kato cantik'
-}
+};

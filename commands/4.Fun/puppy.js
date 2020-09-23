@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const randomPuppy = require('random-puppy')
+const randomPuppy = require('random-puppy');
 
 exports.run = async (client, message, args) => {
   try {
@@ -11,24 +11,24 @@ exports.run = async (client, message, args) => {
       .setColor(client.warna.kato)
       .setImage(img)
       .setTitle(`From /r/${random}`)
-      .setURL(`https://reddit.com/r/${random}`);
+      .setURL(`https://reddit.com/r/${random}`)
 
     message.channel.send(embed);
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.
-  }
-}
+  };
+};
 
 exports.conf = {
   aliases: [],
   cooldown: 5
-}
+};
 
 exports.help = {
   name: 'puppy',
   description: 'gtw',
   usage: 'k!puppy',
   example: 'k!puppy'
-}
+};

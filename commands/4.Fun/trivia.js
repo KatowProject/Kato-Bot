@@ -41,8 +41,8 @@ exports.run = async (client, message, args) => {
     */
     let table_soal = new db.table('tv');
     let soal = table_soal.get('soal');
-    let rstatus = Math.floor(Math.random() * soal.length)
-    let quiz = soal[rstatus]
+    let rstatus = Math.floor(Math.random() * soal.length);
+    let quiz = soal[rstatus];
 
 
     let embed = new Discord.MessageEmbed()
@@ -50,62 +50,42 @@ exports.run = async (client, message, args) => {
         .setTitle('Trivia Seputar POS')
         .setDescription(quiz.pertanyaan)
 
-    for (let i = 0; i < quiz.jawaban.length; i++) {
-        embed.addField(`Jawaban ${i + 1}`, quiz.jawaban[i], true)
-    }
+    quiz.jawaban.forEach((a, i) => {
+        embed.addField(`Jawaban ${i + 1}`, a, true);
+    });
 
-    let r = await message.channel.send(embed);
-    r.react('1️⃣');
-    r.react('2️⃣');
-    r.react('3️⃣');
+    let msg = await message.channel.send(embed);
+    let alert = await message.reply('aku beri waktu 20 detik untuk menjawabnya!');
 
-    const aOne = (reaction, user) =>
-        reaction.emoji.name === `1️⃣` && user.id === message.author.id;
-    const aTwo = (reaction, user) =>
-        reaction.emoji.name === `2️⃣` && user.id === message.author.id;
-    const aThree = (reaction, user) =>
-        reaction.emoji.name === `3️⃣` && user.id === message.author.id;
-
-    const oneA = r.createReactionCollector(aOne);
-    const twoA = r.createReactionCollector(aTwo);
-    const threeA = r.createReactionCollector(aThree);
-
-    oneA.on('collect', (f) => {
-        r.delete();
-        if (quiz.jawaban[0].toLowerCase() === quiz.bener.toLowerCase()) {
-            message.channel.send('bener')
-        } else {
-            message.channel.send('salah men')
-        }
+    let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 15, {
+        max: 1,
+        time: 20000,
+        errors: ["time"]
+    }).catch((err) => {
+        q.delete()
+        message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!').then(t => t.delete({ timeout: 5000 }));
     })
 
-    twoA.on('collect', (f) => {
-        r.delete();
-        if (quiz.jawaban[1].toLowerCase() === quiz.bener.toLowerCase()) {
-            message.channel.send('bener')
-        } else {
-            message.channel.send('salah men')
-        }
-    })
+    const index = response.first().content;
+    await msg.delete();
+    await alert.delete();
 
-    threeA.on('collect', (f) => {
-        r.delete();
-        if (quiz.jawaban[2].toLowerCase() === quiz.benar.toLowerCase()) {
-            message.channel.send('bener')
-        } else {
-            message.channel.send('salah men')
-        }
-    })
-}
+    if (index.toLowerCase() === quiz.bener.toLowerCase()) {
+        message.reply('Keren, jawaban kamu benar.');
+    } else {
+        message.reply('yah, kamu salah menjawabnya.');
+    };
+
+};
 
 exports.conf = {
     aliases: [],
     cooldown: 120
-}
+};
 
 exports.help = {
     name: 'trivia',
     description: 'bot',
     usage: 'trivia',
     example: 'trivia'
-}
+};
