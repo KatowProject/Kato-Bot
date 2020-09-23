@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
   let userID = message.guild.members.cache.get(args[0])
   let self = !args[0]
   let server = args[0] === "server"
-  const userRegex = new RegExp(args.join("|"), "i");
+  const userRegex = new RegExp(args.join(" "), "i");
   let find = message.channel.guild.members.cache.find(a => {
     return userRegex.test(a.nickname) ? userRegex.test(a.nickname) : userRegex.test(a.user.username);
   })
