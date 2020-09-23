@@ -2,14 +2,16 @@ const Discord = require('discord.js')
 
 exports.run = async (client, message, args) => {
 
+  let arg = args.join(' ');
+  if (arg.length < 3) return;
   //option
   let mention = message.mentions.users.first()
   let userID = message.guild.members.cache.get(args[0])
   let self = !args[0]
   let server = args[0] === "server"
-  const userRegex = new RegExp(args.join("|"), "i");
-  let find = message.channel.guild.members.cache.find(a => {
-    return userRegex.test(a.nickname) ? userRegex.test(a.nickname) : userRegex.test(a.user.username);
+  const userRegex = new RegExp(args.join(" "), "i");
+  let find = message.guild.members.cache.find(a => {
+    return userRegex.test(a.nickname) ? userRegex.test(a.nickname) : a.user.username.toLowerCase() === args.join(' ').toLowerCase();
   })
 
   //embed
