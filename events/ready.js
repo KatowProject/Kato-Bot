@@ -19,6 +19,6 @@ module.exports = client => {
   }; setInterval(randomStatus, 15000);
 
   function pengingat() {
-    require('../plugin/pengingat.js')(client)
+    require('../plugin/pengingat.js')(client);
   } setInterval(pengingat, 60000)
 }

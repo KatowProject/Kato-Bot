@@ -245,9 +245,9 @@ class MangaDex {
                     let embed = new Discord.MessageEmbed()
                         .setColor(this.client.warna.kato)
                         .setTitle('MangaDL')
-                        .addField('zip', `[download here]()`)
-                        .addField('cbz', `[download here]()`)
-                    message.channel.send('this message will be deleted in 10 seconds', embed).then(t => t.delete({ timeout: 1000 }))
+                        .addField('zip', `[download here](http://206.189.91.238/download/mangadex/${manga.id}/zip)`)
+                        .addField('cbz', `[download here](http://206.189.91.238/download/mangadex/${manga.id}/cbz)`)
+                    message.channel.send('this message will be deleted in 10 seconds', embed).then(t => t.delete({ timeout: 10000 }))
                 })
 
                 forwards.on("collect", (f) => {
@@ -328,9 +328,9 @@ class MangaDex {
                     let embed = new Discord.MessageEmbed()
                         .setColor(this.client.warna.kato)
                         .setTitle('MangaDL')
-                        .addField('zip', `[download here]()`)
-                        .addField('cbz', `[download here]()`)
-                    message.channel.send('this message will be deleted in 10 seconds', embed).then(t => t.delete({ timeout: 1000 }))
+                        .addField('zip', `[download here](http://206.189.91.238/download/mangadex/${manga.id}/zip)`)
+                        .addField('cbz', `[download here](http://206.189.91.238/download/mangadex/${manga.id}/cbz)`)
+                    message.channel.send('this message will be deleted in 10 seconds', embed).then(t => t.delete({ timeout: 10000 }))
                 })
 
                 forwards.on("collect", (f) => {

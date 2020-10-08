@@ -1,22 +1,12 @@
-let discord = require('discord.js')
-
-let kato = {
-    pagi: 'https://cdn.discordapp.com/attachments/519859252966457369/735116914824839260/110140615_150280596646304_2112518845859829677_o.jpg',
-    siang: 'https://cdn.discordapp.com/attachments/519859252966457369/735131890456985600/109459511_150278073313223_9220051722149059691_o.png',
-    sore: 'https://cdn.discordapp.com/attachments/519859252966457369/735117020898525184/109509537_148938896780474_5364768492484447741_o.jpg',
-    petang: 'https://www.kaorinusantara.or.id/wp-content/uploads/2017/06/saekano-flat-11-0004.jpg',
-    malam: 'https://cdn.discordapp.com/attachments/447408276628307969/735125909031616522/horriblesubs-saekano-s2-08-720p-mkv_snapshot_20-44_2017-06-03_23-11-36.png',
-    tengah: 'https://nijipoi.com/wp-content/uploads/2017/06/02/45-1024x576.jpg',
-    dini: 'https://magnavalon.files.wordpress.com/2017/06/horriblesubs-saekano-s2-08-720p-mkv_snapshot_21-14_2017-06-04_00-57-34.jpg?w=648'
-
-}
+let discord = require('discord.js');
+let moment = require('moment')(Date.now()).utcOffset("+0700");
 
 module.exports = (client, message) => {
 
-    let embed = new discord.MessageEmbed().setColor(client.warna.kato)
-    let jam = new Date().getHours()
-    let menit = new Date().getMinutes()
-    let channel = '753219182967128154'
+    let embed = new discord.MessageEmbed().setColor("RANDOM");
+    let jam = moment.hours();
+    let menit = moment.minutes();
+    let channel = '753219182967128154';
 
     if (jam == 6 && menit == 0) {
         embed.setImage(kato.pagi)

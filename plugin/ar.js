@@ -1,33 +1,29 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, WebhookClient } = require('discord.js');
+const db = require('quick.db');
 
 module.exports = async (client, message) => {
 
-    const embed = new MessageEmbed().setColor(client.warna.kato)
-    let ar = [
-        {
-            name: 'pedo',
-            link: ['https://cdn.discordapp.com/attachments/519859252966457369/641765228987809802/FB_IMG_1571834909693.png']
-        },
-        {
-            name: 'ngaca',
-            link: ['https://cdn.discordapp.com/attachments/447408276628307969/714442765311803472/Screenshot_2020-05-25-18-40-09-59.png']
-        },
-        {
-            name: '<@' + client.user.id + '>',
-            link: ['https://cdn.discordapp.com/attachments/519859252966457369/702365347721773116/kato_ping.gif']
-        },
-        {
-            name: 'trumint',
-            link: ['https://cdn.discordapp.com/attachments/447408276628307969/717310728209694770/ture_miny.png', 'https://cdn.discordapp.com/attachments/447408276628307969/717284086011527188/FB_IMG_1590936689041.jpg']
-        }
-    ]
+    let table = new db.table('ARs').all();
+    try {
+        let msg = table.find(a => a.ID === message.content.toLowerCase());
+        let ar = JSON.parse(msg.data);
+        let random = Math.floor(Math.random() * ar.image.length);
 
-    let msg = ar.find(a => a.name === message.content.toLowerCase());
+        if (ar.image.length < 1) {
+            message.channel.send(ar.text);
+        } else {
+            const embed2 = new MessageEmbed()
+                .setColor(client.warna.kato)
+                .setDescription(ar.text)
+                .setImage(ar.image[random])
+            message.channel.send(embed2);
+        };
+
+
+    } catch (error) {
+        return;
+    };
 
     //trigger 
-    if (msg) {
-        let rstatus = Math.floor(Math.random() * msg.link.length)
-        embed.setImage(msg.link[rstatus])
-        message.channel.send(embed)
-    }
+
 }

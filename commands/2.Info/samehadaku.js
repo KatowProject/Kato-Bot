@@ -183,11 +183,13 @@ exports.run = async (client, message, args) => {
         function mkv(array) { //mkv
             //looping data
             for (let i = 0; i < get.downloadEps[0].data.length; i++) {
-                const e_quality = get.downloadEps[0].data[i].quality //quality
-                const e_link = get.downloadEps[0].data[i].link.zippyshare //link
+                const e_quality = get.downloadEps[0].data[i].quality;//quality
+                const zippyshare = get.downloadEps[0].data[i].link.zippyshare;
+                const gdrive = get.downloadEps[0].data[i].link.gdrive; //link
+                const reupload = get.downloadEps[0].data[i].link.reupload;
                 array.push({
                     kualitas: e_quality,
-                    link: e_link
+                    link: [zippyshare, gdrive, reupload]
                 })
             }
         }
