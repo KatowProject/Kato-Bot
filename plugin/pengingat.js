@@ -1,9 +1,10 @@
 let discord = require('discord.js');
-let moment = require('moment')(Date.now()).utcOffset("+0700");
+
 
 module.exports = (client, message) => {
 
     let embed = new discord.MessageEmbed().setColor("RANDOM");
+    let moment = require('moment')(Date.now()).utcOffset("+0700");
     let jam = moment.hours();
     let menit = moment.minutes();
     let channel = '753219182967128154';

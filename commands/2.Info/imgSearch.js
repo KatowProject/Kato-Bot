@@ -3,7 +3,7 @@ const gis = require('g-i-s')
 
 exports.run = async (client, message, args) => {
     try {
-        if (client.config.channel.includes(message.channel.id)) return;
+        if (client.config.discord.channel.includes(message.channel.id)) return;
         await gis(args.join(' '), logResults);
         async function logResults(error, results) {
             if (error) {

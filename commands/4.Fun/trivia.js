@@ -3,7 +3,7 @@ const db = require('quick.db');
 
 exports.run = async (client, message, args) => {
     //ignore channel
-    if (client.config.channel.includes(message.channel.id)) return;
+    if (client.config.discord.channel.includes(message.channel.id)) return;
 
     //get data in db
     /*
@@ -50,14 +50,17 @@ exports.run = async (client, message, args) => {
         .setTitle('Trivia Seputar POS')
         .setDescription(quiz.pertanyaan)
 
+    let req = message.author;
+    let kata_kunci = [];
     quiz.jawaban.forEach((a, i) => {
         embed.addField(`Jawaban ${i + 1}`, a, true);
+        kata_kunci.push(a);
     });
 
     let msg = await message.channel.send(embed);
     let alert = await message.reply('aku beri waktu 20 detik untuk menjawabnya!');
 
-    let response = await message.channel.awaitMessages((m) => m.content > 0 && m.content <= 15, {
+    let response = await message.channel.awaitMessages((m) => kata_kunci.includes(m.content) && m.author.id == req.id, {
         max: 1,
         time: 20000,
         errors: ["time"]

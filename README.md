@@ -31,8 +31,23 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 - Install yarn (jika ingin menggunakan `yarn` daripada `npm`)
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
-- Edit file `config/config.json` untuk memasukan prefix, owner dan tokennya.
-
+- Edit file `config/config.json`:
+```json
+ {
+  "discord": {
+    "owners": [""], //owners bot
+    "channels": [""], //ignore channels
+    "prefix": ["", " "], //prefix bot
+    "token": "" //login
+  },
+  "mangadex": {
+    "account": {
+      "username": "", //username mangadex
+      "password": "" //password mangadex
+    }
+  }
+}
+```
 ### Penggunaan
 ketik di terminal `node index.js` untuk menjalankan bot-nya.
 

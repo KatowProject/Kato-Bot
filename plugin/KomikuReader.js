@@ -141,7 +141,7 @@ class Komiku {
                     .setDescription(chap_[page - 1])
                     .setFooter(`Page ${page} of ${chap_.length}`)
                 let r = await message.channel.send(embede)
-                await message.reply(`Cara untuk membaca, \`${this.client.config.prefix}read <Endpoint>\``)
+                await message.reply(`Cara untuk membaca, \`${this.client.discord.config.prefix.join(' || ')}read <Endpoint>\``)
                 await r.react("⬅");
                 await r.react("♻");
                 await r.react("➡");

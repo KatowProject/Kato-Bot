@@ -7,10 +7,10 @@ module.exports = async (client, message) => {
 
 
   let prefix;
-  if (message.content.toLowerCase().startsWith(client.config.prefix)) {
-    prefix = client.config.prefix; // Cek folder, config.json.
-  } else if (message.content.toLowerCase().startsWith(client.config.prefix2)) {
-    prefix = client.config.prefix2;
+  if (message.content.toLowerCase().startsWith(client.config.discord.prefix[0])) {
+    prefix = client.config.discord.prefix[0]; // Cek folder, config.json.
+  } else if (message.content.toLowerCase().startsWith(client.config.discord.prefix[1])) {
+    prefix = client.config.discord.prefix[1];
   }
   require('../plugin/ar.js')(client, message)
   require('../plugin/afk.js')(client, message)
@@ -41,7 +41,7 @@ module.exports = async (client, message) => {
   const cooldownAmount = (commandFile.conf.cooldown || 3) * 1000
 
   if (!timestamps.has(member.id)) {
-    if (!client.config.owners.includes(message.author.id)) {
+    if (!client.config.discord.owners.includes(message.author.id)) {
       timestamps.set(member.id, now);
     }
   } else {
@@ -57,6 +57,8 @@ module.exports = async (client, message) => {
     timestamps.set(member.id, now);
     setTimeout(() => timestamps.delete(member.id), cooldownAmount);
   }
+
+  //Permission
 
   try {
     let command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd)); // Jalani command dengan aliases juga bisa. Misalnya: k!serverinfo, k!server, k!s

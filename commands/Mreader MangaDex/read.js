@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 exports.run = async (client, message, args) => {
     try {
         let query = parseInt(args.join(' '))
-        if (!query) return message.reply(`jika kamu tidak menemukannya coba gunakan \`${client.config.prefix}msearch\` untuk mendapatkannya!`)
+        if (!query) return message.reply(`jika kamu tidak menemukannya coba gunakan \`${client.config.discord.prefix[0]}msearch\` untuk mendapatkannya!`)
             .then(t => t.delete({ timeout: 5000 }))
         await client.mangadex.getReadWithID(query, message)
 

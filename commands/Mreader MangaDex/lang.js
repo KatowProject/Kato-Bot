@@ -50,7 +50,7 @@ exports.run = async (client, message, args) => {
     //enter code of country
     let lang = args[0].toUpperCase();
     let query = args.slice(1).join(' ');
-    if (!client.config.language.includes(lang)) return message.reply(`\`${lang}\` Not Found!`);
+    if (!client.config.mangadex.language.includes(lang)) return message.reply(`\`${lang}\` Not Found!`);
     if (!query) return message.reply('pls enter your query!').then(t => t.delete({ timeout: 5000 }));
 
     await client.mangadex.getInformation(query, lang, message);

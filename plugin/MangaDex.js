@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const api = require('mangadex-full-api');
-const account = api.agent.cacheLogin('cache.txt', 'username', 'password')
+const account = require('../config/config.json').mangadex.account;
+const login = api.agent.cacheLogin('cache.txt', account.username, account.password)
 
 class MangaDex {
     constructor(client) {
@@ -10,7 +11,7 @@ class MangaDex {
     getInformation(query, lang, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-                await account;
+                await login;
                 var manga = new api.Manga();
                 manga.fillByQuery(query).then(async (manga) => {
                     //information about manga
@@ -110,7 +111,7 @@ class MangaDex {
     getChapterList(query, lang, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-                await account;
+                await login;
                 var manga = new api.Manga();
                 manga.fillByQuery(query).then(async (manga) => {
 
@@ -195,7 +196,7 @@ class MangaDex {
         return new Promise(async (fullfill, reject) => {
             try {
                 //get data
-                await account;
+                await login;
                 var manga = await new api.Chapter(query, true)
 
                 //image
@@ -269,7 +270,7 @@ class MangaDex {
         return new Promise(async (fullfill, reject) => {
             try {
                 //get data
-                await account;
+                await login;
                 var manga = await new api.Chapter(query, true)
 
                 //image

@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const moment = require('moment');
 
 exports.run = async (client, message, args) => {
-  if (client.config.channel.includes(message.channel.id)) return;
+  if (client.config.discord.channel.includes(message.channel.id)) return;
   try {
 
     if (!message.member.voice.channel) return message.channel.send({

@@ -15,7 +15,7 @@ client.on("error", console.error);
 client.on("disconnect", () => console.log("Disconnected."));
 client.on("reconnecting", () => console.log("Reconnecting."));
 
-client.login(client.config.token).catch(console.error);
+client.login(client.config.discord.token).catch(console.error);
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", reason.stack || reason);
