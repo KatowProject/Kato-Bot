@@ -32,7 +32,7 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
 - Edit file `config/config.json`:
-```json
+```js
  {
   "discord": {
     "owners": [""], //owners bot

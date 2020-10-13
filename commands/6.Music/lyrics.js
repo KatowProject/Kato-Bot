@@ -4,7 +4,7 @@ const axios = require('axios')
 
 module.exports.run = async (client, message, args) => {
 
-    if (client.config.discord.channel.includes(message.channel.id)) return;
+    if (client.config.discord.channels.includes(message.channel.id)) return;
     let query = args.join('-')
     if (!query) return message.reply('Masukkan Permintaan terlebih dahulu!')
 

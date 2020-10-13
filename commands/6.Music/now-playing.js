@@ -11,7 +11,7 @@ console.log(res)
 */
 exports.run = async (client, message, args) => {
   try {
-    if (client.config.discord.channel.includes(message.channel.id)) return;
+    if (client.config.discord.channels.includes(message.channel.id)) return;
     if (!message.member.voice.channel) return message.channel.send({
       embed: {
         color: client.warna.error,

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
-  if (client.config.discord.channel.includes(message.channel.id)) return;
+  if (client.config.discord.channels.includes(message.channel.id)) return;
 
   try {
     const m = await message.channel.send("Pinging..."); // Make sure the async is written, top of the client.on("message", ...)

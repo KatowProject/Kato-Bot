@@ -2,7 +2,7 @@ const Discord = require("discord.js")
 const fs = require("fs");
 
 module.exports.run = async (client, message, args) => {
-    if (client.config.discord.channel.includes(message.channel.id)) return;
+    if (client.config.discord.channels.includes(message.channel.id)) return;
     if (!message.member.voice.channel) return message.channel.send({
         embed: {
             color: client.warna.error,

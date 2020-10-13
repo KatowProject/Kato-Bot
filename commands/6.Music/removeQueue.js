@@ -2,7 +2,7 @@ let Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
-    if (!client.config.discord.channel.includes(message.channel.id)) return;
+    if (!client.config.discord.channels.includes(message.channel.id)) return;
     try {
         if (!message.member.voice.channel) return message.channel.send({
             embed: {
@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
             }
         });
 
-        let number = args[0];
+        let number = parseInt(args[0]);
         if (!number) return message.channel.send({
             embed: {
                 color: client.warna.error,
