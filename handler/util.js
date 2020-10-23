@@ -80,8 +80,7 @@ class Util {
 
     this.shufflelist = function list(arr, conj = "and") {
       const len = arr.length;
-      return `${arr.slice(0, -1).join(", ")}${
-        len > 1 ? `${len > 2 ? "," : ""} ${conj} ` : ""
+      return `${arr.slice(0, -1).join(", ")}${len > 1 ? `${len > 2 ? "," : ""} ${conj} ` : ""
         }${arr.slice(-1)}`;
     };
 
@@ -96,6 +95,14 @@ class Util {
       return `https://hasteb.in/${body.key}`;
     };
 
+    this.randomNumber = function randomNumber(array) {
+      return Math.floor(Math.random() * array);
+    };
+
+    this.truncate = function truncate(str) {
+      return str.length > 2044 ? `${str.substring(0, 2044)}...` : str
+    }
+
     this.chunk = function chunk(array, chunkSize) {
       let temp = [];
       for (let i = 0; i < array.length; i += chunkSize) {
@@ -106,7 +113,7 @@ class Util {
 
     this.chunkString = function chunkString(str, size) {
       const numChunks = Math.ceil(str.length / size)
-      const chunks = new Array(numChunks)
+      const chunks = [numChunks]
 
       for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
         chunks[i] = str.substr(o, size)
@@ -119,8 +126,7 @@ class Util {
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
       if (isNaN(seconds) === false) {
-        return `${forceHours || hours >= 1 ? `${hours}:` : ""}${
-          hours >= 1 ? `0${minutes}`.slice(-2) : minutes
+        return `${forceHours || hours >= 1 ? `${hours}:` : ""}${hours >= 1 ? `0${minutes}`.slice(-2) : minutes
           }:${`0${Math.floor(seconds % 60)}`.slice(-2)}`;
       } else {
         return `LIVE`;

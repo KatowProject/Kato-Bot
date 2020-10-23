@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 
 exports.run = async (client, message, args) => {
 
+  if (client.config.discord.channels.includes(message.channel.id)) return;
   //option
   let mention = message.mentions.users.first();
   let userID = message.guild.members.cache.get(args[0]);

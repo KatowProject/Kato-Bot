@@ -30,6 +30,7 @@
     "os": "^0.1.1",
     "quick.db": "^7.1.1",
     "random-puppy": "^1.1.0",
+    "readline-sync": "^1.4.10",
     "saucenao": "0.0.2",
     "string-template": "^1.0.0",
     "yargs-parser": "^19.0.1"

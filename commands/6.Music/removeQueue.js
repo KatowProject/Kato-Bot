@@ -2,7 +2,7 @@ let Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
-    if (!client.config.discord.channels.includes(message.channel.id)) return;
+
     try {
         if (!message.member.voice.channel) return message.channel.send({
             embed: {
@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
             }
         });
 
-        let number = parseInt(args[0]);
+        let number = args[0]
         if (!number) return message.channel.send({
             embed: {
                 color: client.warna.error,
@@ -26,12 +26,13 @@ exports.run = async (client, message, args) => {
             }
         })
 
-        await client.player.remove(message.guild.id, number).then(() => {
-            message.channel.send('Telah dihapus!');
-        });
+        let GetQueue = client.player.queues.find(a => a.guildID === message.guild.id).tracks;
+        let RemoveSong = GetQueue.indexOf(GetQueue[parseInt(number) - 1]);
+        GetQueue.splice(RemoveSong, 1);
+
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`).then(() => {
-            console.error();
+            console.log(error)
         });
     }
 }

@@ -19,7 +19,6 @@ module.exports = async (client, message) => {
             message.channel.send(embed2);
         };
 
-
     } catch (error) {
         return;
     };

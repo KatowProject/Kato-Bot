@@ -1,8 +1,9 @@
 const { Client, Collection } = require("discord.js");
 const { Player } = require('discord-player');
 const Util = require("./util");
-const Komiku = require('../plugin/KomikuReader.js');
-const MangaDex = require('../plugin/MangaDex.js');
+const Komiku = require('./KomikuReader.js');
+const MangaDex = require('./MangaDex.js');
+const Samehadaku = require('./Samehadaku.js');
 
 module.exports = class katopos extends Client {
   constructor(opt) {
@@ -18,6 +19,7 @@ module.exports = class katopos extends Client {
     this.player = new Player(new Client());
     this.komiku = new Komiku(this);
     this.mangadex = new MangaDex(this);
+    this.samehadaku = new Samehadaku(this);
 
   }
 };
