@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 let axios = require('axios');
-const { Chapter } = require('mangadex-full-api');
 
 class Samehadaku {
     constructor(client) {
