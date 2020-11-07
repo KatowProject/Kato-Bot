@@ -27,7 +27,7 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 - Carl#5404
 
 ### Instalasi
-- Instal node.js
+- Instal node.js (V14 ke atas)
 - Install yarn (jika ingin menggunakan `yarn` daripada `npm`)
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
