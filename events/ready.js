@@ -20,5 +20,9 @@ module.exports = client => {
 
   function pengingat() {
     require('../plugin/pengingat.js')(client);
-  } setInterval(pengingat, 60000)
+  } setInterval(pengingat, 60000);
+
+  function mutedDuration() {
+    require('../plugin/durationMute.js')(client);
+  } setInterval(mutedDuration, 30000);
 }

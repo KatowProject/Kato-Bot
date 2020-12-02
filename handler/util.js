@@ -96,7 +96,7 @@ class Util {
     };
 
     this.randomNumber = function randomNumber(array) {
-      return Math.floor(Math.random() * array);
+      return Math.floor(Math.random() * array.length);
     };
 
     this.truncate = function truncate(str) {

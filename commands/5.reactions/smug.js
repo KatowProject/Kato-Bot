@@ -9,11 +9,11 @@ exports.run = async (client, message, args) => {
     if (member) {
       let embed = new MessageEmbed()
         .setTitle(`${message.guild.member(message.author).displayName}  Menyombongkan Diri! ( •̀ ω •́ )y`)
-        .setColor("#985ce7")
+        .setColor(client.warna.kato)
         .setImage(smug.url);
 
       message.channel.send(embed);
-    } else message.reply("sepertinya terjadi kesalahan");
+    }
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);

@@ -3,7 +3,7 @@ const gis = require('g-i-s')
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.channel.nsfw) return;
+        if (!['496983030993518592', '710431360954794004'].includes(message.channel.id)) return;
         await gis(args.join(' '), logResults);
         async function logResults(error, results) {
             if (error) {

@@ -4,17 +4,29 @@ const { sfw } = new client();
 
 exports.run = async (client, message, args) => {
   try {
+
     let baka = await sfw.baka();
     let member = message.mentions.members.first()
     if (!args[0]) return message.reply("mention seseorang untuk melanjutkan!")
+    const embed = new MessageEmbed();
+
     if (member) {
-      let embed = new MessageEmbed()
-        .setTitle(`${message.guild.member(member).displayName}  Bodoh! ≡(▔﹏▔)≡`)
-        .setColor("#985ce7")
-        .setImage(baka.url);
+
+      embed.setTitle(`${message.guild.member(member).displayName}  Bodoh! ≡(▔﹏▔)≡`)
+      embed.setColor(client.warna.kato)
+      embed.setImage(baka.url);
 
       message.channel.send(embed);
-    } else message.reply("sepertinya terjadi kesalahan");
+    } else;
+
+    if (message.author.id === member.user.id) {
+
+      embed.setTitle(`()...-'-'-...()`)
+      embed.setColor(client.warna.kato)
+      embed.setImage(baka.url)
+
+      message.channel.send(embed);
+    }
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);

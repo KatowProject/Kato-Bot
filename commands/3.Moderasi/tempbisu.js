@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
-const ms = require('ms')
+const ms = require('ms');
+const db = require('quick.db');
 
 exports.run = async (client, message, args) => {
     try {
@@ -21,10 +22,9 @@ exports.run = async (client, message, args) => {
             message.channel.send(`${mutee.user.tag} telah selesai di mute.\nAlasan : ${reason}`)
         });
 
-        setTimeout(() => {
-            mutee.roles.remove(role)
-        }, durasi)
-
+        //upload duration to database
+        let table = new db.table('UNs');
+        await table.set(mutee.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
 
         let embed = new Discord.MessageEmbed()
             .setAuthor(`MUTE | ${mutee.user.tag}`)
@@ -53,7 +53,7 @@ exports.conf = {
 }
 
 exports.help = {
-    name: 'tempbisu',
+    name: 'tempbisuw',
     description: 'Memberikan Role Muted kepada Member',
     usage: 'k!bisu <user> [reason]',
     example: 'k!bisu @juned spam'
