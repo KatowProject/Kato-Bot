@@ -16,5 +16,5 @@ module.exports = async (client, member) => {
         .setAuthor('Member Boost', 'https://cdn.discordapp.com/emojis/638719606738911236.gif')
         .setDescription(`Hai ${member}, terima kasih telah boost di server Perkumpulan Orang Santai ヾ(≧▽≦*)o `)
         .setImage(p[rstatus])
-    client.channels.cache.get('753219182967128154').send(embed)
+    client.channels.cache.find(a => a.name === 'chit-chat').send(embed);
 }
