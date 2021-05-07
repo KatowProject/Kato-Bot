@@ -4,50 +4,71 @@ const db = require('quick.db');
 module.exports = async (client, message) => {
 
     const embeds = message.embeds[0].fields;
+    const table = new db.table('Dons');
 
     const tag = embeds[0].value;
     const unit = embeds[1].value
-    let supportID = embeds[2].value.split(' ');
-    const duration = embeds[3].value;
+    let supportID = embeds[3].value.split(' ');
+    const duration = embeds[4].value;
 
 
     const userRegex = new RegExp(tag, "i");
-    let findTag = message.guild.members.cache.find(a => {
-        return userRegex.test(a.user.tag) ? userRegex.test(a.user.tag) : false
-    })
+    const findTag = message.guild.members.cache.find(a => {
+        return userRegex.test(a.user.tag) ? userRegex.test(a.user.tag) : false;
+    });
 
-    if (!findTag) {
+    let id = null;
+    supportID.forEach(a => {
+        if (parseInt(a)) return id = a;
+    });
+    const findID = message.guild.members.cache.get(id);
 
-        let id;
-        supportID.forEach(a => {
-            const parse = parseInt(a);
-            if (parse) id = parse;
-        });
-        idRegex = new RegExp(id, "i");
+    const value = findTag ? 'tag' : findID ? 'id' : false;
+    switch (value) {
+        case 'tag':
+            const durasiTag = ms(parseInt(duration) + 'd');
+            const alreadyDonaturTag = table.get(findTag.id);
 
-        let findID = message.guild.members.cache.find(a => userRegex.test(a.id) ? userRegex.test(a.id) : false);
-        if (!findID) return client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada Donatur yang tidak terpasang secara otomatis silahkan berikan sesuai dengan log terbaru di <#831475856882925629>');
-        else {
+            if (alreadyDonaturTag) {
 
-            let table = new db.table('Dons');
-            let durasi = ms(parseInt(duration) + 'd');
-            await table.set(findID.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
-            await findID.roles.add('438335830726017025').then(() => {
-                client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
+                await table.set(findTag.id, { dur: alreadyDonaturTag.dur + durasiTag, first: alreadyDonaturTag.first, guild: message.guild.id });
+                client.channels.cache.get('336877836680036352').send('Hai para staff, ada Donatur Aktif yang donasi lagi. Durasi Role diperpanjang secara otomatis oleh bot, segera cek kembali ya untuk memastikan!')
 
-            })
+            } else {
+                await table.set(findTag.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
+                await findTag.roles.add('438335830726017025').then(() => {
+                    client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
 
-        };
+                });
 
-    } else {
+            }
+            break;
 
-        let table = new db.table('Dons');
-        let durasi = ms(parseInt(duration) + 'd');
-        await table.set(findTag.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
-        await findTag.roles.add('438335830726017025').then(() => {
-            client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
+        case 'id':
+            const durasiID = ms(parseInt(duration) + 'd');
+            const alreadyDonaturID = table.get(findID.id);
 
-        })
+            if (alreadyDonaturID) {
+
+                await table.set(findID.id, { dur: alreadyDonaturID.dur + durasiID, first: alreadyDonaturID.first, guild: message.guild.id });
+                client.channels.cache.get('336877836680036352').send('Hai para staff, ada Donatur Aktif yang donasi lagi. Durasi Role diperpanjang secara otomatis oleh bot, segera cek kembali ya untuk memastikan!');
+
+            } else {
+
+                await table.set(findID.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
+                await findID.roles.add('438335830726017025').then(() => {
+                    client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
+
+                });
+
+            }
+            break;
+
+        default:
+
+            client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada Donatur yang tidak terpasang secara otomatis silahkan berikan sesuai dengan log terbaru di <#831475856882925629>');
+
+            break;
+
     }
-
 }

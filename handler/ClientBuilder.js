@@ -3,7 +3,7 @@ const { Player } = require('discord-player');
 const Util = require("./util");
 const { Kusonime, Samehadaku, MangaDex } = require('./AnimeClass');
 const Drakor = require('./Drakor');
-const Trakteer = require('../Trakteer/index');
+const Trakteer = require('../trakteer-scraper/index');
 
 module.exports = class katopos extends Client {
 
@@ -23,7 +23,7 @@ module.exports = class katopos extends Client {
     this.samehadaku = new Samehadaku(this);
     this.kusonime = new Kusonime(this);
     this.drakor = new Drakor(this);
-    this.trakteer = new Trakteer();
+    this.trakteer = new Trakteer(this.config.trakteer);
 
 
   }

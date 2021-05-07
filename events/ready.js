@@ -31,8 +31,6 @@ module.exports = client => {
   setInterval(() => client.dataAttachment = new Discord.Collection(), 300000);
 
   /* Trakteer */
-  const notifications = () => client.trakteer.notify(true);
-  setInterval(notifications, 120000)
-
+  client.trakteer.getNotification(true, 60000)
 }
 

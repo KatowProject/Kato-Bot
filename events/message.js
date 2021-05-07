@@ -4,7 +4,7 @@ const Discord = require('discord.js'),
 
 module.exports = async (client, message) => {
 
-  if (message.channel.id === "831475856882925629") require('../plugin/Trakteer')(client, message);
+  if (message.channel.id === "840073578963795999") require('../plugin/Trakteer')(client, message);
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
 
   let prefix;

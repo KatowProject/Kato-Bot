@@ -13,6 +13,7 @@ exports.run = async (client, message, args) => {
 
                 if (!message.member.hasPermission('MANAGE_MESSAGES')) return;
                 const getSaldo = await client.trakteer.getSaldo();
+                console.log(getSaldo)
                 message.channel.send(new Discord.MessageEmbed()
                     .setTitle('Cek Saldo Trakteer')
                     .setColor(client.warna.kato)
@@ -197,9 +198,9 @@ exports.run = async (client, message, args) => {
                         message.reply('Data telah disetujui dan Durasi Role diakumulasikan dengan sekarang, silahkan cek kembali untuk memastikan!');
                         table.set(findMember.id, { dur: alreadyDonet.dur + time, first: alreadyDonet.first, guild: message.guild.id });
                     } else {
-                    message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
-                    await findMember.roles.add('438335830726017025');
-                    table.set(findMember.id, { dur: time, first: Date.now(), guild: message.guild.id });
+                        message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
+                        await findMember.roles.add('438335830726017025');
+                        table.set(findMember.id, { dur: time, first: Date.now(), guild: message.guild.id });
                     }
                 } else if (tidak.includes(awaitingMSG.first().content.toLowerCase())) {
                     alertMSG.delete();

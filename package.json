@@ -9,6 +9,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.0",
+    "cheerio": "^1.0.0-rc.9",
     "cpu-stat": "^2.0.1",
     "dateformat": "^3.0.3",
     "discord-logs": "^1.7.7",

@@ -1,0 +1,23 @@
+{
+    "discord": {
+        "owners": [
+            "458342161474387999"
+        ],
+        "prefix": [
+            "k!",
+            "k."
+        ],
+        "token": ""
+    },
+    "mangadex": {
+        "account": {
+            "username": "",
+            "password": ""
+        }
+    },
+    "trakteer": {
+        "XSRF-TOKEN": "",
+        "trakteer-id-session": "",
+        "webhook": ""
+    }
+}
