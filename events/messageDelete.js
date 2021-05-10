@@ -2,9 +2,11 @@ const Discord = require('discord.js');
 
 module.exports = async (client, message) => {
 
+    if (!message && message.author?.bot) return;
+
     const dataAttachment = client.dataAttachment;
 
-    if (message.author.bot) return;
+    if (message.mentions.members.size > 0 || message.mentions.roles.size > 0) require('../plugin/ghostTag.js')(client, message);
     if (message.attachments.size > 0) {
 
         const lastMessageID = message.author.lastMessageID;

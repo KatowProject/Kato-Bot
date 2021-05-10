@@ -24,7 +24,7 @@ module.exports = async (client, message) => {
     const format = image.match(/\.(gif|jpe?g|tiff?|png|webp|bmp|mp4|mp3|zip|rar|exe)$/i)[0];
     const toBuffer = await require('got')(image).buffer();
 
-    AttachmentCollection.set(message.author.lastMessageID, { buffer: toBuffer, filename: image + format});
+    AttachmentCollection.set(message.author.lastMessageID, { buffer: toBuffer, filename: image + format });
   }
   //Prefix nya bisa antara di mention, ama antara pake prefix biasa (k!)
   if (!message.content.toLowerCase().startsWith(prefix)) return;
