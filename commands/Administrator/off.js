@@ -1,34 +1,39 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const { allCommands } = require('../../database/schema/manageCommand');
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('MANAGE_CHANNELS')) return;
-
+        const channels = allCommands;
         let request = args.join(' ');
-        if(!request) return message.reply('berikan channelnya untuk melanjutkan');
+        if (!request) return message.reply('berikan channelnya untuk melanjutkan');
 
         const userID = client.channels.cache.get(args[0]);
         const userRegex = new RegExp(args.join(" "), "i");
 
         let findChannel = client.channels.cache.find(a => {
-          return userRegex.test(a.name);
+            return userRegex.test(a.name);
         });
-        
-        let data = db.get('disableAllCommands');
-        if (data === null) db.set('disableAllCommands', ['0']);
 
-        if(userID) {
-            db.push('disableAllCommands', userID.id);
-            message.reply(`Semua perintah telah dinonaktifkan di <#${userID}>`)
-        } else {
-            db.push('disableAllCommands', findChannel.id);
-            message.reply(`Semua perintah telah dinonaktifkan di ${findChannel.name}`)
-        };
-        
-   
+
+        const channel = await channels.find({ guild: message.guild.id });
+
+        if (channel.length > 0) {
+            const chData = channel.find(a => a.guild === message.guild.id);
+
+            if (userID) {
+
+                await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: chData.channels.concat(userID.id) });
+                message.reply(`Semua perintah telah dinonaktifkan di <#${userID.id}>!`);
+
+            } else {
+
+                await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: chData.channels.concat(findChannel.id) });
+                message.reply(`Semua perintah telah dinonaktifkan di <#${findChannel.id}>`);
+
+            }
+        }
+
     } catch (error) {
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
@@ -37,7 +42,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['MANAGE_CHANNELS']
 }
 
 exports.help = {

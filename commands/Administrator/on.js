@@ -1,45 +1,50 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const { allCommands } = require('../../database/schema/manageCommand');
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('MANAGE_CHANNELS')) return;
+        const channels = allCommands;
 
         let request = args.join(' ');
-        if(!request) return message.reply('berikan channelnya untuk melanjutkan');
+        if (!request) return message.reply('berikan channelnya untuk melanjutkan');
 
         const userID = client.channels.cache.get(args[0]);
         const userRegex = new RegExp(args.join(" "), "i");
 
         let findChannel = client.channels.cache.find(a => {
-          return userRegex.test(a.name);
+            return userRegex.test(a.name);
         });
-        
-        let data = db.get('disableAllCommands');
-        if (data === null) db.set('disableAllCommands', ['0']);
 
-        if(userID) {
-            let dataFilter = data.filter(ID => ID !== userID);
-            db.set('disableAllCommands', dataFilter);
-            message.reply(`Semua perintah telah diaktifkan di <#${userID}>`)
-        } else if (findChannel) {
-            let dataFilter = data.filter(ID => ID !== findChannel.id);
-            db.set('disableAllCommands', dataFilter);
-            message.reply(`Semua perintah telah diaktifkan di ${findChannel.name}`)
-        };
-        
-   
+
+        const channel = await channels.findOne({ guild: message.guild.id });
+
+        if (userID) {
+
+            const filterCH = channel.channels.filter(a => a !== userID.id);
+            await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: filterCH });
+            message.reply(`Semua perintah telah diaktifkan di <#${userID.id}>!`);
+
+        } else {
+
+            const filterCH = channel.channels.filter(a => a !== findChannel.id);
+            await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: filterCH });
+            message.reply(`Semua perintah telah diaktifkan di <#${findChannel.id}>`);
+
+        }
+
+
     } catch (error) {
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
     }
+
 }
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['MANAGE_CHANNELS']
 }
 
 exports.help = {

@@ -1,28 +1,24 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const AR = require('../../database/schema/autoResponse');
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('ADMINISTRATOR')) return;
+
         //get author n ar data
-        let req = message.author;
-        let list = new db.table('ARs');
-        let data = list.all();
-        if (data.length < 1) return message.reply('tidak ada autorespond yang terdaftar!');
+        const listAR = await AR.findOne({ guild: message.guild.id });
 
         //send to user
-        let embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(client.warna.kato)
             .setAuthor('List Autorespond:', message.guild.iconURL({ size: 2048, dynamic: true }))
-            .setDescription(data.map((a, i) => `**${i + 1}.** \`${JSON.parse(a.data).name}\` **[ID: ${a.ID}]**`).join('\n'))
+            .setDescription(listAR.data.map((a, i) => `**${i + 1}.** ${a.name}`))
             .setFooter('jika ada list yang bernama `undefined` segera hapus dengan command removear!')
-        let msg_embed = await message.channel.send(embed);
-        let msg_alert = await message.reply('Pilih yang ingin dihapus! `Gunakan Masukkan Nilai ID untuk menghapusnya!`');
+        const msg_embed = await message.channel.send(embed);
+        const msg_alert = await message.reply('Pilih yang ingin dihapus! `Gunakan Masukkan Nilai angka untuk menghapusnya!`');
 
         //request to user
-        let request = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === req.id, {
+        const request = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === message.author.id, {
             max: 1,
             time: 60000,
             errors: ["time"]
@@ -37,22 +33,24 @@ exports.run = async (client, message, args) => {
         //delete data
         await msg_embed.delete();
         await msg_alert.delete();
-        let remove = list.delete(request.first().content.toLowerCase());
-        if (remove === true) {
-            message.channel.send('Ar telah terhapus!').then(t => t.delete({ timeout: 5000 }));
-        } else {
-            message.channel.send('Tidak ada yang dihapus, silahkan membuat permintaan kembali!').then(t => t.delete({ timeout: 5000 }));
-        }
+
+        const requestContent = parseInt(request.first().content);
+        const filterAR = listAR.data.filter(a => a !== listAR.data[requestContent - 1]);
+        if (filterAR.length === listAR.data.length) return message.reply('Permintaan tidak dapat dimengerti, silahkan buat permintaan kembali!');
+
+        await AR.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, data: filterAR });
+        message.reply('telah berhasil dihapus dari database!');
 
     } catch (error) {
-        return message.reply('sepertinya ada kesalahan')
+        return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
     }
 }
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['ADMINISTRATOR']
 }
 
 exports.help = {

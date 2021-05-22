@@ -1,10 +1,10 @@
 const Discord = require('discord.js'),
   cooldowns = new Discord.Collection(),
-  db = require('quick.db')
+  manage = require('../database/schema/manageCommand');
 
 module.exports = async (client, message) => {
 
-  if (message.channel.id === "840073578963795999") require('../plugin/Trakteer')(client, message);
+  if (message.channel.id === "831475856882925629") require('../plugin/Trakteer')(client, message);
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
 
   let prefix;
@@ -13,6 +13,7 @@ module.exports = async (client, message) => {
   } else if (message.content.toLowerCase().startsWith(client.config.discord.prefix[1])) {
     prefix = client.config.discord.prefix[1];
   }
+
   require('../plugin/ar.js')(client, message)
   require('../plugin/afk.js')(client, message)
 
@@ -22,7 +23,6 @@ module.exports = async (client, message) => {
     const AttachmentCollection = client.dataAttachment;
     const attachment = Array.from(message.attachments)[0];
     const image = attachment[1].url;
-    console.log(image);
     const toBuffer = await require('got')(image).buffer();
 
     AttachmentCollection.set(message.author.lastMessageID, { buffer: toBuffer, filename: image.split('/').pop() });
@@ -40,28 +40,52 @@ module.exports = async (client, message) => {
     message.flags.push(args.shift().slice(1));
   } // Ini tuh ibaratkan parameter.
 
-
-
   let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
   if (!commandFile) return;
+
+  /* ALL_COMMANDS */
+  const findChannel = await manage.allCommands.find({ guild: message.guild.id });
+
+  if (findChannel.length === 0) {
+
+    await manage.allCommands.create({ guild: message.guild.id, channels: [] });
+    return message.channel.send('baru pertama kalinya masuk db, silahkan buat permintaan kembali!');
+
+  } else {
+
+    if (commandFile.help.name === 'on') commandFile.run(client, message, args);
+    const ch = findChannel.find(a => a.guild == message.guild.id);
+    if (ch.channels.includes(message.channel.id)) return;
+
+  }
+  /**************************************************************** */
+
+  /* SPECIFIC_COMMANDS */
+  const findCMD = await manage.specificCommands.findOne({ guild: message.guild.id });
+  if (!findCMD) {
+
+    await manage.specificCommands.create({ guild: message.guild.id, command: [] });
+    return message.channel.send('baru pertama kalinya masuk db, silahkan buat permintaan kembali!');
+
+  } else {
+
+    let channels = null;
+    const cmd = findCMD.command.find(a => a.name === commandFile.help.name);
+    channels = cmd ? channels = cmd.channels : channels = [];
+    if (channels.includes(message.channel.id)) return;
+
+  }
+
+  /**************************************************************** */
+
+  /* PERMISSION_CHECK */
+  if (!message.member.hasPermission(commandFile.conf.permissions)) return message.channel.send(`Not Enough Permission!\n**Require: ${commandFile.conf.permissions.join(', ')} **`);
+
+  /**************************************************************** */
+
   if (!cooldowns.has(commandFile.help.name)) {
     cooldowns.set(commandFile.help.name, new Discord.Collection());
   }
-
-  //dsaible all commands  
-  let channels = db.get('disableAllCommands');
-  if (channels === null) channels = [];
-  if (channels.includes(message.channel.id)) {
-    if (commandFile.help.name === 'on') commandFile.run(client, message, args);
-    else return;
-  }
-
-  //disable specifict channel
-  let table = new db.table('disableCommands');
-  let channel = table.get(commandFile.help.name);
-  if (channel === null) channel = [];
-  //disable cmd if channelID available in db
-  if (channel.includes(message.channel.id)) return;
 
 
   const member = message.member;

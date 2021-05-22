@@ -1,23 +1,27 @@
 const Discord = require('discord.js');
-let db = require('quick.db')
+const AFK = require('../../database/schema/AFK');
 
 exports.run = async (client, message, args) => {
     try {
-        const status = new db.table('AFKs');
-        let afk = await status.fetch(message.author.id);
+
+        const afk = await AFK.findOne({ userID: message.author.id });
 
         //ignore AFK
-        let reason = args.join(' ').toString();
+        let reason = args.join(' ');
 
         if (!afk) {
-            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' })
-            setTimeout(() => {
-                status.set(message.author.id, { alasan: reason || 'AFK' });
-                status.add(`${message.author.id}.time`, Date.now());
+            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' });
+            setTimeout(async () => {
+
+                const data = { reason, time: Date.now() };
+                await AFK.create({ userID: message.author.id, data: JSON.stringify(data) });
+
             }, 7000);
 
         } else {
-            status.delete(message.author.id);
+
+            await AFK.findOneAndDelete({ userID: message.author.id });
+
         };
 
 

@@ -1,19 +1,19 @@
-const db = require('quick.db');
+const mutee = require('../database/schema/MuteMembers');
 
 module.exports = async (client) => {
 
-    let table = new db.table("UNs");
-    let data = table.all();
-    if (data.length < 1) return;
+    const donaturs = await mutee.find({});
+    for (const member of donaturs) {
 
-    for (let i = 0; i < data.length; i++) {
-        let member = table.get(data[i].ID);
-        let timeLatest = Date.now() - member.first;
-        if (timeLatest > member.dur) {
-            await client.guilds.cache.get(member.guild).members.cache.get(data[i].ID).roles.remove('430378151651049486');
-            console.log('Telah mencabut role Muted dan Menghapus database!');
-            table.delete(data[i].ID);
+        const timeLatest = Date.now() - member.now;
+        if (timeLatest > member.duration) {
 
-        } else return;
+            await client.guilds.cache.get(member.guild).members.cache.get(member.userID).roles.remove('430378151651049486');
+            await mutee.findOneAndDelete({ userID: member.userID });
+            client.channels.cache.find(a => a.name === 'staff-bot').send(true);
+
+        }
+
     }
+
 }

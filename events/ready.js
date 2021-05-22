@@ -21,8 +21,10 @@ module.exports = client => {
   /** Mute Duration */
   const muteDuration = () => require('../plugin/durationMute.js')(client);
   setInterval(muteDuration, 30000);
-  const durationDonaturate = () => require('../plugin/durationDonatur.js')(client);
-  setInterval(durationDonaturate, 30000);
+
+
+  const durationDonatur = () => require('../plugin/durationDonatur.js')(client);
+  setInterval(durationDonatur, 60000);
 
   /* Music Events */
   require('../plugin/PlayerEvent.js')(client);
@@ -31,6 +33,6 @@ module.exports = client => {
   setInterval(() => client.dataAttachment = new Discord.Collection(), 300000);
 
   /* Trakteer */
-  client.trakteer.getNotification(true, 60000)
+  client.trakteer.getNotification(true, 120000);
 }
 

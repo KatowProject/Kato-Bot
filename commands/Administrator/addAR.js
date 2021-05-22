@@ -1,11 +1,10 @@
-let Discord = require('discord.js');
-let db = require('quick.db');
+const Discord = require('discord.js');
+const AR = require('../../database/schema/autoResponse');
 
 
 exports.run = async (client, message, args) => {
 
     //verify
-    if (!message.member.hasPermission('ADMINISTRATOR')) return;
     let req = message.author;
 
     //await message
@@ -32,25 +31,26 @@ exports.run = async (client, message, args) => {
     }
 
     //checking and add ar
-    let ar = new db.table('ARs');
-    let list_data = ar.all()
-    let array = [];
-    for (let i = 0; i < list_data.length; i++) {
-        array.push(JSON.parse(list_data[i].data))
-    }
-    let check = array.find(a => a.name === obj.name);
+    const ARs = await AR.find({ guild: message.guild.id });
+    const content = ARs[0].data;
+    const check = content.find(a => a.name === obj.name);
     if (check) {
-        return message.reply('telah ada ar dengan nama yang sama, permintaan digagalkan!');
+
+        return message.reply('ada Data dengan nama yang sama, permintaan digagalkan!');
+
     } else {
 
-        await ar.set(obj.name, obj);
-        await message.channel.send('telah selesai ditambahkan!');
+        await AR.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, data: content.concat(obj) })
+        return message.reply('Telah selesai ditambahkan!');
+
     }
+
 }
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['ADMINISTRATOR']
 }
 
 exports.help = {

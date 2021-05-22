@@ -57,7 +57,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 5,
+  permissions: ['BAN_MEMBERS']
 }
 
 exports.help = {

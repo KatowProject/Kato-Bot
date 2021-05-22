@@ -1,37 +1,36 @@
 const Discord = require('discord.js');
-const { add } = require('lodash');
-const db = require('quick.db');
+const AR = require('../../database/schema/autoResponse');
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('ADMINISTRATOR')) return;
+
         //get data | array
-        let list = new db.table('ARs').all();
-        if (list.length < 1) return message.reply('tidak ada autorespond yang terdaftar!');
+        const ARs = await AR.findOne({ guild: message.guild.id });
+        if (!ARs) return message.reply('Gk ada data!');
 
         //send to user
-        let embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(client.warna.kato)
             .setAuthor('List Autorespond:', message.guild.iconURL({ size: 2048, dynamic: true }))
-            .setDescription(list.map((a, i) => `${i + 1}. ${JSON.parse(a.data).name} [ID: ${a.ID}]`).join('\n'))
+            .setDescription(ARs.data.map((a, i) => `**${i + 1}**. ${a.name}`))
             .setFooter('jika ada list yang bernama `undefined` segera hapus dengan command removear!')
         await message.channel.send(embed);
     } catch (error) {
-        return console.log(error)
+        return message.reply('Something went wrong:\n' + error.message);
         // Restart the bot as usual.
     }
 }
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['ADMINISTRATOR']
 }
 
 exports.help = {
     name: 'listar',
-    description: '',
+    description: 'list AR',
     usage: '',
     example: ''
 }

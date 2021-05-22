@@ -3,3 +3,4 @@ node_modules
 config/config.json
 package-lock.json
 cache.txt
+commands/nsfw

@@ -1,9 +1,5 @@
 const Discord = require('discord.js');
 const axios = require('axios');
-const api = require('mangadex-full-api');
-const account = require('../config/config.json').mangadex.account;
-const login = api.agent.cacheLogin('cache.txt', account.username, account.password);
-
 class Kusonime {
     constructor(client) {
         this.client = client;
@@ -668,4 +664,4 @@ class MangaDex {
     };
 };
 
-module.exports = { Kusonime, Samehadaku, MangaDex };
+module.exports = { Kusonime, Samehadaku };

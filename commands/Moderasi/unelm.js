@@ -1,32 +1,29 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const ELM = require('../../database/schema/ELMs');
 
 exports.run = async (client, message, args) => {
   try {
-    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
-    if (!message.guild.me.hasPermission(["MANAGE_ROLES", "ADMINISTRATOR"])) return message.channel.send("Aku tidak mempunyai akses!");
+
+    if (!message.guild.me.hasPermission("MANAGE_ROLES")) return message.channel.send("Aku tidak mempunyai akses!");
 
     let korban = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!korban) return message.channel.send("tag user yang ingin di unelm!");
 
     //cari data
-    let data = new db.table('ELMs')
-    let elm = await data.fetch(korban.user.id)
-    if (!elm) return;
-    let elm_role = data.get(korban.user.id)
+    const member = await ELM.findOne({ userID: korban.id });
+    if (!member) return message.reply('Member gk kena ELM!');
 
-    for (let i = 0; i < elm_role.length; i++) {
-      korban.roles.add(elm_role[i])
+    for (const user of member.roles) {
+      korban.roles.add(user);
     }
 
-    let ELM = message.guild.roles.cache.get("505004825621168128");
-    korban.roles.remove(ELM).then(() => {
+    let ELMs = message.guild.roles.cache.get("505004825621168128");
+    korban.roles.remove(ELMs).then(() => {
       message.delete()
-
       message.channel.send(`**${korban.user.username}#${korban.user.discriminator}** telah selesai di unelm.`)
     })
 
-    await data.delete(korban.user.id)
+    await ELM.findOneAndDelete({ userID: korban.id });
 
     let embed = new Discord.MessageEmbed()
       .setAuthor(`UNELM | ${korban.user.tag}`)
@@ -45,7 +42,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: ["bebas"],
-  cooldown: 5
+  cooldown: 5,
+  permissions: ['MUTE_MEMBERS']
 }
 
 exports.help = {

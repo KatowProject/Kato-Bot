@@ -1,63 +1,95 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const { specificCommands } = require('../../database/schema/manageCommand');
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('MANAGE_CHANNELS')) return;
+
+        const AR = specificCommands;
 
         let request = args.join(' ');
-        if(!request) return message.reply('Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**');
+        if (!request) return message.reply('Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**');
 
-        
+
         let cmd = client.commands.get(args[0]);
-        if(!cmd) return message.reply('tidak ditemukan perintahnya!');
+        if (!cmd) return message.reply('tidak ditemukan perintahnya!');
         cmd = cmd.help;
 
-        let table = new db.table('disableCommands');
-        let data = table.get(cmd.name);
+        const ARs = await AR.findOne({ guild: message.guild.id });
+        if (!ARs) return message.reply('gk ada database-nya');
 
-        switch(args[1]) {
+        const findCMD = ARs.command.find(a => a.name === cmd.name);
+        const indexElement = ARs.command.indexOf(findCMD);
+
+        switch (args[1]) {
             case 'off':
-                
-                if(data === null) {
-                    table.set(cmd.name, ['0', message.channel.id]);
-                } else {
-                    table.push(cmd.name, message.channel.id)
-                }
-        
-                message.reply(`${cmd.name} telah berhasil dinonaktifkan!`);
 
-            break;
+                if (!findCMD) {
+
+                    const objCMD = {
+                        name: cmd.name,
+                        channels: [].concat(message.channel.id)
+                    };
+
+                    await AR.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, command: ARs.command.concat(objCMD) });
+                    message.reply(`${cmd.name} telah berhasil dinonaktifkan!`);
+
+                } else {
+
+                    const objCMD = {
+                        name: findCMD.name,
+                        channels: findCMD.channels.concat(message.channel.id)
+                    };
+
+                    if (findCMD.channels.includes(message.channel.id)) return message.reply('Perintah ini sudah pernah dinonaktifkan sebelumnya!');
+                    ARs.command[indexElement] = objCMD;
+
+                    await AR.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, command: ARs.command });
+                    message.reply(`${cmd.name} telah berhasil dinonaktifkan!`);
+
+                }
+
+
+                break;
 
             case 'on':
 
-                let filterData = data.filter(ID => ID !== message.channel.id);
-                table.set(cmd.name, filterData);
-                message.reply(`${cmd.name} telah berhasil diaktifkan kembali`);
+                if (!findCMD || findCMD.channels.length < 1) {
 
-            break;
-            
+                    return message.reply('Perintah ini tidak dinonaktifkan!');
+
+                } else {
+
+                    const filterChannels = findCMD.channels.filter(a => a !== message.channel.id);
+                    const objCMD = {
+                        name: findCMD.name,
+                        channels: filterChannels
+                    }
+
+                    ARs.command[indexElement] = objCMD;
+                    await AR.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, command: ARs.command });
+                    message.reply(`${cmd.name} telah berhasil diaktifkan kembali`);
+
+                }
+
+                break;
+
             case 'list':
 
-                if(data === null) return message.reply(`tidak ada channel yang dinonaktifkan!`);
-                data.shift();
-
-                let embed = new Discord.MessageEmbed()
-                .setColor(client.warna.kato)
-                .setTitle(`Channel Blacklist | Perintah **${cmd.name}**`)
-                .setDescription(data.map((a, i) => `${i + 1}. <#${a}>`).join('\n') || `~ Tidak ada Channel yang dinonaktifkan! ~`)
+                const embed = new Discord.MessageEmbed()
+                    .setColor(client.warna.kato)
+                    .setTitle(`Channel Blacklist | Perintah **${cmd.name}**`)
+                    .setDescription(findCMD.channels.map((a, i) => `${i + 1}. <#${a}>`).join('\n') || `~ Tidak ada Channel yang dinonaktifkan! ~`)
                 message.channel.send(embed);
 
-            break;
+                break;
 
-            default: 
+            default:
                 message.reply('pilih opsinya!');
-            break;
+                break;
         }
 
-   
+
     } catch (error) {
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
@@ -66,7 +98,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['MANAGE_CHANNELS']
 }
 
 exports.help = {

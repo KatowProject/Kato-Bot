@@ -1,28 +1,32 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+const Discord = require('discord.js');
+const AFK = require('../database/schema/AFK');
 
 module.exports = async (client, message) => {
-    let afk = new db.table('AFKs'),
-        authorstatus = await afk.fetch(message.author.id),
-        mentioned = message.mentions.members.first();
+
+    const mentioned = message.mentions.members.first();
+    const author = await AFK.findOne({ userID: message.author.id });
 
     if (mentioned) {
-        let status = await afk.get(`${mentioned.id}.alasan`);
-        let waktu = await afk.get(`${mentioned.id}.time`)
 
-        let msTos = Date.now() - waktu
-        let since = client.util.parseDur(msTos)
-        if (status) {
-            message.reply(`**${mentioned.user.tag}** saat ini sedang AFK - **${since}** ago\n**Alasan:**\n\`\`\`${status}\`\`\` `, { disableMentions: 'all' }).then(
-                d => d.delete({ timeout: 15000 })
-            );
-        }
+        const user = await AFK.findOne({ userID: mentioned.id });
+        if (!user) return;
+
+        const dataUser = JSON.parse(user.data);
+        const waktu = dataUser.time;
+        const alasan = dataUser.reason;
+
+        const msLeft = Date.now() - waktu;
+        const since = client.util.parseDur(msLeft);
+
+        message.reply(`**${mentioned.user.tag}** saat ini sedang AFK - **${since} ago**\n**Alasan:**\n\`\`\`${alasan}\`\`\` `, { disableMentions: 'all' }).then(
+            m => m.delete({ timeout: 15000 })
+        );
+
     };
 
-    if (authorstatus) {
-        message.reply(`Kato telah mencabut status AFK mu!`).then(
-            d => d.delete({ timeout: 10000 })
-        )
-        afk.delete(message.author.id)
-    };
+    if (author) {
+        message.reply('Kato telah mencabut status AFK mu!').then(m => m.delete({ timeout: 10000 }));
+        await AFK.findOneAndDelete({ userID: message.author.id });
+    }
+
 }

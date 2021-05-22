@@ -1,11 +1,10 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
 const ms = require('ms');
+const donate = require('../../database/schema/Donatur');
 
 exports.run = async (client, message, args) => {
     try {
 
-        const table = new db.table('Dons');
         const option = args[0];
 
         switch (option) {
@@ -87,13 +86,12 @@ exports.run = async (client, message, args) => {
 
                 if (args.includes('--all')) {
 
-                    const allDonatur = table.all();
+                    const allDonatur = await donate.find({})
 
                     const mapDonatur = allDonatur.map((a, i) => {
 
-                        const time = JSON.parse(a.data);
-                        const timeLeft = time.dur - (Date.now() - time.first);
-                        const member = message.guild.members.cache.get(a.ID);
+                        const timeLeft = a.duration - (Date.now() - a.now);
+                        const member = message.guild.members.cache.get(a.userID);
                         return `**${i + 1}**. <@${member.id}> - **${member.user.tag}**\n\`${client.util.parseDur(timeLeft)}\``;
 
                     });
@@ -147,9 +145,9 @@ exports.run = async (client, message, args) => {
 
                 } else {
 
-                    const donaturs = table.get(message.author.id);
-                    const timeLeft = donaturs.dur - (Date.now() - donaturs.first);
-                    if (!donaturs) return message.channel.send('datanya tidak ada!');
+                    const donatur = await donate.findOne({ userID: message.author.id })
+                    if (!donatur) return message.channel.send('datanya tidak ada!');
+                    const timeLeft = donatur.duration - (Date.now() - donatur.now);
                     message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
 
                 }
@@ -193,14 +191,18 @@ exports.run = async (client, message, args) => {
 
                 if (ya.includes(awaitingMSG.first().content.toLowerCase())) {
                     alertMSG.delete();
-                    const alreadyDonet = table.get(findMember.id);
+                    const alreadyDonet = await donate.findOne({ userID: findMember.id });
                     if (alreadyDonet) {
+
                         message.reply('Data telah disetujui dan Durasi Role diakumulasikan dengan sekarang, silahkan cek kembali untuk memastikan!');
-                        table.set(findMember.id, { dur: alreadyDonet.dur + time, first: alreadyDonet.first, guild: message.guild.id });
+                        await donate.findOneAndUpdate({ userID: findMember.id }, { userID: findMember.id, guild: message.guild.id, duration: alreadyDonet.duration + time, now: alreadyDonet.now });
+
                     } else {
+
                         message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
                         await findMember.roles.add('438335830726017025');
-                        table.set(findMember.id, { dur: time, first: Date.now(), guild: message.guild.id });
+                        await donate.create({ userID: findMember.id, guild: message.guild.id, duration: time, now: Date.now() });
+
                     }
                 } else if (tidak.includes(awaitingMSG.first().content.toLowerCase())) {
                     alertMSG.delete();
