@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
+const db = require('../../database').log;
 
 exports.run = async (client, message, args) => {
   try {
 
-    if (!message.member.hasPermission("MUTE_MEMBERS") || !message.guild.owner) return;
-    if (!message.guild.me.hasPermission(["MANAGE_ROLES", "ADMINISTRATOR"])) return message.channel.send("Aku tidak mempunyai akses!");
+    if (!message.guild.me.hasPermission("MANAGE_ROLES")) return message.channel.send("Aku tidak mempunyai akses!");
 
     if (args[0].toLowerCase() === 'voice') {
 
@@ -20,11 +20,10 @@ exports.run = async (client, message, args) => {
       if (!mutee) return;
       let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
-      mutee.roles.remove(role).then(() => {
-        message.channel.send(`${mutee.user.tag} telah selesai diunbisu!`)
-      })
+      mutee.roles.remove(role);
+      message.channel.send(`${mutee.user.tag} telah selesai diunbisu!`);
 
-      let embed = new Discord.MessageEmbed()
+      const embed = new Discord.MessageEmbed()
         .setAuthor(`UNMUTE | ${mutee.user.tag}`)
         .setColor(client.warna.kato)
         .addField("User", mutee, true)
@@ -32,9 +31,13 @@ exports.run = async (client, message, args) => {
         .setTimestamp()
         .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-      client.channels.cache.get("795778726930677790").send(embed);
+      const getChannel = db.get(message.guild.id).mute;
+      if (getChannel === 'null') return message.reply('Untuk mengaktifkan Log, Silahkan jalankan perintah k!logs').then(msg => msg.delete({ timeout: 5000 }));
+      client.channels.cache.get(getChannel).send(embed);
     }
+
   } catch (error) {
+
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.
   }
@@ -42,7 +45,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: ['unmute'],
-  cooldown: 5
+  cooldown: 5,
+  permissions: ['MUTE_MEMBERS']
 }
 
 exports.help = {

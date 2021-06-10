@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { Client, Message, MessageEmbed } = require('discord.js');
+const db = require('../../database').log;
 
 /**
  * @param {Client} client
@@ -7,6 +8,8 @@ const { Client, Message, MessageEmbed } = require('discord.js');
  * @param {[]} args
  */
 exports.run = async (client, message, args) => {
+
+  const dataGuild = db.get(message.guild.id);
 
   try {
 
@@ -21,14 +24,6 @@ exports.run = async (client, message, args) => {
     // Ketika usernamenya sama ama yang di mention
     if (member.user.id === message.author.id)
       return message.reply('Anda tidak bisa membanned diri anda sendiri.');
-
-    // Ketika yang membanned adalah member
-    if (!author.hasPermission("BAN_MEMBERS"))
-      return;
-
-    // Ketika yang dibanned adalah admin/momod
-    if (member.hasPermission("BAN_MEMBERS"))
-      return message.reply('Anda tidak bisa membanned staff!');
 
     member.ban({ reason: reason })
       .then((banMember) => {
@@ -48,7 +43,10 @@ exports.run = async (client, message, args) => {
       .setTimestamp()
       .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-    client.channels.cache.get("795778726930677790").send(embed);
+    const getChannel = dataGuild.mute;
+    if (getChannel === 'null') return message.reply('Untuk mengaktifkan Log silahkan ketik k!logs').then(msg => msg.delete({ timeout: 5000 }));
+    client.channels.cache.get(getChannel).send(embed);
+
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.
@@ -57,7 +55,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 5,
+  permissions: ['BAN_MEMBERS']
 }
 
 exports.help = {

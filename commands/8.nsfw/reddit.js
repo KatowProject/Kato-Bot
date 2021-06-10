@@ -2,10 +2,9 @@ const cabulAPI = require("cabul");
 const r = new cabulAPI.Client();
 
 exports.run = async (client, message) => {
-  if (
-    !["795771950076133438", "796006565240766485"].includes(message.channel.id)
-  )
-    return;
+
+  if (!message.channel.nsfw) return;
+
   try {
     const rTags = [
       r.hentai(),

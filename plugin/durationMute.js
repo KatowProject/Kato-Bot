@@ -1,19 +1,16 @@
-const db = require('quick.db');
+const db = require('../database').mute;
 
 module.exports = async (client) => {
 
-    let table = new db.table("UNs");
-    let data = table.all();
-    if (data.length < 1) return;
+    const mutes = db.all();
+    for (mute of mutes) {
 
-    for (let i = 0; i < data.length; i++) {
-        let member = table.get(data[i].ID);
-        let timeLatest = Date.now() - member.first;
+        const member = db.get(mute.ID);
+        const timeLatest = Date.now() - member.first;
         if (timeLatest > member.dur) {
-            await client.guilds.cache.get(member.guild).members.cache.get(data[i].ID).roles.remove('430378151651049486');
-            console.log('Telah mencabut role Muted dan Menghapus database!');
-            table.delete(data[i].ID);
-
+            await client.guilds.cache.get(member.guild).members.cache.get(mute.ID).roles.remove('430378151651049486');
+            db.delete(mute.ID);
         } else return;
+
     }
 }

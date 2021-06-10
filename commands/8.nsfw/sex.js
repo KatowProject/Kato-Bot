@@ -1,8 +1,9 @@
 const Discord = require('discord.js');
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 exports.run = async (client, message, args) => {
-if (!args[0]) return message.reply(`no parameter has been given\n
+
+  if (!args[0]) return message.reply(`no parameter has been given\n
 \`amateur\` \`anal\` \`anal_gape\` \`asian\` \`ass\` \`ass_fucking\` 
 \`ass_licking\` \`babe\` \`ball_licking\` \`bath\` \`bbw\` \`beach\` 
 \`big_cock\` \`big_tits\` \`bikini\` \`bikini\` \`blindfold\` \`blonde\` 
@@ -29,17 +30,20 @@ if (!args[0]) return message.reply(`no parameter has been given\n
 \`thai\` \`threesome\` \`tiny_tits\` \`titjob\` \`tribbing\` \`undressing\` 
 \`uniform\` \`upskirt\` \`voyeur\` \`wedding\` \`wet\` \`wife\` \`yoga_pants\`
 `);
-    
-if (!['795771950076133438', '796006565240766485'].includes(message.channel.id)) return;
+
+  if (!message.channel.nsfw) return;
+
   try {
-    const { url } = await fetch(`https://scathach.redsplit.org/v3/porn/?tags=${args}`).then(response => response.json());
+
+    const response = await axios.get(`https://scathach.redsplit.org/v3/porn/?tags=${args}`);
+    const url = response.data.url;
     if (!url[0]) return message.reply('Your query returned no results');
 
     let embed = new Discord.MessageEmbed()
 
-    .setImage(`${url}`)
-    .setTitle('CROTT')
-    .setColor('#985ce7')
+      .setImage(`${url}`)
+      .setTitle('CROTT')
+      .setColor('#985ce7')
     message.channel.send(embed);
 
   } catch (error) {

@@ -1,15 +1,18 @@
 const Discord = require('discord.js');
-const neko = require('nekos.life')
-const { nsfw } = new neko()
+const axios = require('axios');
 
 exports.run = async (client, message, args) => {
-  if (!['795771950076133438', '796006565240766485'].includes(message.channel.id)) return;
+  if (!message.channel.nsfw) return;
+
   try {
-    rhentai = await nsfw.avatar()
-    let embed = new Discord.MessageEmbed()
+
+    const response = await axios.get('https://nekos.life/api/v2/img/avatar');
+    const avatar = response.data;
+
+    const embed = new Discord.MessageEmbed()
       .setTitle('( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)')
       .setColor('#985ce7')
-      .setImage(rhentai.url)
+      .setImage(avatar.url)
 
     message.channel.send(embed)
   } catch (error) {

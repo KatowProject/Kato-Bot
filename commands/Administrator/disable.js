@@ -1,63 +1,59 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const db = require('../../database').cmd;
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('MANAGE_CHANNELS')) return;
 
         let request = args.join(' ');
-        if(!request) return message.reply('Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**');
+        if (!request) return message.reply('Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**');
 
-        
+
         let cmd = client.commands.get(args[0]);
-        if(!cmd) return message.reply('tidak ditemukan perintahnya!');
+        if (!cmd) return message.reply('tidak ditemukan perintahnya!');
         cmd = cmd.help;
 
-        let table = new db.table('disableCommands');
-        let data = table.get(cmd.name);
+        let data = db.get(cmd.name);
 
-        switch(args[1]) {
+        switch (args[1]) {
             case 'off':
-                
-                if(data === null) {
-                    table.set(cmd.name, ['0', message.channel.id]);
+
+                if (data === null) {
+                    db.set(cmd.name, [message.channel.id]);
                 } else {
-                    table.push(cmd.name, message.channel.id)
+                    db.push(cmd.name, message.channel.id)
                 }
-        
+
                 message.reply(`${cmd.name} telah berhasil dinonaktifkan!`);
 
-            break;
+                break;
 
             case 'on':
 
                 let filterData = data.filter(ID => ID !== message.channel.id);
-                table.set(cmd.name, filterData);
+                db.set(cmd.name, filterData);
                 message.reply(`${cmd.name} telah berhasil diaktifkan kembali`);
 
-            break;
-            
+                break;
+
             case 'list':
 
-                if(data === null) return message.reply(`tidak ada channel yang dinonaktifkan!`);
-                data.shift();
+                if (data === null) return message.reply(`tidak ada channel yang dinonaktifkan!`);
 
                 let embed = new Discord.MessageEmbed()
-                .setColor(client.warna.kato)
-                .setTitle(`Channel Blacklist | Perintah **${cmd.name}**`)
-                .setDescription(data.map((a, i) => `${i + 1}. <#${a}>`).join('\n') || `~ Tidak ada Channel yang dinonaktifkan! ~`)
+                    .setColor(client.warna.kato)
+                    .setTitle(`Channel Blacklist | Perintah **${cmd.name}**`)
+                    .setDescription(data.map((a, i) => `${i + 1}. <#${a}>`).join('\n') || `~ Tidak ada Channel yang dinonaktifkan! ~`)
                 message.channel.send(embed);
 
-            break;
+                break;
 
-            default: 
+            default:
                 message.reply('pilih opsinya!');
-            break;
+                break;
         }
 
-   
+
     } catch (error) {
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
@@ -66,7 +62,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permission: ['MANAGE_CHANNELS']
 }
 
 exports.help = {

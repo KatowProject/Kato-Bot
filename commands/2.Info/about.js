@@ -3,8 +3,9 @@ const Discord = require('discord.js');
 exports.run = async (client, message, args) => {
 
   try {
-    let bicon = client.user.displayAvatarURL();
-    let botembed = new Discord.MessageEmbed()
+
+    const bicon = client.user.displayAvatarURL();
+    const botembed = new Discord.MessageEmbed()
       .setColor(client.warna.kato)
       .setThumbnail(bicon)
       .addField("Nama", "Kato Megumi")
@@ -16,7 +17,7 @@ exports.run = async (client, message, args) => {
       .addField("Tim Pengembang", "The OwO Family dan Bot Commander Kato Megumi Fanbase")
       .setFooter("Stable Release | ManLord#3143")
       .setAuthor(message.guild.name, message.guild.iconURL())
-    return message.channel.send(botembed);
+    message.channel.send(botembed);
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

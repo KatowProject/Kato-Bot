@@ -1,10 +1,17 @@
-const Discord = require('discord.js'),
-  cooldowns = new Discord.Collection(),
-  db = require('quick.db')
+const Discord = require('discord.js');
+const cooldowns = new Discord.Collection();
+const db = require('../database').cmd;
+const log = require('../database').log;
 
 module.exports = async (client, message) => {
 
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
+
+  const dataGuild = log.get(message.guild.id);
+  if (!dataGuild) {
+    log.set(message.guild.id, { feedbacks: 'null', ban: 'null', mute: 'null', elm: 'null', kick: 'null' });
+    message.reply('Database telah dibuat!');
+  };
 
   let prefix;
   if (message.content.toLowerCase().startsWith(client.config.discord.prefix[0])) {
@@ -14,7 +21,6 @@ module.exports = async (client, message) => {
   }
   require('../plugin/ar.js')(client, message)
   require('../plugin/afk.js')(client, message)
-
 
   if (message.attachments.size > 0) {
 
@@ -47,20 +53,24 @@ module.exports = async (client, message) => {
     cooldowns.set(commandFile.help.name, new Discord.Collection());
   }
 
-  //dsaible all commands  
-  let channels = db.get('disableAllCommands');
-  if (channels === null) channels = [];
+  /* OFF ALL*/
+  let channels = db.get('off');
+  if (!channels) channels = [];
   if (channels.includes(message.channel.id)) {
-    if (commandFile.help.name === 'on') commandFile.run(client, message, args);
-    else return;
-  }
 
-  //disable specifict channel
-  let table = new db.table('disableCommands');
-  let channel = table.get(commandFile.help.name);
-  if (channel === null) channel = [];
-  //disable cmd if channelID available in db
+    if (commandFile.help.name === 'on') {
+      return commandFile.run(client, message, args);
+    } else return;
+
+  };
+
+  /* OFF OF SPECIFIC */
+  let channel = db.get(commandFile.help.name);
+  if (!channel) channel = [];
   if (channel.includes(message.channel.id)) return;
+
+  /* PERMISSION CHECK */
+  if (!message.member.hasPermission(commandFile.conf.permissions)) return message.channel.send(`Not Enough Permission!\n**Require: ${commandFile.conf.permissions.join(', ')} **`);
 
 
   const member = message.member;

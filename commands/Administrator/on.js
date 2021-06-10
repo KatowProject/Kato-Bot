@@ -1,36 +1,36 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
+const db = require('../../database').cmd;
 
 exports.run = async (client, message, args) => {
 
     try {
-        //verify
-        if (!message.member.hasPermission('MANAGE_CHANNELS')) return;
 
         let request = args.join(' ');
-        if(!request) return message.reply('berikan channelnya untuk melanjutkan');
+        if (!request) return message.reply('berikan channelnya untuk melanjutkan');
 
         const userID = client.channels.cache.get(args[0]);
         const userRegex = new RegExp(args.join(" "), "i");
 
         let findChannel = client.channels.cache.find(a => {
-          return userRegex.test(a.name);
+            return userRegex.test(a.name);
         });
-        
-        let data = db.get('disableAllCommands');
-        if (data === null) db.set('disableAllCommands', ['0']);
 
-        if(userID) {
-            let dataFilter = data.filter(ID => ID !== userID);
-            db.set('disableAllCommands', dataFilter);
+        const data = db.get('off');
+        if (!data) db.set('off', []);
+
+        if (userID) {
+            const dataFilter = data.filter(ID => ID !== userID);
+            if (!dataFilter) return message.reply('Gk ada Channel!');
+            db.set('off', dataFilter);
             message.reply(`Semua perintah telah diaktifkan di <#${userID}>`)
         } else if (findChannel) {
             let dataFilter = data.filter(ID => ID !== findChannel.id);
-            db.set('disableAllCommands', dataFilter);
+            if (!dataFilter) return message.reply('Gk ada Channel!');
+            db.set('off', dataFilter);
             message.reply(`Semua perintah telah diaktifkan di ${findChannel.name}`)
         };
-        
-   
+
+
     } catch (error) {
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
@@ -39,7 +39,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['MANAGE_CHANNELS']
 }
 
 exports.help = {

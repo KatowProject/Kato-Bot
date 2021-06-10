@@ -1,19 +1,26 @@
 const Discord = require('discord.js');
-const neko = require('nekos.life')
-const { nsfw } = new neko()
+const axios = require('axios');
 
 exports.run = async (client, message, args) => {
-  if (!['795771950076133438', '796006565240766485'].includes(message.channel.id)) return;
+
+  if (!message.channel.nsfw) return;
+
   try {
-    const genre = [nsfw.hentai(), nsfw.classic()];
+
+    const responseOne = await axios.get('https://nekos.life/api/v2/img/hentai');
+    const responseTwo = await axios.get('https://nekos.life/api/v2/img/classic');
+
+    const genre = [responseOne.data, responseTwo.data]
     const random = genre[Math.floor(Math.random() * genre.length)];
-    rhentai = await random
-    let embed = new Discord.MessageEmbed()
+
+    const hentai = random;
+    const embed = new Discord.MessageEmbed()
       .setTitle('( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)')
       .setColor('#985ce7')
-      .setImage(rhentai.url)
+      .setImage(hentai.url)
 
-    message.channel.send(embed)
+    message.channel.send(embed);
+
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

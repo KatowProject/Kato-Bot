@@ -1,13 +1,13 @@
 const { Client, Collection } = require("discord.js");
 const { Player } = require('discord-player');
 const Util = require("./util");
-const MangaDex = require('./MangaDex.js');
 const Samehadaku = require('./Samehadaku.js');
 const Kusonime = require('./Kusonime.js');
 
 module.exports = class katopos extends Client {
 
   constructor(opt) {
+
     super(opt);
     this.config = require("../config/config.json");
     this.emoji = require('../config/emoji.json');
@@ -19,7 +19,6 @@ module.exports = class katopos extends Client {
     this.dataAttachment = new Collection();
     this.recent = new Set();
     this.player = new Player(new Client());
-    this.mangadex = new MangaDex(this);
     this.samehadaku = new Samehadaku(this);
     this.kusonime = new Kusonime(this);
 

@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const db = require('../../database').log;
+
 const { Client, Message, MessageEmbed } = require('discord.js')
 /**
  * @param {Client} client
@@ -6,8 +8,10 @@ const { Client, Message, MessageEmbed } = require('discord.js')
  * @param {[]} args
  */
 
-
 exports.run = async (client, message, args) => {
+
+    const guildData = db.get(message.guild.id);
+
     try {
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         let reason = args.slice(1).join(" ") || "Tidak ada alasan";
@@ -21,10 +25,6 @@ exports.run = async (client, message, args) => {
         if (member.user.id === message.author.id)
             return message.reply('Anda tidak bisa membanned diri anda sendiri.');
 
-        // Ketika yang membanned adalah member
-        if (!author.hasPermission("KICK_MEMBERS"))
-            return;
-
         // Ketika yang dibanned adalah admin/momod
         if (member.hasPermission("KICK_MEMBERS"))
             return message.reply('Anda tidak bisa membanned staff!');
@@ -36,7 +36,8 @@ exports.run = async (client, message, args) => {
             .catch(err => {
                 message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);
             });
-        let embed = new MessageEmbed()
+
+        const embed = new MessageEmbed()
             .setAuthor(`KICK | ${member.user.tag}`)
             .setColor(client.warna.kato)
             .addField("User", member, true)
@@ -45,7 +46,10 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL())
 
-        client.channels.cache.get("795778726930677790").send(embed);
+        const getChannel = guildData.kick;
+        if (guildData === 'null') return message.reply('Untuk mengaktifkan Log silahkan ketik k!logs').then(msg => msg.delete({ timeout: 5000 }));
+        client.channels.cache.get(getChannel).send(embed);
+
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.
@@ -54,7 +58,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: ["tendang"],
-    cooldown: 5
+    cooldown: 5,
+    permissions: ['KICK_MEMBERS']
 }
 
 exports.help = {

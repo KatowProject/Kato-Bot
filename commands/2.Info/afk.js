@@ -1,23 +1,20 @@
 const Discord = require('discord.js');
-let db = require('quick.db')
+const db = require('../../database').afk;
 
 exports.run = async (client, message, args) => {
     try {
-        const status = new db.table('AFKs');
-        let afk = await status.fetch(message.author.id);
 
+        const afk = await db.fetch(message.author.id);
         //ignore AFK
-        let reason = args.join(' ').toString();
+        const reason = args.join(' ');
 
         if (!afk) {
             message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' })
             setTimeout(() => {
-                status.set(message.author.id, { alasan: reason || 'AFK' });
-                status.add(`${message.author.id}.time`, Date.now());
+                db.set(message.author.id, { alasan: reason || 'AFK', time: Date.now() });
             }, 7000);
-
         } else {
-            status.delete(message.author.id);
+            db.delete(message.author.id);
         };
 
 

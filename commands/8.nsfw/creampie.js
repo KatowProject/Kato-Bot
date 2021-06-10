@@ -1,19 +1,27 @@
 const Discord = require('discord.js');
-const neko = require('nekos.life')
-const { nsfw } = new neko()
+const axios = require('axios');
 
 exports.run = async (client, message, args) => {
-  if (!['795771950076133438', '796006565240766485'].includes(message.channel.id)) return;
+
+  if (!message.channel.nsfw) return;
+
   try {
-    const genre = [nsfw.cumsluts(), nsfw.cumArts(), nsfw.tits()];
+
+    const responseOne = await axios.get('https://nekos.life/api/v2/img/cum');
+    const responseTwo = await axios.get('https://nekos.life/api/v2/img/cum_jpg');
+    const responseThree = await axios.get('https://nekos.life/api/v2/img/tits');
+
+    const genre = [responseOne.data, responseTwo.data, responseThree.data];
     const random = genre[Math.floor(Math.random() * genre.length)];
-    rhentai = await random
-    let embed = new Discord.MessageEmbed()
+    const creampie = random;
+
+    const embed = new Discord.MessageEmbed()
       .setTitle('( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)')
       .setColor('#985ce7')
-      .setImage(rhentai.url)
+      .setImage(creampie.url);
 
-    message.channel.send(embed)
+    message.channel.send(embed);
+
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

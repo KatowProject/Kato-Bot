@@ -1,11 +1,8 @@
 let Discord = require('discord.js');
 let db = require('quick.db');
 
-
 exports.run = async (client, message, args) => {
 
-    //verify
-    if (!message.member.hasPermission('ADMINISTRATOR')) return;
     let req = message.author;
 
     //await message
@@ -50,7 +47,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: [],
-    cooldown: 5
+    cooldown: 5,
+    permission: ['ADMINISTRATOR']
 }
 
 exports.help = {

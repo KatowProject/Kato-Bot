@@ -8,7 +8,6 @@ module.exports.run = async (client, message, args) => {
         let query = args.join('%20');
         const now = client.player.nowPlaying(message);
         if (!query) query = now.title.split(' ').join('%20');
-        console.log(query);
         let get = await axios.get(`https://lyrics-api.powercord.dev/lyrics?input=${query}`)
             .catch((err) => { message.reply(err) })
         get = get.data
