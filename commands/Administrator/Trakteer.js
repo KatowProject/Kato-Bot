@@ -83,15 +83,23 @@ exports.run = async (client, message, args) => {
                 break;
 
             case 'status':
+                const mentions = message.mentions.members.first();
 
-                if (args.includes('--all')) {
+                if (mentions) {
 
+                    const donatur = await donate.findOne({ userID: mentions.user.id });
+                    if (!donatur) return message.reply('Datanya tidak ada!');
+                    const timeLeft = donatur.duration - (Date.now() - donatur.now);
+                    message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
+
+                } else if (args.includes('--all')) {
                     const allDonatur = await donate.find({})
 
                     const mapDonatur = allDonatur.map((a, i) => {
 
                         const timeLeft = a.duration - (Date.now() - a.now);
                         const member = message.guild.members.cache.get(a.userID);
+                        if (!member) return;
                         return `**${i + 1}**. <@${member.id}> - **${member.user.tag}**\n\`${client.util.parseDur(timeLeft)}\``;
 
                     });

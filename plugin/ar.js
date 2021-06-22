@@ -3,8 +3,6 @@ const AR = require('../database/schema/autoResponse');
 
 module.exports = async (client, message) => {
 
-    if (message.author.id !== '458342161474387999') return;
-
     const ar = await AR.find({ guild: message.guild.id });
 
     try {

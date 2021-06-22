@@ -33,19 +33,15 @@ module.exports = async (client, message) => {
 
                 await donate.findOneAndUpdate({ userID: findTag.id }, { userID: findTag.id, guild: message.guild.id, duration: alreadyDonaturTag.duration + durasiTag, now: alreadyDonaturTag.now });
                 // await table.set(findTag.id, { dur: alreadyDonaturTag.dur + durasiTag, first: alreadyDonaturTag.first, guild: message.guild.id });
-                await findTag.roles.add('438335830726017025').then(() => {
-                    client.channels.cache.get('336877836680036352').send('Hai para staff, ada Donatur Aktif yang donasi lagi. Durasi Role diperpanjang secara otomatis oleh bot, segera cek kembali ya untuk memastikan!')
-                });
-
+                await findTag.roles.add('438335830726017025');
+                client.channels.cache.get('336877836680036352').send('Hai para staff, ada Donatur Aktif yang donasi lagi. Durasi Role diperpanjang secara otomatis oleh bot, segera cek kembali ya untuk memastikan!');
 
             } else {
 
                 await donate.create({ userID: findTag.id, guild: message.guild.id, duration: durasiTag, now: Date.now() });
                 //await table.set(findTag.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
-                await findTag.roles.add('438335830726017025').then(() => {
-                    client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
-
-                });
+                await findTag.roles.add('438335830726017025');
+                client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
 
             }
             break;
@@ -64,19 +60,14 @@ module.exports = async (client, message) => {
 
                 await donate.create({ userID: findID.id, guild: message.guild.id, duration: durasiID, now: Date.now() });
                 // await table.set(findID.id, { dur: durasi, first: Date.now(), guild: message.guild.id });
-                await findID.roles.add('438335830726017025').then(() => {
-
-                    client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
-
-                });
+                await findID.roles.add('438335830726017025');
+                client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada donatur yang telah berhasil dipasangkan rolenya, coba segera cek kembali bisa saja tidak terpasang🥰');
 
             }
             break;
 
         default:
-
             client.channels.cache.get('336877836680036352').send('Hai Para Staff, ada Donatur yang tidak terpasang secara otomatis silahkan berikan sesuai dengan log terbaru di <#831475856882925629>');
-
             break;
 
     }

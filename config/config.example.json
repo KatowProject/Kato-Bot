@@ -9,12 +9,6 @@
         ],
         "token": ""
     },
-    "mangadex": {
-        "account": {
-            "username": "",
-            "password": ""
-        }
-    },
     "trakteer": {
         "XSRF-TOKEN": "",
         "trakteer-id-session": "",
