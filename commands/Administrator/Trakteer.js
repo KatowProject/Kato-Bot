@@ -83,9 +83,25 @@ exports.run = async (client, message, args) => {
                 break;
 
             case 'status':
+                const tag = message.guild.members.cache.find(a => a.user.tag.toLowerCase() == args.slice(1).join(' ').toLowerCase())
                 const mentions = message.mentions.members.first();
+                const id = message.guild.members.cache.get(args[1]);
 
-                if (mentions) {
+                if (tag) {
+
+                    const donatur = await donate.findOne({ userID: tag.user.id });
+                    if (!donatur) return message.reply('Datanya tidak ada!');
+                    const timeLeft = donatur.duration - (Date.now() - donatur.now);
+                    message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
+
+                } else if (id) {
+
+                    const donatur = await donate.findOne({ userID: id.id });
+                    if (!donatur) return message.reply('Datanya tidak ada!');
+                    const timeLeft = donatur.duration - (Date.now() - donatur.now);
+                    message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
+
+                } else if (mentions) {
 
                     const donatur = await donate.findOne({ userID: mentions.user.id });
                     if (!donatur) return message.reply('Datanya tidak ada!');
