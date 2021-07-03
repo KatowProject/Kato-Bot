@@ -1,32 +1,17 @@
 const Discord = require('discord.js'),
-  cooldowns = new Discord.Collection(),
-  manage = require('../database/schema/manageCommand');
+  cooldowns = new Discord.Collection()
 
 module.exports = async (client, message) => {
 
-  if (message.channel.id === "831475856882925629") require('../plugin/Trakteer')(client, message);
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
 
   let prefix;
-  if (message.content.toLowerCase().startsWith(client.config.discord.prefix[0])) {
-    prefix = client.config.discord.prefix[0]; // Cek folder, config.json.
-  } else if (message.content.toLowerCase().startsWith(client.config.discord.prefix[1])) {
-    prefix = client.config.discord.prefix[1];
+  if (message.content.toLowerCase().startsWith(client.config.prefix[0])) {
+    prefix = client.config.prefix[0]; // Cek folder, config.json.
+  } else if (message.content.toLowerCase().startsWith(client.config.prefix[1])) {
+    prefix = client.config.prefix[1];
   }
 
-  require('../plugin/ar.js')(client, message)
-  require('../plugin/afk.js')(client, message)
-
-
-  if (message.attachments.size > 0) {
-
-    const AttachmentCollection = client.dataAttachment;
-    const attachment = Array.from(message.attachments)[0];
-    const image = attachment[1].url;
-    const toBuffer = await require('got')(image).buffer();
-
-    AttachmentCollection.set(message.author.lastMessageID, { buffer: toBuffer, filename: image.split('/').pop() });
-  }
   //Prefix nya bisa antara di mention, ama antara pake prefix biasa (k!)
   if (!message.content.toLowerCase().startsWith(prefix)) return;
 
@@ -43,40 +28,6 @@ module.exports = async (client, message) => {
   let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
   if (!commandFile) return;
 
-  /* ALL_COMMANDS */
-  const findChannel = await manage.allCommands.find({ guild: message.guild.id });
-
-  if (findChannel.length === 0) {
-
-    await manage.allCommands.create({ guild: message.guild.id, channels: [] });
-    return message.channel.send('baru pertama kalinya masuk db, silahkan buat permintaan kembali!');
-
-  } else {
-
-    if (commandFile.help.name === 'on') commandFile.run(client, message, args);
-    const ch = findChannel.find(a => a.guild == message.guild.id);
-    if (ch.channels.includes(message.channel.id)) return;
-
-  }
-  /**************************************************************** */
-
-  /* SPECIFIC_COMMANDS */
-  const findCMD = await manage.specificCommands.findOne({ guild: message.guild.id });
-  if (!findCMD) {
-
-    await manage.specificCommands.create({ guild: message.guild.id, command: [] });
-    return message.channel.send('baru pertama kalinya masuk db, silahkan buat permintaan kembali!');
-
-  } else {
-
-    let channels = null;
-    const cmd = findCMD.command.find(a => a.name === commandFile.help.name);
-    channels = cmd ? channels = cmd.channels : channels = [];
-    if (channels.includes(message.channel.id)) return;
-
-  }
-
-  /**************************************************************** */
 
   /* PERMISSION_CHECK */
   if (!message.member.hasPermission(commandFile.conf.permissions)) return message.channel.send(`Not Enough Permission!\n**Require: ${commandFile.conf.permissions.join(', ')} **`);
@@ -94,7 +45,7 @@ module.exports = async (client, message) => {
   const cooldownAmount = (commandFile.conf.cooldown || 3) * 1000
 
   if (!timestamps.has(member.id)) {
-    if (!client.config.discord.owners.includes(message.author.id)) {
+    if (!client.config.owners.includes(message.author.id)) {
       timestamps.set(member.id, now);
     }
   } else {
