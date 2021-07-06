@@ -4,6 +4,7 @@ const db = require('../../database/schema/xp_player');
 exports.run = async (client, message, args) => {
     require('../../handler/XP')();
     const getUser = await db.findOne({ id: 1 });
+    if (!getUser) return;
 
     const mapInfo = getUser.data.map((a, i) => `${i + 1}. <@${a.id}> | Level: ${a.level} | Message Count: ${a.message_count}`);
     const chunk = client.util.chunk(mapInfo, 20);

@@ -29,9 +29,10 @@ module.exports = async (client) => {
             const checkXP = findXP.message_count - user.message.base;
             if (checkXP === findXP.message_count || checkXP < 1) return console.log('Nilainya masih nol!');
             if (checkXP === user.message.daily) return;
-            if (checkXP >= 100) {
+            if (checkXP >= 10) {
                 await dbUser.findOneAndUpdate({ userID: findXP.id },
                     {
+                        ticket: user.ticket + 1,
                         message: {
                             daily: checkXP,
                             base: user.message.base,

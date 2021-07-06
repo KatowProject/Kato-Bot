@@ -20,6 +20,8 @@ module.exports = async (client, isCommand = false) => {
             console.log('Berhasil Berubah!');
         }
 
+        client.channels.cache.get('861405086823350313').send('Daily telah diulang kembali!');
+
     } else if (hours == 24 || hours == 00 || hours == 24 && minutes > 0) {
 
         for (const user of userData) {
@@ -27,6 +29,7 @@ module.exports = async (client, isCommand = false) => {
             console.log('Berhasil Berubah!');
         }
 
+        client.channels.cache.get('861405086823350313').send('Daily telah diulang kembali!');
     }
 
 }
