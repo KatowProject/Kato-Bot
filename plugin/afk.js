@@ -1,8 +1,8 @@
-const discord = require('discord.js')
-const db = require('quick.db')
+const discord = require('discord.js');
+const db = require('../database');
 
 module.exports = async (client, message) => {
-    let afk = new db.table('AFKs'),
+    let afk = db.afk,
         authorstatus = await afk.fetch(message.author.id),
         mentioned = message.mentions.members.first();
 

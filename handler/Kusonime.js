@@ -10,7 +10,7 @@ class Kusonime {
         return new Promise(async (fullfill, reject) => {
             try {
 
-                const response = await axios.get(`https://kusonime-scrapper.glitch.me/api/cari/${query}`);
+                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/cari/${query}`);
                 const data = response.data;
 
                 if (data.length === 0) return message.reply(`Tidak ditemukan dengan teks ${query}!`)
@@ -58,7 +58,7 @@ class Kusonime {
         return new Promise(async (fullfill, reject) => {
             try {
 
-                const response = await axios.get(`http://kusonime-rest.herokuapp.com/api/anime/${query}`);
+                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/anime/${query}`);
                 const data = response.data;
 
                 let embed = new Discord.MessageEmbed()

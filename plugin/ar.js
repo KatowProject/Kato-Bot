@@ -1,9 +1,9 @@
 const { MessageEmbed, WebhookClient } = require('discord.js');
-const db = require('quick.db');
+const db = require('../database');
 
 module.exports = async (client, message) => {
 
-    let table = new db.table('ARs');
+    let table = db.ar;
     try {
         let msg = table.get(message.content.toLowerCase());
         if (msg === null) return;
