@@ -22,7 +22,7 @@ module.exports = async (client, isCommand = false) => {
 
         client.channels.cache.get('861405086823350313').send('Daily telah diulang kembali!');
 
-    } else if (hours == 24 || hours == 00 || hours == 24 && minutes > 0) {
+    } else if (hours == 24 && minutes > 0 || hours == 00 && minutes <= 1) {
 
         for (const user of userData) {
             await db.findOneAndUpdate({ userID: user.userID }, { isAttend: false, message: { daily: 0, base: 0, isComplete: false } });
