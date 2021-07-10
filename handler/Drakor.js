@@ -10,7 +10,7 @@ class Drakor {
         return new Promise(async (fullfill, reject) => {
             try {
 
-                const response = await axios.get('http://localhost:3001/api/cari/' + query);
+                const response = await axios.get('http://posantai.bugs.today/drakor/api/cari/' + query);
                 const data = response.data;
                 console.log(data);
                 if (data.length < 1) return message.reply('Pencarian tidak ditemukan');
@@ -47,7 +47,7 @@ class Drakor {
         return new Promise(async (fullfill, reject) => {
             try {
 
-                const response = await axios.get('http://localhost:3001/api/drakor/' + query);
+                const response = await axios.get('http://posantai.bugs.today/drakor/api/drakor/' + query);
                 const data = response.data;
 
 

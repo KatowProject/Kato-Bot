@@ -9,7 +9,7 @@ class Kusonime {
         return new Promise(async (fullfill, reject) => {
             try {
 
-                const response = await axios.get(`http://localhost:3000/api/cari/${query}`);
+                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/cari/${query}`);
                 const data = response.data;
 
                 if (data.length === 0) return message.reply(`Tidak ditemukan dengan teks ${query}!`)
@@ -57,7 +57,7 @@ class Kusonime {
         return new Promise(async (fullfill, reject) => {
             try {
 
-                const response = await axios.get(`http://localhost:3000/api/anime/${query}`);
+                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/anime/${query}`);
                 const data = response.data;
 
                 let embed = new Discord.MessageEmbed()
@@ -124,7 +124,7 @@ class Samehadaku {
                 //get endpoint
                 let endpoint_search = [];
                 data_search.forEach(a => {
-                    endpoint_search.push(a.linkId);
+                    endpoint_search.push(a.linkId.split('/')[3]);
                 });
                 console.log(endpoint_search)
 
@@ -169,7 +169,7 @@ class Samehadaku {
                 let chapterList = [];
                 let dataChapter = get.data.list_episode;
                 dataChapter.forEach((a, i) => {
-                    chapterList.push({ title: `${i + 1}. ${a.title}`, endpoint: a.id });
+                    chapterList.push({ title: `${i + 1}. ${a.title}`, endpoint: a.id.split('/')[3] });
                 });
 
                 //chunk array

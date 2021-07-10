@@ -21,10 +21,6 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 
 ## Develover
 - ManLord#3143
-- Ray#1337
-- Stellarz_Munn#4554
-- The F#7252
-- Carl#5404
 
 ### Instalasi
 - Instal node.js (V14 ke atas)
@@ -33,19 +29,16 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
 - Edit file `config/config.json`:
 ```js
- {
-  "discord": {
-    "owners": [""], //owners bot
-    "channels": [""], //ignore channels
-    "prefix": ["", " "], //prefix bot
-    "token": "" //login
-  },
-  "mangadex": {
-    "account": {
-      "username": "", //username mangadex
-      "password": "" //password mangadex
-    }
-  }
+{
+    "owners": [
+        "458342161474387999"
+    ],
+    "prefix": [
+        "k@",
+        "k$"
+    ],
+    "token": "",
+    "db": ""
 }
 ```
 ### Penggunaan

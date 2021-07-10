@@ -3,7 +3,8 @@ const axios = require('axios');
 
 exports.run = async (client, message, args) => {
     try {
-        const query = args.join(' ');
+        let query = args.join(' ');
+        if (query.includes('youtube.com')) return ytdl(query.match(/^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/)[1]);
         if (!query) return message.reply('Silahkan masukkan permintaan terlebih dahulu!');
 
         const embed = new Discord.MessageEmbed().setColor(client.warna.kato).setTimestamp();

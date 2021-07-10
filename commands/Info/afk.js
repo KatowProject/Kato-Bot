@@ -13,7 +13,7 @@ exports.run = async (client, message, args) => {
             message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' });
             setTimeout(async () => {
 
-                const data = { reason, time: Date.now() };
+                const data = { reason: reason ? reason : "AFK", time: Date.now() };
                 await AFK.create({ userID: message.author.id, data: JSON.stringify(data) });
 
             }, 7000);
