@@ -12,7 +12,7 @@ module.exports = async (client) => {
 
     for (const user of getUser) {
         const findXP = getXP.data.find(a => a.id === user.userID);
-        if (!findXP) return;
+        if (!findXP) continue;
 
         if (user.message.base === 0) {
             await dbUser.findOneAndUpdate({ userID: findXP.id },
@@ -24,11 +24,11 @@ module.exports = async (client) => {
                     }
                 });
         } else {
-            if (user.message.isComplete) return;
+            if (user.message.isComplete) continue;
 
             const checkXP = findXP.message_count - user.message.base;
             if (checkXP === findXP.message_count || checkXP < 1) return console.log('Nilainya masih nol!');
-            if (checkXP === user.message.daily) return;
+            if (checkXP === user.message.daily) continue;
             if (checkXP >= 50) {
                 await dbUser.findOneAndUpdate({ userID: findXP.id },
                     {
@@ -39,7 +39,8 @@ module.exports = async (client) => {
                             isComplete: true
                         }
                     });
-                return client.users.cache.find(a => a.id === findXP.id).send('Misi telah selesai!');
+                client.users.cache.find(a => a.id === findXP.id).send('Misi telah selesai!');
+                continue;
             }
 
             await dbUser.findOneAndUpdate({ userID: findXP.id }, { message: { daily: checkXP, base: user.message.base, } });
