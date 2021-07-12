@@ -83,7 +83,7 @@ module.exports = async (client, message) => {
             await decisonMsg.react('✔');
             await decisonMsg.react('✖');
             await decisonMsg.react('🔄');
-            const alertDecisonMsg = await message.reply('Apakah kamu sudah yakin?');
+            const alertDecisonMsg = await message.reply('**PERINGATAN**\nDisaat H-1 harus wajib datang, Apakah kamu sudah yakin?');
 
             const finalSetuju = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '✔');
             const finalTidak = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '✖');
