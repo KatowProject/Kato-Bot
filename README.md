@@ -30,15 +30,22 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 - Edit file `config/config.json`:
 ```js
 {
-    "owners": [
-        "458342161474387999"
-    ],
-    "prefix": [
-        "k@",
-        "k$"
-    ],
-    "token": "",
-    "db": ""
+    "discord": {
+        "owners": [
+            "458342161474387999"
+        ],
+        "prefix": [
+            "k!",
+            "k."
+        ],
+        "token": "",
+        "instaAuth": ""
+    },
+    "trakteer": {
+        "XSRF-TOKEN": "",
+        "trakteer-id-session": "",
+        "webhook": ""
+    }
 }
 ```
 ### Penggunaan

@@ -13,7 +13,7 @@ exports.run = async (client, message, args) => {
         if (!query) return message.reply('Masukkan permintaan terlebih dahulu!');
         if (query.includes('http')) query = query.split('/').pop();
 
-        await insta.authBySessionId('2147862687dd%3AiuDGiNay0S2ze6%3A6');
+        await insta.authBySessionId(client.config.discord.instaAuth);
         const data = await insta.getProfile(query);
         if (!data) return message.reply('Data tidak ditemukan!');
 
