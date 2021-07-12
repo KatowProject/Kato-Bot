@@ -124,7 +124,7 @@ class Samehadaku {
                 //get endpoint
                 let endpoint_search = [];
                 data_search.forEach(a => {
-                    endpoint_search.push(a.linkId.split('/')[3]);
+                    endpoint_search.push(a.linkId.replace('https:/samehadaku.to/anime/', ''));
                 });
                 console.log(endpoint_search)
 
@@ -169,13 +169,12 @@ class Samehadaku {
                 let chapterList = [];
                 let dataChapter = get.data.list_episode;
                 dataChapter.forEach((a, i) => {
-                    chapterList.push({ title: `${i + 1}. ${a.title}`, endpoint: a.id.split('/')[3] });
+                    chapterList.push({ title: `${i + 1}. ${a.title}`, endpoint: a.id.replace('https://samehadaku.to/', '') });
                 });
 
                 //chunk array
                 let page = 1;
                 let chapterChunk = this.client.util.chunk(chapterList, 12);
-                console.log(chapterChunk[0])
                 let embed = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
                     .setTitle(get.data.title)
@@ -240,7 +239,6 @@ class Samehadaku {
 
                 const index = parseInt(response.first().content);
                 let result_eps = chapterList[index - 1].endpoint;
-                embed_detail.delete();
                 embed_chapterList.delete();
                 alert_detail.delete();
                 await this.getLink(result_eps, message);
@@ -255,56 +253,18 @@ class Samehadaku {
     getLink(query, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-                let get = await axios.get(`https://samehadaku-rest-api.herokuapp.com/anime/eps/${query}`);
-                let author = message.author
+                const res = await axios.get(`https://samehadaku-rest-api.herokuapp.com/anime/eps/${query}`);
+                const data = res.data;
 
-                let alert_link = await message.reply('Mau pilih format apa?\n1. MKV\n2. MP4\n3. x265 ');
-                let response = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === author.id, {
-                    max: 1,
-                    time: 100000,
-                    errors: ["time"]
-                }).catch(err => {
-                    message.reply('Waktu permintaan telah habis, silahkan buat permintaan kembali!');
-                    alert_link.delete();
-                });
+                for (const format of data.downloadEps) {
+                    const embed = new Discord.MessageEmbed().setColor(this.client.warna.kato).setAuthor(format.format);
+                    embed.setDescription(format.data.map((a, i) => {
+                        const link = Object.entries(a.link);
+                        const maplink = link.map((b, j) => `[${b[0]}](${b[1]})`).join('\n');
 
-                let index = parseInt(response.first().content);
-                await alert_link.delete();
-
-                switch (index) {
-                    case 1:
-                        let getMKV = get.data.downloadEps;
-                        let mkvResults = getMKV.find(a => a.format === 'MKV').data;
-                        let embedMKV = new Discord.MessageEmbed().setColor(this.client.warna.kato).setTitle('Format MKV');
-                        for (let i = 0; i < mkvResults.length; i++) {
-                            embedMKV.addField(mkvResults[i].quality, `[Klik di sini!](${mkvResults[i].link.zippyshare})`)
-                        }
-                        message.channel.send(embedMKV);
-                        break;
-
-                    case 2:
-                        let getMP4 = get.data.downloadEps;
-                        let mp4Results = getMP4.find(a => a.format === 'MP4').data;
-                        let embedMP4 = new Discord.MessageEmbed().setColor(this.client.warna.kato).setTitle('Format MP4');
-                        for (let i = 0; i < mp4Results.length; i++) {
-                            embedMP4.addField(mp4Results[i].quality, `[Klik di sini!](${mp4Results[i].link.zippyshare})`)
-                        }
-                        message.channel.send(embedMP4);
-                        break;
-
-                    case 3:
-                        let getx265 = get.data.downloadEps;
-                        let x265results = getx265.find(a => a.format === 'x265').data;
-                        if (x265results === undefined) return message.reply('ternyata tidak ada format x265 untuk anime ini :(')
-                        let embedx265 = new Discord.MessageEmbed().setColor(this.client.warna.kato).setTitle('Format x265');
-                        for (let i = 0; i < x265results.length; i++) {
-                            embedx265.addField(x265results[i].quality, `[Klik di sini!](${x265results[i].link.zippyshare})`)
-                        }
-                        message.channel.send(embedx265);
-                        break;
-                    default:
-                        message.reply('kamu memasukkan nilai yang salah, silahkan ulangi lagi dari awal!')
-                        break;
+                        return `**${a.quality}**\n${maplink}`;
+                    }));
+                    message.channel.send(embed);
                 }
                 fullfill();
             } catch (error) {

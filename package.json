@@ -28,7 +28,6 @@
     "node-fetch": "^2.6.1",
     "node-superfetch": "^0.1.10",
     "os": "^0.1.1",
-    "saucenao": "0.0.2",
     "scathach-api": "0.0.7",
     "scraper-instagram": "^1.0.17",
     "string-template": "^1.0.0",

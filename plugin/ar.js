@@ -2,7 +2,6 @@ const { MessageEmbed, WebhookClient, ClientUser } = require('discord.js');
 const AR = require('../database/schema/autoResponse');
 
 module.exports = async (client, message) => {
-
     const ar = await AR.find({ guild: message.guild.id });
 
     try {
