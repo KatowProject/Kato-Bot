@@ -7,13 +7,13 @@ module.exports = async (client, message) => {
     welcomeBed.setImage('https://cdn.discordapp.com/attachments/795771950076133438/863799150609301544/pos_idol-01.png');
 
     const welcomeMsg = await message.reply(welcomeBed);
-    await welcomeMsg.react('✔');
+    await welcomeMsg.react('🟢');
 
-    const alertMsg = await message.reply('Jika sudah memahami Syarat & Ketentuan, Kamu bisa react ✔ untuk melanjutkan!');
+    const alertMsg = await message.reply('Jika sudah memahami Syarat & Ketentuan, Kamu bisa react 🟢 untuk melanjutkan!');
     let finalName = null;
     let finalSong = null;
 
-    const agree = welcomeMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '✔');
+    const agree = welcomeMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🟢');
     agree.on('collect', async (f) => {
         message.delete();
         await welcomeMsg.delete();
@@ -40,16 +40,12 @@ module.exports = async (client, message) => {
                 return await getSong()
             }
 
-            if (decisionOptions.disagree.includes(f.content)) {
-                return message.reply('Silahkan masukin lagi namanya!');
-            }
-
-            message.reply(`Apakah kamu sudah yakin dengan nama **${f.content}**?\n\n**Setuju**: \`${decisionOptions.agree.join(', ')}\`\n**Tidak Setuju**: \`${decisionOptions.disagree.join(', ')}\``);
+            message.reply(`Apakah kamu sudah yakin dengan nama **${f.content}**?\n\n**Setuju**: \`${decisionOptions.agree.join(', ')}\`\nJika ada kesalahan silahkan diketik ulang namanya!`);
 
         });
 
         async function getSong() {
-            const alertSong = await message.reply('Silahkan masukkan lagu yang ingin kamu nyanyikan!');
+            const alertSong = await message.reply('Silahkan masukkan satu lagu yang ingin kamu nyanyikan!\n\n**Note**: Maksimal durasi lagu 5 menit dan sertakan link lagunya!');
             const song = await message.channel.createMessageCollector((m) => m.author.id === message.author.id, { time: 200000 });
 
             song.on('collect', async f => {
@@ -65,11 +61,7 @@ module.exports = async (client, message) => {
                     return finalDecision();
                 }
 
-                if (decisionOptions.disagree.includes(f.content)) {
-                    return message.reply('Silahkan masukin lagi namanya!');
-                }
-
-                await message.reply(`Apakah kamu sudah yakin dengan lagu **${f.content}**?\n\n**Setuju**: \`${decisionOptions.agree.join(', ')}\`\n**Tidak Setuju**: \`${decisionOptions.disagree.join(', ')}\``);
+                await message.reply(`Apakah kamu sudah yakin dengan lagu **${f.content}**?\n\n**Setuju**: \`${decisionOptions.agree.join(', ')}\`\nJika ada kesalahan silahkan diketik ulang nama lagu yang diinginkan!`);
             });
         }
 
@@ -80,13 +72,13 @@ module.exports = async (client, message) => {
             embedDecision.addField('Lagu: ', finalSong);
 
             const decisonMsg = await message.reply(embedDecision);
-            await decisonMsg.react('✔');
-            await decisonMsg.react('✖');
+            await decisonMsg.react('🟢');
+            await decisonMsg.react('🔴');
             await decisonMsg.react('🔄');
-            const alertDecisonMsg = await message.reply('Apakah kamu sudah yakin?');
+            const alertDecisonMsg = await message.reply('**PERINGATAN**\nDisaat H-1 harus wajib datang, Apakah kamu sudah yakin?');
 
-            const finalSetuju = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '✔');
-            const finalTidak = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '✖');
+            const finalSetuju = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🟢');
+            const finalTidak = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🔴');
             const finalReload = decisonMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🔄');
 
             finalSetuju.on('collect', async f => {

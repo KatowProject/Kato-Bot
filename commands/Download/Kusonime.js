@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 exports.run = async (client, message, args) => {
 
     try {
-        let query = args.join(' ');
+        let query = args.join('+');
         if (!query) return message.reply('masukin dulu!');
 
         if(query.startsWith('https')) await client.kusonime.getDetail(query.replace('https://kusonime.com/', ''), message);

@@ -6,9 +6,9 @@ module.exports = async (client, message) => {
 
   if (message.channel.id === "831475856882925629") require('../plugin/Trakteer')(client, message);
   if (message.channel.type === 'dm') {
-    if (message.content === 'register') {
+    if (message.content.toLowerCase() === 'register') {
       require('../plugin/registerEvent')(client, message);
-    } else if (message.content === 'edit') {
+    } else if (message.content.toLowerCase() === 'edit') {
       require('../plugin/editEvent')(client, message);
     };
   };

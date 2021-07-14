@@ -12,10 +12,10 @@ module.exports = async (client, message) => {
 
     const embedMsg = await message.reply(embed);
     await embedMsg.react('🇳');
-    await embedMsg.react('🇸');
+    await embedMsg.react('🇱');
 
     const name = embedMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🇳');
-    const song = embedMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🇸');
+    const song = embedMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '🇱');
 
     name.on('collect', async (f) => {
         message.reply('Masukkan nama yang ingin diubah!');
