@@ -33,6 +33,6 @@ module.exports = client => {
   setInterval(() => client.dataAttachment = new Discord.Collection(), 300000);
 
   /* Trakteer */
-  //client.trakteer.getNotification(false, 120000);
+  client.trakteer.getNotification(true, 120000);
 }
 
