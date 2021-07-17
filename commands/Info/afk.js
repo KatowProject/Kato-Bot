@@ -5,23 +5,22 @@ exports.run = async (client, message, args) => {
     try {
 
         const afk = await AFK.findOne({ userID: message.author.id });
+        const member = message.guild.members.cache.get(message.author.id);
 
         //ignore AFK
         let reason = args.join(' ');
 
         if (!afk) {
+            const nickname = member.nickname ? member.nickname : member.user.username;
+            member.setNickname(`[AFK] ${nickname}`);
             message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' });
             setTimeout(async () => {
-
                 const data = { reason: reason ? reason : "AFK", time: Date.now() };
                 await AFK.create({ userID: message.author.id, data: JSON.stringify(data) });
 
             }, 7000);
-
         } else {
-
             await AFK.findOneAndDelete({ userID: message.author.id });
-
         };
 
 
