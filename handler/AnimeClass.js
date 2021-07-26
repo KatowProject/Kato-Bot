@@ -231,7 +231,7 @@ class Samehadaku {
                 const index = parseInt(response.first().content);
                 r.delete();
                 alertDetail.delete();
-                await this.getLink(chapterChunk[pagination - 1][index - 1], message);
+                await this.getLink(res.list_episode[index - 1], message);
 
                 fullfill();
             } catch (error) {
