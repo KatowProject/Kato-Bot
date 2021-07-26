@@ -27,7 +27,7 @@ module.exports = client => {
   setInterval(durationDonatur, 60000);
 
   /* Music Events */
-  require('../plugin/PlayerEvent.js')(client);
+  require('../handler/PlayerEvent.js')(client);
 
   /* Reset Collection Attachment */
   setInterval(() => client.dataAttachment = new Discord.Collection(), 300000);

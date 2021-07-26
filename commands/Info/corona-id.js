@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
-const fetch = require('node-fetch');
-const moment = require('moment')
+const moment = require('moment');
+const axios = require('axios');
+
 exports.run = async (client, message, args) => {
 
     if (args[0] === 'karawang') {
-        let get = await require('node-superfetch').get('https://covid-apiw.herokuapp.com/api')
-        let json = get.body
+        const get = await axios.get('https://covid-apiw.herokuapp.com/api');
+        const json = get.data;
 
         let embed = new Discord.MessageEmbed()
             .setAuthor('Kabupaten Karawang, Jawa Barat', 'https://covid19.karawangkab.go.id/assets/images/logo_karawangicon.png', 'http://covid19.karawangkab.go.id/')
@@ -20,61 +21,37 @@ exports.run = async (client, message, args) => {
 
     } else {
 
-        let embed = new Discord.MessageEmbed().setColor(client.warna.kato).setFooter(`API oleh KawalCorona pada Tanggal ${moment().format('DD-MM-YYYY')} `)
+        const embed = new Discord.MessageEmbed().setColor(client.warna.kato).setFooter(`API oleh KawalCorona pada Tanggal ${moment().format('DD-MM-YYYY')} `)
 
-        let get = await require("node-superfetch").get(`https://api.kawalcorona.com/indonesia/provinsi/`);
-        let provinsi = get.body.map(x => x.attributes["Provinsi"])
-        let msgp = await message.reply(provinsi.join(', '))
-        let amsg = await message.channel.send('Di antara provinsi tersebut, yang mana ingin anda ketahui secara detail informasinya? (Symbol Sensitive)')
-        let response = await message.channel.awaitMessages(
+        const get = await axios.get(`https://api.kawalcorona.com/indonesia/provinsi/`);
+        const provinsi = get.data.map(x => x.attributes["Provinsi"]);
+        const msgp = await message.reply(provinsi.join(', '));
+        const amsg = await message.channel.send('Di antara provinsi tersebut, yang mana ingin anda ketahui secara detail informasinya? (Symbol Sensitive)')
+        const response = await message.channel.awaitMessages(
             m => m.author.id === message.author.id,
             { max: 1, time: 300000, errors: ['time'] }
-        ).then(async collected => {
-            await msgp.delete()
-            await amsg.delete()
-            index = collected.first().content
-            getResult(index)
-        }).catch((err) => { message.reply('Waktu permintaan telah habis!\nSilahkan buat permintaan kembali!') })
+        ).catch((err) => { message.reply('Waktu permintaan telah habis!\nSilahkan buat permintaan kembali!') });
 
+        await msgp.delete();
+        await amsg.delete();
 
-        function getResult(location) {
+        const reqRegion = response.first().content;
 
-            const region = location;
+        const findRegion = get.data.find(reg => reg.attributes.Provinsi.toLowerCase() === reqRegion.toLowerCase());
+        if (!findRegion) return message.channel.send({ embed: { description: '**Data tidak ditemukan!**', color: client.warna.error } });
+        const finalResult = findRegion.attributes;
 
-            (async () => {
-                const data = await fetch("https://api.kawalcorona.com/indonesia/provinsi/", { method: "GET" }).then(res => res.json())
+        const persentase = {
+            sembuh: `${finalResult.Kasus_Semb}` / `${finalResult.Kasus_Posi}` * '100',
+            meninggal: `${finalResult.Kasus_Meni}` / `${finalResult.Kasus_Posi}` * '100'
+        };
 
-                const findRegion = data.find(d => {
-                    return d.attributes.Provinsi.toLowerCase() === region.toLowerCase() // to lower case avoid case sensitive
-                })
-                const finalResult = findRegion ? findRegion.attributes : { error: true, message: embed.setDescription(`Region ${region} tidak ditemukan!`) }; // flatten attributes
+        embed.setTitle(`[ID] ${finalResult.Provinsi}, Indonesia`)
+        embed.addField(`Kasus Dikonfirmasi:`, `${finalResult.Kasus_Posi.toLocaleString()} Orang`, true);
+        embed.addField(`Sembuh:`, `${finalResult.Kasus_Semb.toLocaleString()} Orang (${persentase.sembuh.toFixed(2)}%)`, true);
+        embed.addField(`Meninggal:`, `${finalResult.Kasus_Meni.toLocaleString()} Orang (${persentase.meninggal.toFixed(2)}%)`, true);
 
-                let persentase = {
-                    sembuh: `${finalResult.Kasus_Semb}` / `${finalResult.Kasus_Posi}` * '100',
-                    meninggal: `${finalResult.Kasus_Meni}` / `${finalResult.Kasus_Posi}` * '100'
-                }
-                embed.setTitle(`[ID] ${region}, Indonesia`)
-                embed.addField(`Kasus Dikonfirmasi:`, `${finalResult.Kasus_Posi.toLocaleString()} Orang`, true);
-                embed.addField(`Sembuh:`, `${finalResult.Kasus_Semb.toLocaleString()} Orang (${persentase.sembuh.toFixed(2)}%)`, true);
-                embed.addField(`Meninggal:`, `${finalResult.Kasus_Meni.toLocaleString()} Orang (${persentase.meninggal.toFixed(2)}%)`, true);
-
-                message.reply(!finalResult.error ? embed : finalResult.message);
-
-            })()
-        }
-
-
-        /*.then(async collected => {
-    
-            await msgp.delete()
-            await amsg.delete()
-    
-            const jawab = collected.first().content
-            const data = getResult(jawab)
-            message.channel.send(data)
-    
-    
-        })*/
+        message.reply(embed);
 
     }
 }

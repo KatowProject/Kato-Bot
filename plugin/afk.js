@@ -24,7 +24,9 @@ module.exports = async (client, message) => {
 
     if (author) {
         const nickname = member.nickname;
-        member.setNickname(nickname.replace('[AFK]', ''));
+        if (nickname) {
+            if (nickname.includes('[AFK]')) member.setNickname(nickname.replace('[AFK]', ''));
+        }
         message.reply('Kato telah mencabut status AFK mu!').then(m => m.delete({ timeout: 10000 }));
         await AFK.findOneAndDelete({ userID: message.author.id });
     }

@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const axios = require('axios');
+const { MessageButton } = require('discord-buttons');
 class Kusonime {
     constructor(client) {
         this.client = client;
@@ -117,43 +118,35 @@ class Samehadaku {
     getSearch(query, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-                let get = await axios.get(`https://samehadaku-rest-api.herokuapp.com/search/${query}/1`);
-                let data_search = get.data.results;
-                if (data_search.length < 1) return message.reply(`Pencarian dengan nama **${query}** tidak ditemukan!`);
-
-                //get endpoint
-                let endpoint_search = [];
-                data_search.forEach(a => {
-                    endpoint_search.push(a.linkId.replace('https:/samehadaku.to/anime/', ''));
-                });
-                console.log(endpoint_search)
+                const get = await axios.get(`https://samehadaku-rest-api.herokuapp.com/search/${query}/1`);
+                const res = get.data.results;
+                if (res.length < 1) return message.reply(`Pencarian dengan nama **${query}** tidak ditemukan!`);
 
                 //send title results
-                let embed = new Discord.MessageEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
                     .setTitle('Hasil Pencarian')
-                    .setDescription(data_search.map((a, i) => `${i + 1}. ${a.title}`).join('\n'))
-                let embed_search = await message.channel.send(embed);
-                let alert_search = await message.reply('pilih untuk melanjutkan!');
+                    .setDescription(res.map((a, i) => `${i + 1}. ${a.title}`).join('\n'))
+                const embedSearch = await message.channel.send(embed);
+                const alertSearch = await message.reply('pilih untuk melanjutkan!');
 
-                let author = message.author;
-                let response = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === author.id, {
+                const response = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === message.author.id, {
                     max: 1,
                     time: 100000,
                     errors: ["time"]
                 }).catch((err) => {
                     return message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!').then(t => {
                         t.delete({ timeout: 5000 });
-                        embed_search.delete();
-                        alert_search.delete();
+                        embedSearch.delete();
+                        alertSearch.delete();
                     });
                 });
 
-                const search_index = response.first().content;
-                let result_search = endpoint_search[search_index - 1];
-                await embed_search.delete();
-                await alert_search.delete();
-                await this.getDetail(result_search, message);
+                await embedSearch.delete();
+                await alertSearch.delete();
+
+                const index = response.first().content;
+                await this.getDetail(res[index - 1], message);
 
                 fullfill();
             } catch (error) {
@@ -165,83 +158,80 @@ class Samehadaku {
     getDetail(query, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-                let get = await axios.get(`https://samehadaku-rest-api.herokuapp.com/anime/${query}`);
-                let chapterList = [];
-                let dataChapter = get.data.list_episode;
-                dataChapter.forEach((a, i) => {
-                    chapterList.push({ title: `${i + 1}. ${a.title}`, endpoint: a.id.replace('https://samehadaku.to/', '') });
-                });
+                query = query.linkId.replace('https:/samehadaku.to/anime/', '');
+                const get = await axios.get(`https://samehadaku-rest-api.herokuapp.com/anime/${query}`);
+                const res = get.data;
 
                 //chunk array
-                let page = 1;
-                let chapterChunk = this.client.util.chunk(chapterList, 12);
-                let embed = new Discord.MessageEmbed()
+                const chapterChunk = this.client.util.chunk(res.list_episode, 10);
+                const embede = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
-                    .setTitle(get.data.title)
-                    .setDescription(this.client.util.truncate(get.data.sinopsis))
-                    .setImage(get.data.image)
-                    .addField('Genre', get.data.genre.map((i) => `[${i.text}](${i.link})`).join(', '), true)
-                    .addField('Judul dalam Jepang', get.data.detail.Japanese, true)
-                    .addField('Status', get.data.detail.Status, true)
-                    .addField('Studio', get.data.detail.Studio, true)
-                    .addField('Season', get.data.detail.Season ? get.data.detail.Season : 'tidak tersedia', true)
-                    .addField('Sinonim', get.data.detail.Synonyms ? get.data.detail.Synonyms : 'tidak tersedia', true)
-                let embed_detail = await message.channel.send(embed);
+                    .setTitle(res.title)
+                    .setDescription(this.client.util.truncate(res.sinopsis))
+                    .setImage(res.image)
+                    .addField('Genre', res.genre.map((i) => `[${i.text}](${i.link})`).join(', '), true)
+                    .addField('Judul dalam Jepang', res.detail.Japanese, true)
+                    .addField('Status', res.detail.Status, true)
+                    .addField('Studio', res.detail.Studio, true)
+                    .addField('Season', res.detail.Season ? res.detail.Season : 'tidak tersedia', true)
+                    .addField('Sinonim', res.detail.Synonyms ? res.detail.Synonyms : 'tidak tersedia', true)
+                const embedDetail = await message.channel.send(embede);
 
-                let embed2 = new Discord.MessageEmbed()
+
+                let pagination = 1;
+                const embed = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
                     .setTitle('List Episode')
-                    .setDescription(chapterChunk[page - 1].map(a => a.title))
-                    .setFooter(`Page ${page} of ${chapterChunk.length}`)
-                let embed_chapterList = await message.channel.send(embed2);
-                let alert_detail = await message.reply('Pilih yang ingin didownload!');
+                    .setDescription(chapterChunk[pagination - 1].map(a => a.title))
+                    .setFooter(`Page ${pagination} of ${chapterChunk.length}`)
 
-                await embed_chapterList.react('👈')
-                await embed_chapterList.react('👉')
+                const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
+                const forwadsButton = new MessageButton().setStyle('grey').setLabel('Next >').setID('nextID');
+                const buttonList = [backwardsButton, forwadsButton];
 
-                const backwardsFilter = (reaction, user) =>
-                    reaction.emoji.name === `👈` && user.id === message.author.id;
-                const forwardsFilter = (reaction, user) =>
-                    reaction.emoji.name === `👉` && user.id === message.author.id;
+                const r = await message.channel.send({ embed, buttons: this.client.util.buttonPageFilter(buttonList, chapterChunk.length, pagination) });
 
-                const backwards = embed_chapterList.createReactionCollector(backwardsFilter);
-                const forwards = embed_chapterList.createReactionCollector(forwardsFilter);
+                const collector = r.createButtonCollector(button => button.clicker.user.id === message.author.id, { time: 500000 });
+                collector.on('collect', button => {
+                    button.reply.defer();
+                    switch (button.id) {
+                        case 'backID':
+                            if (pagination === 1) return;
+                            pagination--;
+                            embed.setDescription(chapterChunk[pagination - 1].map(a => a.title));
+                            embed.setFooter(`Page ${pagination} of ${chapterChunk.length}`);
+                            r.edit({ embed, buttons: this.client.util.buttonPageFilter(buttonList, chapterChunk.length, pagination) });
+                            break;
 
-                backwards.on('collect', (f) => {
-                    if (page === 1) return;
-                    page--;
-                    embed2.setDescription(chapterChunk[page - 1].map(a => a.title));
-                    embed2.setFooter(`Page ${page} of ${chapterChunk.length}`)
-                    embed_chapterList.edit(embed2);
-                })
-                forwards.on("collect", (f) => {
-                    if (page == chapterChunk.length) return;
-                    page++;
-                    embed2.setDescription(chapterChunk[page - 1].map(a => a.title));
-                    embed2.setFooter(`Page ${page} of ${chapterChunk.length}`);
-                    embed_chapterList.edit(embed2);
+                        case 'nextID':
+                            if (pagination === chapterChunk.length) return;
+                            pagination++;
+                            embed.setDescription(chapterChunk[pagination - 1].map(a => a.title));
+                            embed.setFooter(`Page ${pagination} of ${chapterChunk.length}`);
+                            r.edit({ embed, buttons: this.client.util.buttonPageFilter(buttonList, chapterChunk.length, pagination) });
+                            break;
+                    };
                 });
 
-                let author = message.author;
-                let response = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === author.id, {
+                const alertDetail = await message.reply('Pilih yang ingin didownload!');
+                let response = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === message.author.id, {
                     max: 1,
                     time: 100000,
                     errors: ["time"]
                 }).catch((err) => {
                     return message.reply('waktu permintaan telah habis!\nSilahkan buat Permintaan kembali!')
                         .then(t => {
-                            embed_detail.delete();
-                            embed_chapterList.delete();
-                            alert_detail.delete();
+                            embedDetail.delete();
+                            r.delete();
+                            alertDetail.delete();
                             t.delete({ timeout: 5000 })
                         });
                 });
 
                 const index = parseInt(response.first().content);
-                let result_eps = chapterList[index - 1].endpoint;
-                embed_chapterList.delete();
-                alert_detail.delete();
-                await this.getLink(result_eps, message);
+                r.delete();
+                alertDetail.delete();
+                await this.getLink(chapterChunk[pagination - 1][index - 1], message);
 
                 fullfill();
             } catch (error) {
@@ -253,6 +243,7 @@ class Samehadaku {
     getLink(query, message) {
         return new Promise(async (fullfill, reject) => {
             try {
+                query = query.id.replace('https://samehadaku.to/', '');
                 const res = await axios.get(`https://samehadaku-rest-api.herokuapp.com/anime/eps/${query}`);
                 const data = res.data;
 

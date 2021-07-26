@@ -9,6 +9,6 @@ const conn = (account) => {
         .on('open', () => console.log('Telah terhubung ke db!'))
         .on('close', () => console.log('Telah terputus dari db!'));
 
-}
+};
 
 module.exports = conn;

@@ -1,14 +1,15 @@
 const { MessageEmbed } = require("discord.js");
-const client = require("nekos.life");
-const { sfw } = new client();
+const axios = require('axios');
 
 exports.run = async (client, message, args) => {
   try {
-    let hug = await sfw.hug();
+
+    const response = await axios.get('https://nekos.life/api/v2/img/hug');
+    const hug = response.data;
+
     let member = message.mentions.members.first();
     if (!args[0]) return message.reply("mention seseorang untuk melanjutkan!");
     const embed = new MessageEmbed();
-
 
     if (message.author.id === member.user.id) {
 

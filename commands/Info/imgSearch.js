@@ -1,11 +1,10 @@
 const Discord = require('discord.js');
-const gis = require('g-i-s')
+const gis = require('g-i-s');
+const { MessageButton } = require('discord-buttons');
 
 exports.run = async (client, message, args) => {
     try {
-
-        gis(args.join(' '), logResults);
-        async function logResults(error, results) {
+        gis(args.join(' '), async (error, results) => {
             if (error) {
                 message.reply(`sepertinya gagal mendapatkannya :(\`\`\`\n${error}\`\`\``)
                 console.log(error);
@@ -17,7 +16,8 @@ exports.run = async (client, message, args) => {
                 });
                 return await imageList(message, array);
             }
-        }
+
+        })
 
         async function imageList(message, results) {
             if (results < 1) return message.reply(`Pencarian \`${args.join(' ')}\` tidak ditemukan!`);
@@ -26,48 +26,40 @@ exports.run = async (client, message, args) => {
                 .setColor(client.warna.kato)
                 .setTitle(`Hasil Pencarian \`${args.join(' ')}\``)
                 .setImage(results[pagination - 1])
-                .setFooter(`Image ${pagination} of ${results.length} images`)
-            let r = await message.channel.send(embed);
-            r.react('👈');
-            r.react('♻');
-            r.react('👉');
+                .setFooter(`Image ${pagination} of ${results.length} images`);
 
-            const backwardsFilter = (reaction, user) =>
-                reaction.emoji.name === `👈` && user.id === message.author.id;
-            const deleteFilter = (reaction, user) =>
-                reaction.emoji.name === `♻` && user.id === message.author.id;
-            const forwardsFilter = (reaction, user) =>
-                reaction.emoji.name === `👉` && user.id === message.author.id;
+            const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
+            const deleteButton = new MessageButton().setStyle('red').setLabel('♻').setID('deleteID');
+            const forwardsButton = new MessageButton().setStyle('grey').setLabel('Next >').setID('nextID');
+            const buttonList = [backwardsButton, deleteButton, forwardsButton];
+            let r = await message.channel.send({ embed, buttons: client.util.buttonPageFilter(buttonList, results.length, pagination) });
 
-            const backwards = r.createReactionCollector(backwardsFilter);
-            const deletes = r.createReactionCollector(deleteFilter);
-            const forwards = r.createReactionCollector(forwardsFilter);
+            const collector = r.createButtonCollector(button => button.clicker.user.id === message.author.id, { time: 500000 });
+            collector.on('collect', (button) => {
+                button.reply.defer();
+                switch (button.id) {
+                    case 'backID':
+                        if (pagination === 1) return;
+                        pagination--;
+                        embed.setImage(results[pagination - 1]);
+                        embed.setFooter(`Image ${pagination} of ${results.length} images`);
+                        r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, results.length, pagination) });
+                        break;
 
-            backwards.on('collect', (f) => {
-                if (pagination === 1) return;
-                pagination--;
-                embed.setImage(results[pagination - 1]);
-                embed.setFooter(`Image ${pagination} of ${results.length} Images`)
-                r.edit(embed);
+                    case 'deleteID':
+                        r.delete();
+                        break;
 
-            })
-
-            deletes.on('collect', (f) => {
-                r.delete();
-            })
-
-            forwards.on("collect", (f) => {
-                if (pagination == results.length) return;
-                pagination++;
-                embed.setImage(results[pagination - 1]);
-                embed.setFooter(`Image ${pagination} of ${results.length} Images`);
-                r.edit(embed);
+                    case 'nextID':
+                        if (pagination === results.length) return;
+                        pagination++;
+                        embed.setImage(results[pagination - 1]);
+                        embed.setFooter(`Image ${pagination} of ${results.length} images`);
+                        r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, results.length, pagination) });
+                        break;
+                }
             });
-
         };
-
-
-
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.

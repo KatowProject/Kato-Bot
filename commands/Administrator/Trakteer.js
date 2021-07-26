@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
 const ms = require('ms');
+const { MessageButton } = require('discord-buttons');
 const donate = require('../../database/schema/Donatur');
 
 exports.run = async (client, message, args) => {
     try {
-
         const option = args[0];
 
         switch (option) {
@@ -45,41 +45,35 @@ exports.run = async (client, message, args) => {
                     .setDescription(chunk[pagination - 1].join('\n'))
                     .setFooter('Pilih menggunakan angka untuk melanjutkan!');
 
-                const donaturMSG = await message.channel.send(embed);
-                await donaturMSG.react('👈');
-                await donaturMSG.react('♻');
-                await donaturMSG.react('👉');
+                const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
+                const deleteButton = new MessageButton().setStyle('red').setLabel('♻').setID('deleteID');
+                const forwardsButton = new MessageButton().setStyle('grey').setLabel('Next >').setID('nextID');
+                const buttonList = [backwardsButton, deleteButton, forwardsButton];
+                let r = await message.channel.send({ embed, buttons: client.util.buttonPageFilter(buttonList, chunk.length, pagination) });
 
-                const backwardsFilter = (reaction, user) =>
-                    reaction.emoji.name === `👈` && user.id === message.author.id;
-                const deleteEmbed = (reaction, user) =>
-                    reaction.emoji.name === `♻` && user.id === message.author.id;
-                const forwardsFilter = (reaction, user) =>
-                    reaction.emoji.name === `👉` && user.id === message.author.id;
+                const collector = r.createButtonCollector(button => button.clicker.user.id === message.author.id, { time: 500000 });
+                collector.on('collect', (button) => {
+                    button.reply.defer();
+                    switch (button.id) {
+                        case 'backID':
+                            if (pagination === 1) return;
+                            pagination--;
+                            embed.setDescription(chunk[pagination - 1].join('\n'));
+                            r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, chunk.length, pagination) });
+                            break;
 
-                const backwards = donaturMSG.createReactionCollector(backwardsFilter);
-                const embedDelete = donaturMSG.createReactionCollector(deleteEmbed);
-                const forwards = donaturMSG.createReactionCollector(forwardsFilter);
+                        case 'deleteID':
+                            r.delete();
+                            break;
 
-                backwards.on('collect', (f) => {
-                    if (pagination === 1) return;
-                    pagination--;
-                    embed.setDescription(chunk[pagination - 1].join('\n'));
-                    donaturMSG.edit(embed);
-
+                        case 'nextID':
+                            if (pagination === chunk.length) return;
+                            pagination++;
+                            embed.setDescription(chunk[pagination - 1].join('\n'));
+                            r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, chunk.length, pagination) });
+                            break;
+                    }
                 });
-
-                embedDelete.on('collect', (f) => {
-                    donaturMSG.delete();
-                });
-
-                forwards.on('collect', (f) => {
-                    if (pagination == chunk.length) return;
-                    pagination++;
-                    embed.setDescription(chunk[pagination - 1].join('\n'));
-                    donaturMSG.edit(embed);
-                });
-
                 break;
 
             case 'status':
@@ -130,42 +124,35 @@ exports.run = async (client, message, args) => {
                         .setColor(client.warna.kato)
                         .setTimestamp()
 
-                    const donaturMSG = await message.channel.send(embed);
-                    donaturMSG.react('👈');
-                    donaturMSG.react('♻')
-                    donaturMSG.react('👉');
+                    const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
+                    const deleteButton = new MessageButton().setStyle('red').setLabel('♻').setID('deleteID');
+                    const forwardsButton = new MessageButton().setStyle('grey').setLabel('Next >').setID('nextID');
+                    const buttonList = [backwardsButton, deleteButton, forwardsButton];
+                    let r = await message.channel.send({ embed, buttons: client.util.buttonPageFilter(buttonList, chunkDonatur.length, pagination) });
 
-                    const backwardsFilter = (reaction, user) =>
-                        reaction.emoji.name === `👈` && user.id === message.author.id;
-                    const deleteEmbed = (reaction, user) =>
-                        reaction.emoji.name === `♻` && user.id === message.author.id;
-                    const forwardsFilter = (reaction, user) =>
-                        reaction.emoji.name === `👉` && user.id === message.author.id;
+                    const collector = r.createButtonCollector(button => button.clicker.user.id === message.author.id, { time: 500000 });
+                    collector.on('collect', (button) => {
+                        button.reply.defer();
+                        switch (button.id) {
+                            case 'backID':
+                                if (pagination === 1) return;
+                                pagination--;
+                                embed.setDescription(chunkDonatur[pagination - 1].join('\n'));
+                                r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, chunkDonatur.length, pagination) });
+                                break;
 
-                    const backwards = donaturMSG.createReactionCollector(backwardsFilter);
-                    const embedDelete = donaturMSG.createReactionCollector(deleteEmbed);
-                    const forwards = donaturMSG.createReactionCollector(forwardsFilter);
+                            case 'deleteID':
+                                r.delete();
+                                break;
 
-                    backwards.on('collect', (f) => {
-                        if (pagination === 1) return;
-                        pagination--;
-                        embed.setDescription(chunkDonatur[pagination - 1].join('\n'));
-                        donaturMSG.edit(embed);
-
+                            case 'nextID':
+                                if (pagination === chunkDonatur.length) return;
+                                pagination++;
+                                embed.setDescription(chunkDonatur[pagination - 1].join('\n'));
+                                r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, chunkDonatur.length, pagination) });
+                                break;
+                        }
                     });
-
-                    embedDelete.on('collect', (f) => {
-                        donaturMSG.delete();
-                    });
-
-                    forwards.on('collect', (f) => {
-                        if (pagination == chunkDonatur.length) return;
-                        pagination++;
-                        embed.setDescription(chunkDonatur[pagination - 1].join('\n'));
-                        donaturMSG.edit(embed);
-                    });
-
-
 
                 } else {
 

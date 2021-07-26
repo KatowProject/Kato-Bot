@@ -2,11 +2,11 @@ const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
-  let prefix = client.config.discord.prefix;
+  let prefix = client.config.prefix;
 
   if (!args[0]) {
     let module = client.helps.array();
-    // if (!client.config.discord.owners.includes(message.author.id)) 
+    // if (!client.config.owners.includes(message.author.id)) 
     module = module.filter(x => !x.hide)
 
 

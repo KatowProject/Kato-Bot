@@ -3,23 +3,13 @@ const Discord = require('discord.js'),
   manage = require('../database/schema/manageCommand');
 
 module.exports = async (client, message) => {
-
-  if (message.channel.id === "831475856882925629") require('../plugin/Trakteer')(client, message);
-  if (message.channel.type === 'dm') {
-    if (message.content.toLowerCase() === 'register') {
-      require('../plugin/registerEvent')(client, message);
-    } else if (message.content.toLowerCase() === 'edit') {
-      require('../plugin/editEvent')(client, message);
-    };
-  };
-
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
 
   let prefix;
-  if (message.content.toLowerCase().startsWith(client.config.discord.prefix[0])) {
-    prefix = client.config.discord.prefix[0]; // Cek folder, config.json.
-  } else if (message.content.toLowerCase().startsWith(client.config.discord.prefix[1])) {
-    prefix = client.config.discord.prefix[1];
+  if (message.content.toLowerCase().startsWith(client.config.prefix[0])) {
+    prefix = client.config.prefix[0]; // Cek folder, config.json.
+  } else if (message.content.toLowerCase().startsWith(client.config.prefix[1])) {
+    prefix = client.config.prefix[1];
   }
 
   require('../plugin/ar.js')(client, message)
@@ -102,7 +92,7 @@ module.exports = async (client, message) => {
   const cooldownAmount = (commandFile.conf.cooldown || 3) * 1000
 
   if (!timestamps.has(member.id)) {
-    if (!client.config.discord.owners.includes(message.author.id)) {
+    if (!client.config.owners.includes(message.author.id)) {
       timestamps.set(member.id, now);
     }
   } else {

@@ -4,6 +4,21 @@ const discord = require('discord.js')
 
 class Util {
   constructor() {
+
+    this.buttonPageFilter = function buttonFilter(buttons, arrayLength, pagination) {
+      if (typeof buttons !== 'object') return;
+
+      if (pagination === 1) {
+        const filterButton = buttons.filter(a => a.custom_id !== 'backID');
+        return filterButton;
+      } else if (pagination === arrayLength) {
+        const filterButton = buttons.filter(a => a.custom_id !== 'nextID');
+        return filterButton;
+      } else {
+        return buttons;
+      };
+    };
+
     this.numberString = function numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };

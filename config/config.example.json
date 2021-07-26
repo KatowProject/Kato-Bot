@@ -1,16 +1,14 @@
 {
-    "discord": {
-        "owners": [
-            "458342161474387999"
-        ],
-        "prefix": [
-            "k!",
-            "k."
-        ],
-        "token": "",
-        "db": "",
-        "instaAuth": ""
-    },
+    "owners": [
+        "458342161474387999"
+    ],
+    "prefix": [
+        "k!",
+        "k."
+    ],
+    "token": "",
+    "db": "",
+    "instaAuth": "",
     "trakteer": {
         "XSRF-TOKEN": "",
         "trakteer-id-session": "",
