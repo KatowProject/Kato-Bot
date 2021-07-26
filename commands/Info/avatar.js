@@ -7,6 +7,8 @@ exports.run = async (client, message, args) => {
   let userID = message.guild.members.cache.get(args[0]);
   let self = !args[0];
   let server = args[0] === "server";
+  let banner = args[0] === "banner";
+
   const userRegex = new RegExp(args.join(" "), "i");
 
   let find = message.guild.members.cache.find(a => {
@@ -41,6 +43,12 @@ exports.run = async (client, message, args) => {
     embed.setImage(message.guild.iconURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
     return message.channel.send(embed); //send this message to user
   } else;
+  if (banner) {
+    embed.setAuthor(message.guild.name, message.guild.iconURL())
+    embed.setDescription(`[Avatar URL Link](${message.guild.bannerURL({ size: 4096, dynamic: true })})`)
+    embed.setImage(message.guild.bannerURL({ size: 4096, dynamic: true }).replace(',webp', '.png'))
+    return message.channel.send(embed);
+  }
   if (find) {
     embed.setAuthor(find.user.tag, find.user.displayAvatarURL({ size: 4096, dynamic: true }))
     embed.setDescription(`[Avatar URL](${find.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
