@@ -10,9 +10,9 @@ exports.run = async (client, message, args) => {
     const mobage = '868778296710672394';
 
     const embed = new Discord.MessageEmbed().setColor('RANDOM').setTitle('Self Roles').setAuthor(message.guild.name, message.guild.iconURL()).setTimestamp();
-    embed.addField('FPS', 'Mabar First-person shooter');
-    embed.addField('MOBA', 'Mabar Multiplayer Online Battle Arena');
-    embed.addField('MOBAGE', 'Mabar game gacha');
+    embed.addField('FPS', 'Mabar/mencari teman game First-person shooter');
+    embed.addField('MOBA', 'Mabar/mencari teman game Multiplayer Online Battle Arena');
+    embed.addField('MOBAGE', 'Mabar/mencari teman anime dan gacha');
 
     for (const role of roles) {
         if (role === fps) embed.fields[0].name = 'FPS (Telah Terpasang)';
@@ -100,8 +100,8 @@ exports.conf = {
 };
 
 exports.help = {
-    name: 'selfrole',
+    name: 'selfroles',
     description: 'selfroles',
-    usage: 'selfrole',
-    example: 'selfrole'
+    usage: 'selfroles',
+    example: 'selfroles'
 };
