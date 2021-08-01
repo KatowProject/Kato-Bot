@@ -15,26 +15,23 @@ exports.run = async (client, message, args) => {
             return userRegex.test(a.name);
         });
 
-
         const channel = await channels.find({ guild: message.guild.id });
-
         if (channel.length > 0) {
             const chData = channel.find(a => a.guild === message.guild.id);
 
             if (userID) {
-
                 await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: chData.channels.concat(userID.id) });
                 message.reply(`Semua perintah telah dinonaktifkan di <#${userID.id}>!`);
-
-            } else {
-
+            } else if (findChannel) {
                 await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: chData.channels.concat(findChannel.id) });
                 message.reply(`Semua perintah telah dinonaktifkan di <#${findChannel.id}>`);
-
+            } else {
+                message.reply('Channel tidak ditemukan!');
             }
         }
 
     } catch (error) {
+        console.log(error)
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
     }

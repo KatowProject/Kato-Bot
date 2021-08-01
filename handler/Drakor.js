@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const axios = require('axios');
-
+const { MessageButton } = require('discord-buttons');
 class Drakor {
     constructor(client) {
         this.client = client;
@@ -12,7 +12,7 @@ class Drakor {
 
                 const response = await axios.get('http://posantai.bugs.today/drakor/api/cari/' + query);
                 const data = response.data;
-                console.log(data);
+
                 if (data.length < 1) return message.reply('Pencarian tidak ditemukan');
                 if (data.length === 1) return this.client.drakor.getDrakor(data[0].link.endpoint, message);
 
@@ -46,10 +46,9 @@ class Drakor {
     getDrakor(query, message) {
         return new Promise(async (fullfill, reject) => {
             try {
-
+                query = query.replace('https://ratudrakor.com/', '');
                 const response = await axios.get('http://posantai.bugs.today/drakor/api/drakor/' + query);
                 const data = response.data;
-
 
                 const msginfo = await message.channel.send(
                     new Discord.MessageEmbed()
@@ -67,40 +66,44 @@ class Drakor {
                 let page = 1;
                 const chapter = data.list_download.map((a, i) => `**${i + 1}. ${a.title}**`);
                 const chunkChapter = this.client.util.chunk(chapter, 15);
-                const chapbed = new Discord.MessageEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setColor(this.client.warna.kato)
                     .setTitle('Episode List: ')
                     .setDescription(chunkChapter[page - 1].join('\n'))
                     .setFooter(`Page ${page} of ${chunkChapter.length}`)
-                const msgChapter = await message.channel.send(chapbed);
-                const alertChapter = await message.reply('Pilih menggunakan angka!');
 
-                await msgChapter.react('👈');
-                await msgChapter.react('👉');
+                const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
+                const forwardsButton = new MessageButton().setStyle('grey').setLabel('Next >').setID('nextID');
+                const buttonList = [backwardsButton, forwardsButton];
+                let r = await message.channel.send({ embed, buttons: this.client.util.buttonPageFilter(buttonList, chunkChapter.length, page) });
 
-                const backwardsFilter = (reaction, user) =>
-                    reaction.emoji.name === `👈` && user.id === message.author.id;
-                const forwardsFilter = (reaction, user) =>
-                    reaction.emoji.name === `👉` && user.id === message.author.id;
+                const collector = r.createButtonCollector(button => button.clicker.user.id === message.author.id, { time: 500000 });
+                collector.on('collect', (button) => {
+                    button.reply.defer();
+                    switch (button.id) {
+                        case 'backID':
+                            if (page === 1) return;
+                            page--;
 
-                const backwards = msgChapter.createReactionCollector(backwardsFilter);
-                const forwards = msgChapter.createReactionCollector(forwardsFilter);
+                            embed.setDescription(chunkChapter[page - 1].join('\n'));
+                            embed.setFooter(`Page ${page} of ${chunkChapter.length}`);
 
-                backwards.on('collect', (f) => {
-                    if (page === 1) return;
-                    page--;
-                    chapbed.setDescription(chunkChapter[page - 1].join('\n'));
-                    chapbed.setFooter(`Page ${page} of ${chunkChapter.length}`)
-                    msgChapter.edit(chapbed);
-                })
-                forwards.on("collect", (f) => {
-                    if (page == chunkChapter.length) return;
-                    page++;
-                    chapbed.setDescription(chunkChapter[page - 1].join('\n'));
-                    chapbed.setFooter(`Page ${page} of ${chunkChapter.length}`);
-                    msgChapter.edit(chapbed);
+                            r.edit({ embed, buttons: this.client.util.buttonPageFilter(buttonList, chunkChapter.length, page) });
+                            break;
+
+                        case 'nextID':
+                            if (page === chunkChapter.length) return;
+                            page++;
+
+                            embed.setDescription(chunkChapter[page - 1].join('\n'));
+                            embed.setFooter(`Page ${page} of ${chunkChapter.length}`);
+
+                            r.edit({ embed, buttons: this.client.util.buttonPageFilter(buttonList, chunkChapter.length, page) });
+                            break;
+                    }
                 });
 
+                const alertChapter = await message.reply('Pilih menggunakan angka!');
                 const awaitingChap = await message.channel.awaitMessages((msg) => msg.content.toLowerCase() && msg.author.id === message.author.id, {
                     max: 1,
                     times: 15000,
@@ -108,7 +111,7 @@ class Drakor {
                 }).catch(err => message.reply('Waktu telah habis, silahkan buat permintaan kembali!').then(m => m.delete({ timeout: 5000 })));
 
                 await msginfo.delete();
-                await msgChapter.delete();
+                await r.delete();
                 await alertChapter.delete();
 
                 const answerChap = awaitingChap.first().content;

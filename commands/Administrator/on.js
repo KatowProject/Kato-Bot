@@ -18,23 +18,21 @@ exports.run = async (client, message, args) => {
 
 
         const channel = await channels.findOne({ guild: message.guild.id });
-
         if (userID) {
-
             const filterCH = channel.channels.filter(a => a !== userID.id);
             await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: filterCH });
             message.reply(`Semua perintah telah diaktifkan di <#${userID.id}>!`);
-
-        } else {
-
+        } else if (findChannel) {
             const filterCH = channel.channels.filter(a => a !== findChannel.id);
             await channels.findOneAndUpdate({ guild: message.guild.id }, { guild: message.guild.id, channels: filterCH });
             message.reply(`Semua perintah telah diaktifkan di <#${findChannel.id}>`);
-
+        } else {
+            message.reply('Tidak ditemukan!');
         }
 
 
     } catch (error) {
+        console.log(error);
         return message.reply('sepertinya ada kesalahan:\n' + error.message);
         // Restart the bot as usual.
     }

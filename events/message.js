@@ -52,7 +52,7 @@ module.exports = async (client, message) => {
 
   } else {
 
-    if (commandFile.help.name === 'on') commandFile.run(client, message, args);
+    if (commandFile.help.name === 'on') return commandFile.run(client, message, args);
     const ch = findChannel.find(a => a.guild == message.guild.id);
     if (ch.channels.includes(message.channel.id)) return;
 

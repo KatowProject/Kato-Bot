@@ -260,10 +260,82 @@ class Samehadaku {
                 fullfill();
             } catch (error) {
                 reject(error);
+            };
+        });
+    };
+};
+
+class AnimeBatchs {
+    constructor(client) {
+        this.client = client;
+    }
+
+    getBySearch(query, message) {
+        return new Promise(async (fullfill, reject) => {
+            try {
+                const res = await axios.get('http://posantai.bugs.today/animebatchs/api/search/' + query);
+                const data = res.data.data;
+
+                const embed = new Discord.MessageEmbed().setColor(this.client.warna.kato).setTitle('Hasil Pencarian: ');
+                embed.setDescription(data.map((a, i) => `[${i + 1}. ${a.title}](${a.url})`).join('\n'));
+                const mesagembed = await message.channel.send(embed);
+                const alert = await message.reply('Pilih yang ingin didownload!');
+
+                const collector = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 500000 });
+                collector.on('collect', async (msg) => {
+                    if (parseInt(msg.content)) {
+                        collector.stop();
+
+                        mesagembed.delete();
+                        alert.delete();
+                        return await this.getLink(data[parseInt(msg.content) - 1], message);
+                    };
+
+                    message.reply('ini bukan angka!');
+                });
+                fullfill();
+            } catch (error) {
+                return reject(error);
             }
+        });
+    };
+
+    getLink(query, message) {
+        return new Promise(async (fullfill, reject) => {
+            try {
+                const res = await axios.get(`http://posantai.bugs.today/animebatchs/api/anime/${query.endpoint}`);
+                const data = res.data.data;
+
+                const embed = new Discord.MessageEmbed().setColor(this.client.warna.kato)
+                    .setTitle(data.judul)
+                    .addField('Alternatif: ', data.alter, true)
+                    .addField('Tipe: ', data.tipe, true)
+                    .addField('Total Episode :', data.totalEps, true)
+                    .addField('Status: ', data.status, true)
+                    .addField('Studio', data.studio, true)
+                    .addField('Musim: ', data.musim, true)
+                    .addField('Genre: ', data.genre.map(a => a.name).join(', '), true)
+                    .addField('Score: ', data.score, true)
+                    .setImage(data.thumb)
+                message.channel.send(embed);
+
+                for (const title of data.listDownload) {
+                    const embed = new Discord.MessageEmbed().setColor('RANDOM').setTitle(title.name);
+                    for (const reso of title.data) {
+                        const msg = `**${reso.reso}**\n${reso.linkDownload.map(a => `[${a.name}](${a.url})`).join('\n')}\n`
+                        embed.setDescription(msg);
+                        message.channel.send(embed);
+                    };
+                };
+
+
+                fullfill();
+            } catch (error) {
+                reject(error);
+            };
         })
     }
-}
+};
 
 /** ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
@@ -609,10 +681,10 @@ class MangaDex {
 
                 fullfill();
             } catch (err) {
-                reject(err)
+                reject(err);
             }
         })
     };
 };
 
-module.exports = { Kusonime, Samehadaku };
+module.exports = { Kusonime, Samehadaku, AnimeBatchs };

@@ -1,12 +1,11 @@
 const { Client, Collection } = require("discord.js");
 const { Player } = require('discord-player');
 const Util = require("./util");
-const { Kusonime, Samehadaku } = require('./AnimeClass');
+const { Kusonime, Samehadaku, AnimeBatchs } = require('./AnimeClass');
 const Drakor = require('./Drakor');
 const Trakteer = require('../module/trakteer-scraper/index');
 
 module.exports = class katopos extends Client {
-
   constructor(opt) {
     super(opt);
     this.config = require("../config/config.json");
@@ -22,9 +21,7 @@ module.exports = class katopos extends Client {
     this.samehadaku = new Samehadaku(this);
     this.kusonime = new Kusonime(this);
     this.drakor = new Drakor(this);
+    this.animebatchs = new AnimeBatchs(this);
     this.trakteer = new Trakteer(this.config.trakteer);
-
-
-  }
-
+  };
 };
