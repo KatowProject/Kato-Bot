@@ -41,8 +41,8 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
         "k!",
         "k."
     ],
-    "token": "NTc4MTQ0MzY1MDA5MDQzNDY2.XNvU5g.on_PNTGPOOZoWcabQMNcgwZf090",
-    "instaAuth": "2147862687%3APOl1ZkIteIC5fK%3A21"
+    "token": "",
+    "instaAuth": ""
 }
 ```
 ### Penggunaan
