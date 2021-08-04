@@ -32,20 +32,17 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 - Clone repo ini.
 - Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
 - Edit file `config/config.json`:
-```js
- {
-  "discord": {
-    "owners": [""], //owners bot
-    "channels": [""], //ignore channels
-    "prefix": ["", " "], //prefix bot
-    "token": "" //login
-  },
-  "mangadex": {
-    "account": {
-      "username": "", //username mangadex
-      "password": "" //password mangadex
-    }
-  }
+```json
+{
+    "owners": [
+        "458342161474387999"
+    ],
+    "prefix": [
+        "k!",
+        "k."
+    ],
+    "token": "NTc4MTQ0MzY1MDA5MDQzNDY2.XNvU5g.on_PNTGPOOZoWcabQMNcgwZf090",
+    "instaAuth": "2147862687%3APOl1ZkIteIC5fK%3A21"
 }
 ```
 ### Penggunaan

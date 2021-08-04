@@ -14,10 +14,10 @@ module.exports = async (client, message) => {
   };
 
   let prefix;
-  if (message.content.toLowerCase().startsWith(client.config.discord.prefix[0])) {
-    prefix = client.config.discord.prefix[0]; // Cek folder, config.json.
-  } else if (message.content.toLowerCase().startsWith(client.config.discord.prefix[1])) {
-    prefix = client.config.discord.prefix[1];
+  if (message.content.toLowerCase().startsWith(client.config.prefix[0])) {
+    prefix = client.config.prefix[0]; // Cek folder, config.json.
+  } else if (message.content.toLowerCase().startsWith(client.config.prefix[1])) {
+    prefix = client.config.prefix[1];
   }
   require('../plugin/ar.js')(client, message)
   require('../plugin/afk.js')(client, message)
@@ -79,7 +79,7 @@ module.exports = async (client, message) => {
   const cooldownAmount = (commandFile.conf.cooldown || 3) * 1000
 
   if (!timestamps.has(member.id)) {
-    if (!client.config.discord.owners.includes(message.author.id)) {
+    if (!client.config.owners.includes(message.author.id)) {
       timestamps.set(member.id, now);
     }
   } else {
