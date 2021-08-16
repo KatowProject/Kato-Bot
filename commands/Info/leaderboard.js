@@ -1,25 +1,26 @@
 const Discord = require('discord.js');
 const axios = require('axios');
 const { MessageButton } = require('discord-buttons');
+const db = require('../../database/schema/xp_player');
 
 exports.run = async (client, message, args) => {
     try {
 
-        const req = parseInt(args[0]) ? parseInt(args[0]) : 1;
-        const res = await axios.get('https://mee6.xyz/api/plugins/levels/leaderboard/336336077755252738?page=' + (req - 1));
-
+        const res = await db.findOne({ id: 1 });
         const response = res.data;
 
-        const mappingLB = response.players.map((a, i) => `${i + 1}. \`${a.username}#${a.discriminator}\` **[Level ${a.level} | ${a.xp} EXP]**`);
+        const mappingLB = response.map((a, i) => `${i + 1}. <@${a.id}> **[Level ${a.level} | ${a.xp} EXP]**`);
+        const myRank = mappingLB.find(a => a.includes(`<@${message.author.id}`));
         const chunkLB = client.util.chunk(mappingLB, 20);
 
         let pagination = 1;
         const embed = new Discord.MessageEmbed()
             .setColor(client.warna.kato)
             .setTitle('Leaderboard MEE6')
-            .setAuthor(message.guild.name, message.guild.iconURL(), response.guild.leaderboard_url)
+            .setAuthor(message.guild.name, message.guild.iconURL())
+            .addField('Peringkat Saya', myRank)
             .setDescription(chunkLB[0].join('\n'))
-            .setFooter(`Page ${pagination} of ${chunkLB.length} | Bagian ${req}`)
+            .setFooter(`Page ${pagination} of ${chunkLB.length}`)
 
         const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
         const deleteButton = new MessageButton().setStyle('red').setLabel('♻').setID('deleteID');
@@ -36,7 +37,7 @@ exports.run = async (client, message, args) => {
                     pagination--;
 
                     embed.setDescription(chunkLB[pagination - 1].join('\n'));
-                    embed.setFooter(`Page ${pagination} of ${chunkLB.length} | Bagian ${req}`);
+                    embed.setFooter(`Page ${pagination} of ${chunkLB.length}`);
 
                     r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, chunkLB.length, pagination) });
                     break;
@@ -50,7 +51,7 @@ exports.run = async (client, message, args) => {
                     pagination++;
 
                     embed.setDescription(chunkLB[pagination - 1].join('\n'));
-                    embed.setFooter(`Page ${pagination} of ${chunkLB.length} | Bagian ${req}`);
+                    embed.setFooter(`Page ${pagination} of ${chunkLB.length}`);
 
                     r.edit({ embed, buttons: client.util.buttonPageFilter(buttonList, chunkLB.length, pagination) });
                     break;

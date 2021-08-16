@@ -5,6 +5,7 @@ const GiveawaySchema = new Schema({
     guildID: String,
     channelID: String,
     time: Object,
+    require: Object,
     winnerCount: Number,
     entries: Array,
     embed: Object,

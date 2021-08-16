@@ -33,8 +33,12 @@ module.exports = client => {
   /* Reset Collection Attachment */
   setInterval(() => client.dataAttachment = new Discord.Collection(), 300000);
 
+  /* XP MEE6 */
+  const xp = () => require('../handler/xp_player')(client);
+  setInterval(xp, 60000);
+
   /* Trakteer */
-  client.trakteer.getNotification(true, 120000);
+  //client.trakteer.getNotification(true, 120000);
 
   /* Giveaway Time */
   setInterval(async () => {
@@ -47,20 +51,30 @@ module.exports = client => {
       if (timeLeft > data.time.duration) {
         if (data.isDone) continue;
 
+        const msg = await channel.messages.fetch(data.messageID);
+        if (data.entries.length === 0) {
+          data.isDone = true;
+          data.embed.fields[3] = { name: 'Pemenang:', value: 'Tidak ada yang menang', inline: false };
+
+          msg.edit('**🎉- Giveaway Ended -🎉**', { embed: data.embed });
+          await db.findOneAndUpdate({ messageID: data.messageID }, data);
+
+          return client.channels.cache.get(data.channelID).send(`Tidak ada yang menang karna nol partisipan!`);
+        };
+
         const winLength = data.winnerCount;
         const win = client.util.shuffle(data.entries);
         const winners = win.slice(0, winLength);
 
         data.isDone = true;
-        data.embed.fields[2] = { name: 'Winners:', value: winners.map(a => `<@${a}>`).join(', '), inline: false };
+        data.embed.fields[3] = { name: 'Winners:', value: winners.map(a => `<@${a}>`).join(', '), inline: false };
 
-        const msg = await channel.messages.fetch(data.messageID);
-        msg.edit('🎉- Giveaway Ended -🎉', { embed: data.embed });
+        msg.edit('**🎉- Giveaway Ended -🎉**', { embed: data.embed });
         client.channels.cache.get(data.channelID).send(`Congrats ${winners.map(a => `<@${a}>`).join(', ')}!\n${msg.url}`);
 
         await db.findOneAndUpdate({ messageID: data.messageID }, data);
       }
     }
   }, 10000);
-}
+};
 

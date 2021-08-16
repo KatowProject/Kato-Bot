@@ -7,6 +7,7 @@ exports.run = async (client, message, args) => {
 
     const option = args[0];
     const embed = new Discord.MessageEmbed()
+    const embedReq = new Discord.MessageEmbed().setTitle('Opsi Dibutuhkan').setColor(client.warna.warning);
 
     switch (option) {
         case 'create':
@@ -17,6 +18,9 @@ exports.run = async (client, message, args) => {
             let alertTime = null;
             let alertWinner = null;
             let alertTitle = null;
+            let alertMee6 = null;
+            let alertRole = null;
+            let alertRequire = null;
             let alertFinal = null;
 
             const channelRequest = await message.channel.createMessageCollector(msg => msg.author.id === message.author.id, { time: 150000 });
@@ -28,16 +32,23 @@ exports.run = async (client, message, args) => {
                         temporaly.channel = m.mentions.channels.first().id;
 
                         cases = 'time';
-                        alertTime = await message.reply('Masukkan durasi Giveaway!');
+                        alertTime = await message.reply(`<#${m.mentions.channels.first().id}> menjadi tempat Giveaway, selanjutnya silahkan masukkan durasi Giveaway!`);
                         break;
 
                     case 'time':
-                        if (!ms(m.content)) return message.reply('Invalid Time!').then(t => t.delete({ timeout: 5000 }));
+                        const timelist = m.content.split(' ');
+                        const totalTime = [];
+                        for (const time of timelist) {
+                            if (!ms(time)) return message.reply('Invalid Time!').then(t => t.delete({ timeout: 5000 }));
+                            totalTime.push(ms(time));
+                        }
+
+
                         alertTime.delete();
-                        temporaly.time = ms(m.content);
+                        temporaly.time = totalTime.reduce((a, c) => a + c);
 
                         cases = 'winner';
-                        alertWinner = await message.reply('Masukkan jumlah pemenang!');
+                        alertWinner = await message.reply(`Giveaway berdurasi **${client.util.parseDur(temporaly.time)}**, selanjutnya masukkan jumlah pemenang!`);
                         break;
 
                     case 'winner':
@@ -45,16 +56,92 @@ exports.run = async (client, message, args) => {
                         alertWinner.delete();
                         temporaly.winner = m.content;
 
-                        cases = 'title';
-                        alertTitle = await message.reply('Masukkan Judul Giveaway!');
+                        cases = 'require';
+                        embedReq.addField('Level MEE6', 'Ketik `1` untuk menggunakan Level MEE6');
+                        embedReq.addField('Role', 'Ketik `2` untuk menggunakan Role');
+                        embedReq.addField('None', 'Ketik `3` untuk yang tidak memiliki syarat apapun');
+
+                        alertRequire = await message.reply('Pilih menggunakan angka!', embedReq);
                         break;
 
+                    case 'require':
+
+                        if (!parseInt(m.content)) return message.reply('Invalid Option!').then(t => t.delete({ timeout: 5000 }));
+                        alertRequire.delete();
+
+                        const opsiReq = embedReq.fields;
+                        const reqOpsi = opsiReq[m.content - 1];
+
+                        if (!reqOpsi) return message.reply('Nilai Invalid!').then(t => t.delete({ timeout: 5000 }));
+
+                        switch (m.content) {
+
+                            case '1':
+                                cases = 'mee6';
+                                alertMee6 = await message.reply('Silahkan masukkan Level MEE6!');
+                                break;
+
+                            case '2':
+                                cases = 'roles';
+                                alertRole = await message.reply('Silahkan masukkan role yang ingin dimasukkan (Name, RoleID)\n**Contoh**: santai dermawan, nitro boost, santai');
+                                break;
+                            case '3':
+                                cases = 'title';
+                                temporaly.require = { name: 'None', value: 'Tidak ada syarat' };
+                                alertTitle = await message.reply('Masukkan Judulnya!');
+                                break;
+                        };
+                        break;
+
+                    case 'mee6':
+                        if (!parseInt(m.content)) return message.reply('Harus bernilai angka!');
+                        temporaly.require = { name: 'MEE6', value: m.content };
+                        cases = 'title';
+                        alertTitle = await message.reply('Masukkan Judulnya!');
+                        break;
+
+                    case 'roles':
+                        const query = m.content;
+                        const roles = query.split(',');
+                        temporaly.require = { name: 'Roles', value: [] };
+
+                        const roleTemp = temporaly.require.value;
+                        for (const role of roles) {
+                            if (role.length < 1) continue;
+                            const name = role.trim();
+
+                            const roleID = message.guild.roles.cache.get(name);
+                            const findRole = message.guild.roles.cache.find(a => a.name.toLowerCase() === name.toLowerCase());
+                            const roleRegex = new RegExp(name, "i");
+                            const findRegex = message.guild.roles.cache.find(a => roleRegex.test(a.name) ? roleRegex.test(a.name) : null);
+
+                            if (roleID) {
+                                roleTemp.push(roleID.id);
+                            } else if (findRole) {
+                                roleTemp.push(findRole.id);
+                            } else if (findRegex) {
+                                roleTemp.push(findRegex.id);
+                            } else continue;
+                        };
+
+                        cases = 'title';
+                        alertTitle = await message.reply('Masukkan judulnya!');
+                        break;
                     case 'title':
                         if (m.content.length < 10) return message.reply('Setidaknya isi Judul sebanyak 10 karakter!').then(t => t.delete({ timeout: 5000 }));
                         alertTitle.delete();
                         temporaly.title = m.content;
 
                         cases = 'final';
+
+                        const reqName = temporaly.require;
+                        if (reqName.name === 'MEE6') {
+                            embed.addField('Dibutuhkan:', `Level MEE6 - **${reqName.value}**`);
+                        } else if (reqName.name === 'Roles') {
+                            embed.addField('Dibutuhkan:', `Role ${reqName.value.map(a => `<@&${a}>`).join(', ')}`);
+                        } else {
+                            embed.addField('Dibutuhkan:', '**Tidak ada**');
+                        };
 
                         embed.setColor('RANDOM')
                         embed.setDescription(`**${temporaly.title}**`)
@@ -68,13 +155,13 @@ exports.run = async (client, message, args) => {
                         if (m.content === 'cancel') {
                             alertFinal.delete();
                             message.reply('Dibatalkan!');
-                            channelRequest.stop();
+                            return channelRequest.stop();
                         };
 
                         if (m.content !== 'ya') return message.reply('ketik **ya** jika sudah yakin, ketik **cancel** untuk membatalkan!');
                         alertFinal.delete();
 
-                        const buttonsEntries = new MessageButton().setID('giveawayID').setLabel('🎉').setStyle('green');
+                        const buttonsEntries = new MessageButton().setID('giveawayID2').setLabel('🎉').setStyle('green');
                         embed.addField('Entries:', '0');
                         const messageGiveaway = await message.guild.channels.cache.get(temporaly.channel).send('🎉- Giveaway -🎉', { embed, button: buttonsEntries });
 
@@ -89,6 +176,7 @@ exports.run = async (client, message, args) => {
                                 start: Date.now(),
                                 duration: temporaly.time
                             },
+                            require: temporaly.require,
                             winnerCount: parseInt(temporaly.winner),
                             entries: [],
                             isDone: false,
@@ -117,11 +205,49 @@ exports.run = async (client, message, args) => {
             const giveawayDataList = await db.find({});
             if (!giveawayDataList.length) return message.reply('Nothing data!');
 
-            const mapData = giveawayDataList.map(a => `[${a.messageID}](https://discord.com/channels/${a.guildID}/${a.channelID}/${a.messageID}) - ${a.embed.description} | ${a.isDone ? 'Telah Selesai' : 'Belum Selesai'}`).join('\n');
+            const mapData = giveawayDataList.map(a => `[${a.messageID}](https://discord.com/channels/${a.guildID}/${a.channelID}/${a.messageID}) - ${a.embed.description} | ${a.isDone ? 'Telah Selesai' : 'Belum Selesai'}`);
+            const chunkData = client.util.chunk(mapData, 10);
 
+            let pagination = 1;
             const embede = new Discord.MessageEmbed().setColor(client.warna.kato).setTitle('Giveaways List');
-            embede.setDescription(mapData);
-            message.channel.send(embede);
+            embede.setDescription(chunkData[pagination - 1]);
+            embede.setFooter(`Page ${pagination} of ${chunkData.length}`);
+
+            const backwardsButton = new MessageButton().setStyle('grey').setLabel('< Back').setID('backID');
+            const deleteButton = new MessageButton().setStyle('red').setLabel('♻').setID('deleteID');
+            const forwardsButton = new MessageButton().setStyle('grey').setLabel('Next >').setID('nextID');
+            const buttonList = [backwardsButton, deleteButton, forwardsButton];
+            let r = await message.channel.send({ embed: embede, buttons: client.util.buttonPageFilter(buttonList, chunkData.length, pagination) });
+
+            const collector = r.createButtonCollector(button => button.clicker.user.id === message.author.id, { time: 500000 });
+            collector.on('collect', (button) => {
+                button.reply.defer();
+                switch (button.id) {
+                    case 'backID':
+                        if (pagination === 1) return;
+                        pagination--;
+
+                        embede.setDescription(chunkData[pagination - 1].join('\n'));
+                        embede.setFooter(`Page ${pagination} of ${chunkData.length}`);
+
+                        r.edit({ embed: embede, buttons: client.util.buttonPageFilter(buttonList, chunkData.length, pagination) });
+                        break;
+
+                    case 'deleteID':
+                        r.delete();
+                        break;
+
+                    case 'nextID':
+                        if (pagination === chunkData.length) return;
+                        pagination++;
+
+                        embede.setDescription(chunkData[pagination - 1].join('\n'));
+                        embede.setFooter(`Page ${pagination} of ${chunkData.length}`);
+
+                        r.edit({ embed: embede, buttons: client.util.buttonPageFilter(buttonList, chunkData.length, pagination) });
+                        break;
+                }
+            });
             break;
 
         case 'end':
@@ -134,6 +260,16 @@ exports.run = async (client, message, args) => {
             await db.findOneAndUpdate({ messageID: giveawayDataEnd.messageID }, giveawayDataEnd);
 
             message.reply('Telah selesai diberhentikan, tunggu 1-10 detik ya!').then(t => t.delete({ timeout: 5000 }));
+            break;
+
+        case 'delete':
+            if (!args[1]) return message.reply('Message ID required!');
+            const giveawayDataDelete = await db.findOne({ messageID: args[1] });
+            if (!giveawayDataDelete) return message.reply('Not Found!');
+            if (!giveawayDataDelete.isDone) return message.reply(`Giveaway isn't over yet, pls end giveaway first!`).then(a => a.delete({ timeout: 5000 }));
+
+            await db.findOneAndDelete({ messageID: giveawayDataDelete.messageID });
+            message.reply(`Telah selesai dihapus!`);
             break;
         default:
             message.reply('Opsi tidak dimengerti oleh Kato!');
