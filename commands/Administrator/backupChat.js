@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const db = require('../../database/schema/')
+const db = require('../../database/schema/autoResponse');
 
 exports.run = async (client, message, args) => {
     try {
