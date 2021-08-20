@@ -28,7 +28,10 @@ module.exports = async (client, button) => {
                 const requireRole = data.require.value;
                 const rolePlayer = button.clicker.member.roles.cache;
                 for (const role of requireRole) if (rolePlayer.has(role)) isOK = true;
+                break;
 
+            default:
+                isOK = true;
                 break;
         };
 

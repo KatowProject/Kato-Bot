@@ -8,11 +8,11 @@ exports.run = async (client, message, args) => {
     const option = args[0];
     const embed = new Discord.MessageEmbed()
     const embedReq = new Discord.MessageEmbed().setTitle('Opsi Dibutuhkan').setColor(client.warna.warning);
+    if (!message.member.hasPermission('MANAGE_MESSAGES') || !message.member.roles.cache.has('473869471183011860')) return message.reply('Not Enough Permission!');
 
     switch (option) {
         case 'create':
             const temporaly = {};
-            let cases = 'channel';
 
             const alertChannel = await message.reply('Pilih channel yang ingin dibuat Giveaway!');
             let alertTime = null;
@@ -23,6 +23,7 @@ exports.run = async (client, message, args) => {
             let alertRequire = null;
             let alertFinal = null;
 
+            let cases = 'channel';
             const channelRequest = await message.channel.createMessageCollector(msg => msg.author.id === message.author.id, { time: 150000 });
             channelRequest.on('collect', async (m) => {
                 switch (cases) {
@@ -121,7 +122,10 @@ exports.run = async (client, message, args) => {
                                 roleTemp.push(findRole.id);
                             } else if (findRegex) {
                                 roleTemp.push(findRegex.id);
-                            } else continue;
+                            } else {
+                                message.reply(`Role ${name} tidak ditemukan`);
+                                return;
+                            };
                         };
 
                         cases = 'title';
@@ -280,8 +284,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: ['ga'],
-    cooldown: 10,
-    permissions: ['MANAGE_MESSAGES']
+    cooldown: 10
 };
 
 exports.help = {
