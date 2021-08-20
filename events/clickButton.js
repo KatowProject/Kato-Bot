@@ -2,7 +2,7 @@ const db = require('../database/schema/Giveaway');
 const dbxp = require('../database/schema/xp_player');
 
 module.exports = async (client, button) => {
-    if (button.id !== 'giveawayID2') return;
+    if (button.id !== 'giveawayID') return;
     button.reply.defer();
 
     const data = await db.findOne({ messageID: button.message.id });
