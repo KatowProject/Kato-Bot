@@ -8,7 +8,7 @@ exports.run = async (client, message, args) => {
     const option = args[0];
     const embed = new Discord.MessageEmbed()
     const embedReq = new Discord.MessageEmbed().setTitle('Opsi Dibutuhkan').setColor(client.warna.warning);
-    if (!message.member.hasPermission('MANAGE_MESSAGES') || !message.member.roles.cache.has('473869471183011860')) return message.reply('Not Enough Permission!');
+    if (!message.member.roles.cache.has('473869471183011860') || !message.member.hasPermission('MANAGE_MESSAGES')) return message.reply('Not Enough Permission!');
 
     switch (option) {
         case 'create':
