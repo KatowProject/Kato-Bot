@@ -21,6 +21,8 @@ const Trakteer = new client({
     console.log(await Trakteer.getData());
     /* Mengambil Data Supporter [Aktif/Tidak Aktif] */
     console.log(await Trakteer.getSupporter());
+    /* Melihat History Donasi dengan ID*/
+    console.log(await Trakteer.getOrderDetail('i451idcc1eDe'));
     /* Cek Saldo */
     console.log(await Trakteer.getSaldo());
     /* Cek Tip yang telah diterima */

@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
 
         if (!afk) {
             const nickname = member.nickname ? member.nickname : member.user.username;
-            member.setNickname(`[AFK] ${nickname}`);
+            if (!nickname.length > 26) member.setNickname(`[AFK] ${nickname}`);
             message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' });
             setTimeout(async () => {
                 const data = { reason: reason ? reason : "AFK", time: Date.now() };

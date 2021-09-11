@@ -12,20 +12,18 @@ class Trakteer {
     getSaldo() {
         return new Promise(async (resolve, reject) => {
             try {
-
                 const endpoint = 'manage/balance';
                 const res = await tools.get(endpoint, this.options);
                 const response = res.data;
 
                 const $ = cheerio.load(response);
-                const saldo = $('.available-balance').find('h3').text();
+                const saldo = $('.available-balance').find('h2').text();
 
                 return resolve(saldo);
-
             } catch (e) {
                 return reject(e);
             }
-        })
+        });
     }
 
     getData() {
@@ -38,22 +36,15 @@ class Trakteer {
 
                 const list = [];
                 donet.forEach((a, i) => {
+                    const $nominal = cheerio.load(a.nominal);
+                    const $aksi = cheerio.load(a.aksi);
 
-                    const $ = cheerio.load(a);
                     const donatur = {
                         createdAt: a.created_at,
                         supporter: a.supporter.split('<')[0],
-                        support_message: a.support_message === '-' ? '-' : $(a.support_message).text().trim().split('\n')[0],
-                        unit: [
-                            a.quantity,
-                            $(a.unit).attr('src')
-                        ],
-                        nominal: [
-                            $(a.nominal).find('tr:nth-of-type(1) td:nth-of-type(3)').text(),
-                            $(a.nominal).find('tr:nth-of-type(2) td:nth-of-type(3)').text(),
-                            $(a.nominal).find('tr:nth-of-type(3) td:nth-of-type(3)').text(),
-                            $(a.nominal).find('tr:nth-of-type(4) th.text-left:nth-of-type(3)').text()
-                        ]
+                        unit: a.quantity,
+                        nominal: $nominal('.d-iflex').text().split('\n')[0],
+                        orderId: $aksi('a').attr('href').split('/').pop()
                     }
                     list.push(donatur);
                 })
@@ -68,6 +59,32 @@ class Trakteer {
 
         });
 
+    }
+
+    getOrderDetail(orderId) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const endpoint = `manage/tip-received/${orderId}`;
+                const res = await tools.get(endpoint, this.options);
+                const $ = cheerio.load(res.data);
+
+                const data = {};
+
+                data.orderId = orderId;
+                data.tanggal = $('tbody').find('tr:contains("Tanggal") td').text();
+                data.nama = $('tbody').find('tr:contains("Nama") td').text().replace(/\s+|&nbsp;/g, "");
+                data.unit = {
+                    length: $('tbody').find('tr:contains("Unit") td').text().trim(),
+                    image: $('tbody').find('tr:contains("Unit") td').find('img').attr('src')
+                };
+                data.nominal = $('tbody').find('tr:contains("Nominal") td').text().trim();
+                data.message = $('.block').text().trim();
+
+                return resolve(data);
+            } catch (e) {
+                return reject(e);
+            }
+        });
     }
 
     getSupporter() {
@@ -111,97 +128,80 @@ class Trakteer {
         return new Promise(async (resolve, reject) => {
 
             try {
-
                 const res = await tools.get('manage/tip-received', this.options);
                 const $ = cheerio.load(res.data);
-                const response = $('span.text-primary').text();
-
+                const response = $('.overview-total').find('.fs-150:nth-of-type(4)').text().trim();
                 return resolve(response);
-
             } catch (e) {
-
                 return reject(e);
-
             }
 
         });
     }
 
-
-
-
     getNotification(boolean, time) {
-
         const notify = async () => {
-
-            const donaturData = await this.getData();
-
             try {
+                const donaturData = await this.getData();
 
-                const readDonatur = fs.readFileSync(path.join(__dirname, './latestDonatur.json'), 'utf8');
-                const donatur = JSON.parse(readDonatur.toString());
-
-                if (donaturData[0].createdAt === donatur.createdAt) return;
-
+                const order = await this.getOrderDetail(donaturData[0].orderId);
                 const json = {
                     'content': '<a:bell:840021626473152513> tengtong ada donatur masuk! <a:bell:840021626473152513>',
                     'embeds': [
                         {
                             "title": "Donasi Trakteer",
-                            "color": 0,
-                            "footer": {
-                                "icon_url": "https://cdn.discordapp.com/emojis/827038555896938498.png",
-                                "text": "1 Koin = Rp 10.000,00.-"
+                            "color": 16777215,
+                            "author": {
+                                "name": "Perkumpulan Orang Santai",
+                                "url": "https://trakteer.id/santai",
+                                "icon_url": "https://cdn.discordapp.com/icons/336336077755252738/c3940657b6d2bf8bf973e1b5e4499728.png?size=4096"
                             },
+                            "description": `
+                                **Nama:** ${donaturData[0].supporter}
+                                **Unit:** <:santai:827038555896938498> ${order.unit.length}
+                                **Nominal:** ${order.nominal}
+                            `,
                             "fields": [
                                 {
-                                    "name": "Donatur",
-                                    "value": donaturData[0].supporter
-                                },
-                                {
-                                    "name": "Unit Donasi",
-                                    "value": `<:santai:827038555896938498> ${donaturData[0].unit[0]} Koin`
-                                },
-                                {
-                                    "name": "Tanggal Donasi",
-                                    "value": donaturData[0].createdAt
-                                },
-                                {
-                                    "name": "Pesan Dukungan",
-                                    "value": donaturData[0].support_message
-                                },
-                                {
-                                    "name": "Durasi Role",
-                                    "value": `${parseInt(donaturData[0].unit[0]) * 28} hari`
+                                    name: 'Pesan Dukungan',
+                                    value: order.message,
                                 }
-                            ]
+                            ],
+                            "footer": {
+                                "text": `Tanggal • ${order.tanggal}`
+                            }
                         }
                     ]
                 };
 
-                const parse = JSON.stringify(json);
+                const isAvailable = fs.existsSync(path.join(__dirname, './latestDonatur.json'));
+                if (isAvailable) {
+                    const readDonatur = fs.readFileSync(path.join(__dirname, './latestDonatur.json'), 'utf8');
+                    const donatur = JSON.parse(readDonatur.toString());
 
-                fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
-                await tools.post(parse, this.options['webhook']);
+                    if (donaturData[0].orderId === donatur.orderId) return;
+                    fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
+                    await tools.post(parse, this.options['webhook']);
 
+
+                } else {
+                    fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
+                    await tools.post(json, this.options['webhook']);
+                }
             } catch (err) {
-
-                fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
                 console.log(err);
-
             }
         }
 
         const notification = setInterval(notify, time);
 
         if (boolean === false) {
-            cleanInterval(notification);
+            clearInterval(notification);
             console.log('Notifikasi Dinonaktifkan!');
         }
         console.log('Notifikasi diaktifkan!');
 
     }
-
 }
 
 
