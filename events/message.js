@@ -6,8 +6,6 @@ module.exports = async (client, message) => {
   if (message.channel.id === "840073578963795999") require('../plugin/Trakteer')(client, message);
   if (message.channel.type === "dm" || message.author.bot || message.author === client.user) return;
 
-  if (message.author.id !== "458342161474387999") return;
-
   let prefix;
   if (message.content.toLowerCase().startsWith(client.config.prefix[0])) {
     prefix = client.config.prefix[0]; // Cek folder, config.json.
