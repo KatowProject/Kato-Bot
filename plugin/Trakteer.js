@@ -4,7 +4,7 @@ module.exports = async (client, message) => {
     const embed = message.embeds[0];
     const data = embed.description.split('\n');
 
-    const name = 'ManLord#3143'//data[0].replace('**Nama:** ', '');
+    const name = data[0].replace('**Nama:** ', '');
     const value = parseInt(data[1].split('x').pop());
     const duration = value * 28;
     const toMS = require('ms')(`${duration}d`);
