@@ -168,7 +168,7 @@ exports.run = async (client, message, args) => {
                         if (m.content !== 'ya') return message.reply('ketik **ya** jika sudah yakin, ketik **cancel** untuk membatalkan!');
                         alertFinal.delete();
 
-                        const buttonsEntries = new MessageButton().setID('giveawayID2').setLabel('🎉').setStyle('green');
+                        const buttonsEntries = new MessageButton().setID('giveawayID').setLabel('🎉').setStyle('green');
                         embed.addField('Entries:', '0');
                         const messageGiveaway = await message.guild.channels.cache.get(temporaly.channel).send('🎉- Giveaway -🎉', { embed, button: buttonsEntries });
 
