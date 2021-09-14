@@ -181,7 +181,7 @@ class Trakteer {
 
                     if (donaturData[0].orderId === donatur.orderId) return;
                     fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
-                    await tools.post(parse, this.options['webhook']);
+                    await tools.post(donatur, this.options['webhook']);
 
 
                 } else {
