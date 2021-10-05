@@ -9,15 +9,24 @@ exports.run = async (client, message, args) => {
     if (!user) return message.reply('Kamu belum terdaftar dalam event ini!');
 
     dailyEmbed.addField('Absen', user.isAttend ? 'Telah dilakukan' : 'Belum dilakukan');
-    dailyEmbed.addField('Pesan', `${user.message.daily}/100 | ${user.message.daily <= 100 ? 'Belum selesai' : 'Telah selesai'}`);
-    dailyEmbed.setFooter('Note: Jumlah pesan update setiap 5 Menit dan pesan akan direset Jam 00.00 WIB');
-
+    dailyEmbed.addField('Pesan', `${user.message.daily}/50 | ${user.message.daily <= 50 ? 'Belum selesai' : 'Telah selesai'}`);
     dailyEmbed.addField('Ticket', user.ticket);
+    if (user.items.length < 1) {
+        dailyEmbed.addField('Items', 'Tidak ada')
+    } else {
+        const items = user.items.map((a, i) => {
+            const isPending = a.isPending ? 'Pending' : 'Tidak ada';
+            const isUsed = a.used ? 'Sudah digunakan' : 'Belum digunakan';
+            return `**${i + 1}.** ${a.name} | ${isPending} | ${isUsed}`;
+        });
+        dailyEmbed.addField('Items', items.join('\n'));
+    }
+    dailyEmbed.setFooter('Note:\n1. Jumlah pesan update setiap 5 Menit dan pesan akan direset Jam 00.00 WIB\n2. Jika ingin mengklaim hadiah jalankan perintah k#use');
     message.channel.send(dailyEmbed);
 }
 
 exports.conf = {
-    aliases: [],
+    aliases: ['inv'],
     cooldown: 5
 };
 

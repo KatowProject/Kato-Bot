@@ -23,29 +23,25 @@ module.exports = async (client) => {
                         isComplete: false
                     }
                 });
-        } else {
-            if (user.message.isComplete) continue;
+            continue;
+        }
+        if (user.message.isComplete) continue;
 
-            const checkXP = findXP.message_count - user.message.base;
-            if (checkXP === findXP.message_count || checkXP < 1) return console.log('Nilainya masih nol!');
-            if (checkXP === user.message.daily) continue;
-            if (checkXP >= 50) {
-                await dbUser.findOneAndUpdate({ userID: findXP.id },
-                    {
-                        ticket: user.ticket + 1,
-                        message: {
-                            daily: checkXP,
-                            base: user.message.base,
-                            isComplete: true
-                        }
-                    });
-                client.users.cache.find(a => a.id === findXP.id).send('Misi telah selesai!');
-                continue;
-            }
-
-            await dbUser.findOneAndUpdate({ userID: findXP.id }, { message: { daily: checkXP, base: user.message.base, } });
+        const checkXP = findXP.message_count - user.message.base;
+        if (checkXP >= 50) {
+            await dbUser.findOneAndUpdate({ userID: findXP.id },
+                {
+                    ticket: user.ticket + 1,
+                    message: {
+                        daily: checkXP,
+                        base: user.message.base,
+                        isComplete: true
+                    }
+                });
+            client.users.cache.find(a => a.id === findXP.id).send('Misi telah selesai!');
+            continue;
         }
 
+        await dbUser.findOneAndUpdate({ userID: findXP.id }, { message: { daily: checkXP, base: user.message.base, } });
     }
-
 }

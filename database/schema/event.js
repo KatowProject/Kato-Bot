@@ -5,7 +5,8 @@ const eventSchema = new Schema({
     ticket: Number,
     isParticipant: Boolean,
     isAttend: Boolean,
-    message: Object
+    message: Object,
+    items: Array
 });
 
 const eventData = model('EVENT_DATA', eventSchema);

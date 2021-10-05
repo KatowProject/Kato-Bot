@@ -20,7 +20,6 @@
     "node-superfetch": "^0.1.10"
   },
   "license": "CC-BY-SA-4.0",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KatowProject/Kato-Bot.git"

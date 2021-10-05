@@ -2,7 +2,7 @@ const Kato = require("./handler/ClientBuilder.js");
 const client = new Kato({ disableMentions: 'everyone', fetchAllMembers: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const recent = new Set();
 
-
+require('discord-buttons')(client);
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
 require('./database/index')(client.config.db);
