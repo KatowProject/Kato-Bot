@@ -9,15 +9,14 @@ exports.run = async (client, message, args) => {
     if (!user) return message.reply('Kamu belum terdaftar dalam event ini!');
 
     dailyEmbed.addField('Absen', user.isAttend ? 'Telah dilakukan' : 'Belum dilakukan');
-    dailyEmbed.addField('Pesan', `${user.message.daily}/50 | ${user.message.daily <= 50 ? 'Belum selesai' : 'Telah selesai'}`);
+    dailyEmbed.addField('Pesan', `${user.message.daily}/50 | ${user.message.daily < 50 ? 'Belum selesai' : 'Telah selesai'}`);
     dailyEmbed.addField('Ticket', user.ticket);
     if (user.items.length < 1) {
         dailyEmbed.addField('Items', 'Tidak ada')
     } else {
         const items = user.items.map((a, i) => {
-            const isPending = a.isPending ? 'Pending' : 'Tidak ada';
-            const isUsed = a.used ? 'Sudah digunakan' : 'Belum digunakan';
-            return `**${i + 1}.** ${a.name} | ${isPending} | ${isUsed}`;
+            const isPending = a.isPending ? 'Pending' : a.used ? 'Sudah digunakan' : 'Ready';
+            return `**${i + 1}.** ${a.name} | ${isPending}`;
         });
         dailyEmbed.addField('Items', items.join('\n'));
     }

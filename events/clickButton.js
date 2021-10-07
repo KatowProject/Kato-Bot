@@ -1,5 +1,6 @@
 const db = require('../database/schema/Giveaway');
 const dbUser = require('../database/schema/event');
+const { MessageButton } = require('discord-buttons');
 
 module.exports = async (client, button) => {
     if (button.id == 'giveawayEvent') {
@@ -39,7 +40,7 @@ module.exports = async (client, button) => {
         if (!getUser) return button.clicker.user.send('User tidak terdaftar!');
         const getItem = getUser.items.find(a => a.name === item);
         if (!getItem) return button.clicker.user.send('Item tidak ditemukan!');
-        if (getItem.used) return client.channels.cache.get('894853662629834772').send(`${button.clicker.user.username} telah menggunakan item ${item}!`);
+        if (getItem.used) return client.channels.cache.get('894853662629834772').send(`<@${id}> telah menggunakan item ${item}!`).then((a) => a.delete({ timeout: 5000 }));
 
         getItem.used = true;
         getItem.isPending = false;
@@ -51,8 +52,9 @@ module.exports = async (client, button) => {
         client.channels.cache.get('894853662629834772').send('Berhasil Menerima Hadiah User!');
         client.users.cache.get(id).send('Berhasil Menerima Hadiah!');
 
+        const completedButton = new MessageButton().setLabel('Completed').setStyle('grey').setDisabled(true).setID('completed');
         data[4] = data[4].replace('Menunggu', 'Selesai');
         embeds.description = data.join('\n');
-        button.message.edit({ embed: embeds, buttons: [] });
+        button.message.edit({ embed: embeds, buttons: [completedButton] });
     }
 };

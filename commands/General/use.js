@@ -4,28 +4,28 @@ const dbUser = require('../../database/schema/event');
 
 exports.run = async (client, message, args) => {
     const isParticipant = await dbUser.findOne({ userID: message.author.id });
-    if (!isParticipant) return message.channel.send('You are not participating in any event.');
+    if (!isParticipant) return message.channel.send('Kamu bukan partisipan.');
     const items = isParticipant.items;
 
-    const embed = new Discord.MessageEmbed().setColor('#0099ff').setTitle('Items Available')
+    const embed = new Discord.MessageEmbed().setColor('#0099ff').setTitle('Item Tersedia')
     if (items.length > 0) {
-        embed.setDescription(`${items.map((item, i) => `${i + 1}. ${item.name} | ${item.isPending ? 'Pending' : 'Ready'}`).join('\n')}`);
+        embed.setDescription(`${items.map((item, i) => `${i + 1}. ${item.name} | ${item.isPending ? 'Pending' : item.used ? 'Sudah digunakan' : 'Ready'}`)}.join('\n')}`);
     } else {
-        embed.setDescription('No items available.');
+        embed.setDescription('Tidak ada item tersedia.');
     }
     message.channel.send(embed);
-    let r = await message.reply('Select item with number to receive!');
+    let r = await message.reply('Pilih menggunakan angka untuk mengklaim!');
 
     const collector = await message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
     collector.on('collect', async (m) => {
         if (m.content === 'cancel') {
             collector.stop();
-            return message.channel.send('Cancelled!');
+            return message.channel.send('Dibatalkan!');
         }
-        if (!m.content.match(/\d+/)) return message.reply('Please enter a valid number!');
+        if (!m.content.match(/\d+/)) return message.reply('Masukkan angka yang valid!');
 
         const index = parseInt(m.content) - 1;
-        if (index < 0 || index >= items.length) return message.reply('Please enter a valid number!');
+        if (index < 0 || index >= items.length) return message.reply('Masukkan angka yang valid!');
         r.delete();
 
         const item = items[index];
@@ -34,7 +34,7 @@ exports.run = async (client, message, args) => {
     });
 
     async function requireItem(item) {
-        if (item.isPending) return message.reply('Item is already requested!');
+        if (item.isPending) return message.reply('Item sedang status Pending!');
         let repl = await message.reply('Apakah kamu sudah yakin? **ya** | **cancel**');
 
         const collector = await message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });

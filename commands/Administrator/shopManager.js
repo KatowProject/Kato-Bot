@@ -14,7 +14,9 @@ exports.run = async (client, message, args) => {
     if (getProducts.length === 0) {
         embedShop.setDescription('There are no products in the shop!');
     } else {
-        for (const product of getProducts) embedShop.addField(`${product.name}`, `${product.price} Tickets | ${product.stock} item available`);
+        i = 0;
+        getProducts.sort((a, b) => b.price - a.price);
+        for (const product of getProducts) embedShop.addField(`${++i}. ${product.name}`, `${product.price} Tickets | ${product.stock} item available`);
     }
 
     const backwardsButton = new MessageButton().setStyle('grey').setLabel('Add').setID('addID');
