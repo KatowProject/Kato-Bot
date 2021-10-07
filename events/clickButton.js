@@ -49,7 +49,7 @@ module.exports = async (client, button) => {
         getUser.items[getItemIndex] = getItem;
 
         await dbUser.findOneAndUpdate({ userID: id }, getUser);
-        client.channels.cache.get('894853662629834772').send('Berhasil Menerima Hadiah User!');
+        client.channels.cache.get('894853662629834772').send('Berhasil Menerima Hadiah User!').then((m) => m.delete({ timeout: 5000 }));
         client.users.cache.get(id).send('Berhasil Menerima Hadiah!');
 
         const completedButton = new MessageButton().setLabel('Completed').setStyle('grey').setDisabled(true).setID('completed');

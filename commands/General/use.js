@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 
     const embed = new Discord.MessageEmbed().setColor('#0099ff').setTitle('Item Tersedia')
     if (items.length > 0) {
-        embed.setDescription(`${items.map((item, i) => `${i + 1}. ${item.name} | ${item.isPending ? 'Pending' : item.used ? 'Sudah digunakan' : 'Ready'}`)}.join('\n')}`);
+        embed.setDescription(`${items.map((item, i) => `${i + 1}. ${item.name} | ${item.isPending ? 'Pending' : item.used ? 'Sudah digunakan' : 'Ready'}`).join('\n')}`);
     } else {
         embed.setDescription('Tidak ada item tersedia.');
     }
@@ -35,6 +35,8 @@ exports.run = async (client, message, args) => {
 
     async function requireItem(item) {
         if (item.isPending) return message.reply('Item sedang status Pending!');
+        if (item.used) return message.reply('Item sudah digunakan!');
+
         let repl = await message.reply('Apakah kamu sudah yakin? **ya** | **cancel**');
 
         const collector = await message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
