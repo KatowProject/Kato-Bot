@@ -55,7 +55,7 @@ exports.run = async (client, message, args) => {
                 const buttonAccept = new MessageButton().setStyle('green').setLabel('✔').setID('acceptID');
                 const buttonReject = new MessageButton().setStyle('red').setLabel('✖').setID('rejectID');
 
-                client.channels.cache.get('894853662629834772').send({ embed, buttons: [buttonAccept, buttonReject] });
+                client.channels.cache.get('894853662629834772').send({ embed, buttons: [buttonAccept] });
                 const _item = items.indexOf(item);
                 items[_item].isPending = true;
 

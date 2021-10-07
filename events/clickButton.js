@@ -16,7 +16,7 @@ module.exports = async (client, button) => {
 
         dataUser.ticket >= data.require ? isOK = true : isOK = false;
         if (!isOK) return button.clicker.user.send('Syarat tidak mencukupi!');
-        dataUser.ticket = dataUser.ticket -= data.require;
+        //dataUser.ticket = dataUser.ticket -= data.require;
 
         data.entries.push(button.clicker.user.id);
         data.embed.fields[2].value = data.entries.length;
