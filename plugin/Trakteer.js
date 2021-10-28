@@ -2,6 +2,7 @@ const donaturs = require('../database/schema/Donatur');
 
 module.exports = async (client, message) => {
     const embed = message.embeds[0];
+    console.log(embed);
     const data = embed.description.split('\n');
 
     const name = data[0].replace('**Nama:** ', '');
@@ -10,6 +11,7 @@ module.exports = async (client, message) => {
     const toMS = require('ms')(`${duration}d`);
 
     const user = message.guild.members.cache.find(m => m.user.tag === name);
+    console.log(user);
     if (!user) return client.channels.cache.get('336877836680036352')
         .send(`Hai Para Staff, ada Donatur yang tidak dapat Kato temui dalam Server, maaf kato tidak dapat memberikan role-nya secara otomatis :(`);
 

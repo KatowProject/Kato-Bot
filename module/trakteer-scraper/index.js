@@ -160,7 +160,7 @@ class Trakteer {
                             "fields": [
                                 {
                                     name: 'Pesan Dukungan',
-                                    value: order.message,
+                                    value: order.message ? order.message : 'Tidak ada Pesan',
                                 }
                             ],
                             "footer": {

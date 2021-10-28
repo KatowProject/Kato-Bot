@@ -15,6 +15,7 @@
     "discord-logs": "^1.7.7",
     "discord-player": "^3.4.0",
     "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.4.0",
     "g-i-s": "^2.1.6",
     "got": "^11.8.2",
     "lodash": "^4.17.20",
@@ -24,13 +25,13 @@
     "mongoose": "^5.12.10",
     "ms": "^2.1.2",
     "node-superfetch": "^0.1.10",
+    "opusscript": "0.0.8",
     "os": "^0.1.1",
     "scraper-instagram": "^1.0.17",
     "string-template": "^1.0.0",
     "yargs-parser": "^20.2.4"
   },
   "license": "CC-BY-SA-4.0",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KatowProject/Kato-Bot.git"

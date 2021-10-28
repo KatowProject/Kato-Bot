@@ -35,7 +35,7 @@ module.exports = client => {
 
   /* XP MEE6 */
   const xp = () => require('../handler/xp_player')(client);
-  setInterval(xp, 60000);
+  setInterval(xp, 120000);
 
   /* Trakteer */
   client.trakteer.getNotification(true, 120000);

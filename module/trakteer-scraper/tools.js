@@ -10,7 +10,7 @@ function get(endpoint, options) {
                 }
             })
 
-            if (res.status === 200) return resolve(res);
+            if (res.status) return resolve(res);
             else reject(res);
         } catch (err) {
             reject(err.message);
@@ -27,7 +27,7 @@ function post(json, url) {
                 }
             });
 
-            if (res.status === 204) return resolve(res);
+            if (res.status) return resolve(res);
             else reject(res);
         } catch (err) {
             reject(err);
