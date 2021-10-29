@@ -4,6 +4,7 @@ const Util = require("./util");
 const { Kusonime, Samehadaku, AnimeBatchs } = require('./AnimeClass');
 const Drakor = require('./Drakor');
 const Trakteer = require('../module/trakteer-scraper/index');
+const Genius = require('genius-lyrics');
 
 module.exports = class katopos extends Client {
   constructor(opt) {
@@ -23,5 +24,6 @@ module.exports = class katopos extends Client {
     this.drakor = new Drakor(this);
     this.animebatchs = new AnimeBatchs(this);
     this.trakteer = new Trakteer(this.config.trakteer);
+    this.genius = new Genius.Client();
   };
 };

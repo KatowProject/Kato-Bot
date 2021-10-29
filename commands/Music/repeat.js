@@ -18,10 +18,10 @@ exports.run = async (client, message, args) => {
 
     const mode = client.player.getQueue(message).repeatMode;
     if (mode) {
-      client.player.setRepeatMode(message.guild.id, false)
+      client.player.setRepeatMode(message, false)
       message.channel.send('*Repeat* telah dinonaktifkan!');
     } else {
-      client.player.setRepeatMode(message.guild.id, true)
+      client.player.setRepeatMode(message, true)
       message.channel.send('*Repeat* telah diaktifkan!');
     }
     // Get the current song

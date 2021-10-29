@@ -38,7 +38,7 @@ module.exports = client => {
   setInterval(xp, 120000);
 
   /* Trakteer */
-  client.trakteer.getNotification(true, 120000);
+  //client.trakteer.getNotification(true, 120000);
 
   /* Giveaway Time */
   setInterval(async () => {
