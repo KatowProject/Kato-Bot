@@ -44,9 +44,10 @@ exports.run = async (client, message, args) => {
     return message.channel.send(embed); //send this message to user
   } else;
   if (banner) {
-    embed.setAuthor(message.guild.name, message.guild.iconURL())
-    embed.setDescription(`[Avatar URL Link](${message.guild.bannerURL({ size: 4096, dynamic: true })})`)
-    embed.setImage(message.guild.bannerURL({ size: 4096, dynamic: true }).replace(',webp', '.png'))
+    const getUserBannerURL = await client.util.getUserBannerURL(message.author.id, { size: 4096 });
+    embed.setAuthor(message.author.tag, message.author.displayAvatarURL({ size: 4096, dynamic: true }))
+    embed.setDescription(`[Avatar URL Link](${getUserBannerURL})`)
+    embed.setImage(getUserBannerURL)
     return message.channel.send(embed);
   }
   if (find) {
