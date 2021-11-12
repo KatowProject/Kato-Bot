@@ -4,8 +4,9 @@ const Util = require("./util");
 const { Kusonime, Samehadaku, AnimeBatchs } = require('./AnimeClass');
 const Drakor = require('./Drakor');
 const Trakteer = require('../module/trakteer-scraper/index');
-const Genius = require('genius-lyrics');
-
+const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
+const Kuroshiro = require('@dsquare-gbu/kuroshiro');
+const kuroshiro = new Kuroshiro();
 module.exports = class katopos extends Client {
   constructor(opt) {
     super(opt);
@@ -24,6 +25,7 @@ module.exports = class katopos extends Client {
     this.drakor = new Drakor(this);
     this.animebatchs = new AnimeBatchs(this);
     this.trakteer = new Trakteer(this.config.trakteer);
-    this.genius = new Genius.Client();
+    this.kuroshiroInit = async () => await kuroshiro.init(new KuromojiAnalyzer());
+    this.kuroshiro = kuroshiro;
   };
 };

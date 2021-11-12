@@ -8,7 +8,7 @@ require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
 require('./database/index')(client.config.db);
 
-
+client.kuroshiroInit();
 client.package = require("./package.json");
 client
   .on("warn", console.warn)

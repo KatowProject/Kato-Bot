@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const translate = require("translate-google");
-const wanakana = require("wanakana");
 const { MessageButton } = require("discord-buttons");
+const axios = require('axios');
 const langList = require("../../config/lang-gtranslate.json");
 
 module.exports.run = async (client, message, args) => {
@@ -9,18 +9,18 @@ module.exports.run = async (client, message, args) => {
         const query = args.join(" ");
         if (!query) return message.reply("Permintaan tidak boleh kosong!");
 
-        const getBySearch = await client.genius.songs.search(query);
-        if (getBySearch.length < 1) return message.reply("Tidak dapat menemukan lirik.");
+        const getBySearch = await axios.get('https://genius-lirik.herokuapp.com/search/' + query + '?length=1');
+        if (getBySearch.data.data.length < 1) return message.reply("Tidak dapat menemukan lirik.");
 
-        const getSong = getBySearch.shift();
-        const lyrics = await getSong.lyrics();
+        const getSong = getBySearch.data.data.shift();
+        const lyrics = getSong.lyrics;
         const texLength = lyrics.length;
         let msg;
 
         const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
-            .setTitle(getSong.featuredTitle)
-            .setAuthor(getSong.artist.name, getSong.image, getSong.url);
+            .setTitle(getSong.full_title)
+            .setAuthor(getSong.artist_names, getSong.song_art_image_url, getSong.url);
         const TranslateButton = new MessageButton().setLabel("Translate").setStyle("grey").setID("translate");
         const RomajiButton = new MessageButton().setLabel("Romaji").setStyle("grey").setID("romaji");
 
@@ -86,11 +86,11 @@ module.exports.run = async (client, message, args) => {
                     break;
 
                 case "romaji":
-                    const isJapanese = wanakana.isJapanese(lyrics[1]);
-                    if (!isJapanese) return message.reply("Lirik ini bukan bahasa Jepang.");
-                    const romaji = wanakana.toRomaji(lyrics);
-                    embed.setDescription(romaji);
-                    msg.edit({ embed });
+                    client.kuroshiro.convert(lyrics, { to: "romaji", mode: "spaced" })
+                        .then(function (result) {
+                            embed.setDescription(result);
+                            msg.edit({ embed });
+                        })
                     break;
             }
         });
