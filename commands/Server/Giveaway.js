@@ -206,6 +206,7 @@ exports.run = async (client, message, args) => {
             const reroll = client.util.shuffle(entries);
 
             channel.send(`Selamat untuk <@${reroll.shift()}>!\n${msg.url}`);
+            message.reply('Berhasil direroll!');
             break;
 
         case 'list':
