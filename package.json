@@ -13,6 +13,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.7.5",
+    "@dsquare-gbu/kuroshiro": "^1.1.2-iedev-1",
     "axios": "^0.24.0",
     "dateformat": "^3.0.3",
     "discord-logs": "^2.0.1",
@@ -20,10 +21,12 @@
     "discord.js": "^13.1.0",
     "g-i-s": "^2.1.6",
     "got": "^11.8.3",
+    "kuroshiro-analyzer-kuromoji": "^1.1.0",
     "moment": "^2.29.1",
     "mongoose": "^6.0.13",
     "quick.db": "^7.1.3",
     "scraper-instagram": "^1.0.17",
-    "spotify-url-info": "^2.2.3"
+    "spotify-url-info": "^2.2.3",
+    "translate-google": "^1.5.0"
   }
 }
