@@ -1,3 +1,5 @@
+const { Permissions } = require('discord.js');
+
 exports.run = async (client, message, args) => {
     try {
         let member = args[0];
@@ -8,7 +10,7 @@ exports.run = async (client, message, args) => {
             return message.reply('Kamu tidak mencantumkan IDnya!');
 
         // Ketika yang mengunban adalah member
-        if (!author.permissions.has("BAN_MEMBERS"))
+        if (!author.permissions.has(Permissions.FLAGS.BAN_MEMBERS))
             return message.reply('Kamu adalah member biasa, Kamu tidak bisa menggunakan command ini!');
 
         message.guild.members.unban(member)

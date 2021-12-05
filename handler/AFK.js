@@ -18,7 +18,7 @@ module.exports = async (client, message) => {
         const since = client.util.parseDur(msLeft);
 
         message.reply(`**${mentioned.user.tag}** saat ini sedang AFK - **${since} ago**\n**Alasan:**\n${alasan}`, { disableMentions: 'all' })
-            .then(m => m.delete({ timeout: 15000 }));
+            .then(t => setTimeout(() => t.delete(), 5000));
     };
 
     if (author) {
@@ -26,7 +26,7 @@ module.exports = async (client, message) => {
         if (nickname) {
             if (nickname.includes('[AFK]')) member.setNickname(nickname.replace('[AFK]', ''));
         }
-        message.reply('Kato telah mencabut status AFK mu!').then(m => m.delete({ timeout: 10000 }));
+        message.reply('Kato telah mencabut status AFK mu!').then(t => setTimeout(() => t.delete(), 5000));
         await AFK.findOneAndDelete({ userID: message.author.id });
     }
 }

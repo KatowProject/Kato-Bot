@@ -1,8 +1,9 @@
 const Discord = require('discord.js');
+const { Permissions } = Discord;
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.member.permissions.has('MANAGE_MESSAGES')) return;
+        if (!message.member.permissions.has([Permissions.FLAGS.MANAGE_MESSAGES])) return;
 
         if (!args[0]) return message.channel.send(" Tidak bisa menghapus pesan yang kau inginkan!")
         message.delete

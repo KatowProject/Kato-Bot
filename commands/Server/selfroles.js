@@ -31,8 +31,8 @@ exports.run = async (client, message, args) => {
 
     const r = await message.channel.send({ embeds: [embed], components: [buttons] });
     const collector = r.channel.createMessageComponentCollector(m => m.author.id === message.author.id, { time: 60000 });
-    collector.on('collect', (f) => {
-        f.deferUpdate();
+    collector.on('collect', async (f) => {
+        await f.deferUpdate();
         switch (f.customId) {
             case `fps-${message.id}`:
                 if (roles.includes(fps)) {

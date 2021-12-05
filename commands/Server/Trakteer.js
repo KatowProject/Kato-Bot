@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { Permissions } = Discord;
 const ms = require('ms');
 const donate = require('../../database/schema/Donatur');
 
@@ -7,12 +8,12 @@ exports.run = async (client, message, args) => {
         const option = args[0];
         switch (option) {
             case 'saldo':
-                if (!message.member.permissions.has('MANAGE_MESSAGES')) return;
+                if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
                 const getSaldo = await client.trakteer.getSaldo();
                 message.channel.send({
                     embeds: [new Discord.MessageEmbed()
                         .setTitle('Cek Saldo Trakteer')
-                        .setColor(client.warna.kato)
+                        .setColor('RANDOM')
                         .addField('Saldo', getSaldo)
                         .setFooter(`trakter.id/santai`, message.guild.iconURL())
                     ]
@@ -20,7 +21,7 @@ exports.run = async (client, message, args) => {
                 break;
 
             case 'data':
-                if (!message.member.permissions.has('MANAGE_MESSAGES')) return;
+                if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
                 const getData = await client.trakteer.getData();
                 if (getData.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
 
@@ -44,7 +45,7 @@ exports.run = async (client, message, args) => {
                             .setLabel('Detail 📇').setStyle('SECONDARY').setCustomId(`detail-${message.id}`)
                     )
                 let r = await message.channel.send({ embeds: [embed], components: [buttons] });
-                const collector = r.channel.createMessageComponentCollector(msg => msg.author.id === message.author.id && msg.componentType === 'button', { time: 60000 });
+                const collector = r.channel.createMessageComponentCollector(msg => msg.user.id === message.author.id, { time: 60000 });
                 collector.on('collect', async (m) => {
                     await m.deferUpdate();
 
@@ -168,7 +169,7 @@ exports.run = async (client, message, args) => {
                 break;
 
             case 'apply':
-                if (!message.member.permissions.has('MANAGE_MESSAGES')) return;
+                if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
                 if (!args[1]) return message.reply('Masukkan waktu/durasi telebih dahulu!');
 
                 const ya = ['ya', 'bener', 'betul', 'ok'];

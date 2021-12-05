@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
+const { Permissions } = Discord;
 const ms = require('ms');
 const mutees = require('../../database/schema/MuteMembers');
 
 exports.run = async (client, message, args) => {
     try {
-
-        if (!message.guild.me.permissions.has("MANAGE_ROLES")) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.guild.me.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) return message.channel.send("Aku tidak mempunyai akses!");
 
         let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!mutee) return;

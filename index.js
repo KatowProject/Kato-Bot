@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Kato = require('./handler/clientBuilder.js');
+
 const client = new Kato({
     intents: [
         Discord.Intents.FLAGS.GUILDS,

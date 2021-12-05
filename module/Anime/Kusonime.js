@@ -13,6 +13,7 @@ module.exports = class Kusonime {
                 const res = response.data;
                 if (res.length === 0) return reject(`Pencarian ${query} tidak ditemukan!`);
 
+                console.log('masuk')
                 let page = 1;
                 const animes = this.client.util.chunk(res, 10);
                 const embed = new Discord.MessageEmbed()
@@ -31,7 +32,8 @@ module.exports = class Kusonime {
                     collector.stop();
                     r.delete();
 
-                    await this.getDetail(animes[0][f.content - 1], message);
+                    console.log(f.content);
+                    await this.getDetail(animes[0][parseInt(f.content) - 1], message);
                 });
 
                 resolve();

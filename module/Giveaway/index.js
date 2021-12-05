@@ -243,4 +243,131 @@ module.exports = class Giveaway {
             resolve();
         });
     }
+
+    reroll(message, args) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!args[1]) return message.reply('Message ID required');
+                const giveawayData = await db.findOne({ messageID: args[1] });
+                if (!giveawayData) return message.reply('Not Found!');
+                if (!giveawayData.isDone) return message.reply('Giveaway not ended!');
+
+                const channel = this.client.channels.cache.get(giveawayData.channelID);
+                const msg = await channel.messages.fetch(giveawayData.messageID);
+                const entries = giveawayData.entries;
+                const reroll = this.client.util.shuffle(entries);
+
+                channel.send(`Selamat untuk <@${reroll.shift()}>!\n${msg.url}`);
+                message.reply('Berhasil direroll!');
+
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    getData(message, args) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const giveawayDataList = await db.find({});
+                if (!giveawayDataList.length) return message.reply('Nothing data!');
+
+                const mapData = giveawayDataList.map(a => `[${a.messageID}](https://discord.com/channels/${a.guildID}/${a.channelID}/${a.messageID}) - ${a.embed.description} | ${a.isDone ? 'Telah Selesai' : 'Belum Selesai'}`);
+                const chunkData = this.client.util.chunk(mapData, 10);
+
+                let pagination = 1;
+                const embede = new Discord.MessageEmbed().setColor('RANDOM').setTitle('Giveaways List');
+
+                embede.setDescription(chunkData[pagination - 1].join('\n'));
+                embede.setFooter(`Page ${pagination} of ${chunkData.length}`);
+
+                const button = new Discord.MessageActionRow()
+                    .addComponents(
+                        new Discord.MessageButton()
+                            .setLabel('< Back')
+                            .setStyle('SECONDARY')
+                            .setCustomId(args[0] + 'back' + message.id),
+                        new Discord.MessageButton()
+                            .setLabel('Next >')
+                            .setStyle('SECONDARY')
+                            .setCustomId(args[0] + 'next' + message.id),
+                        new Discord.MessageButton()
+                            .setLabel('🗑️')
+                            .setStyle('DANGER')
+                            .setCustomId(args[0] + 'delete' + message.id)
+                    )
+
+                const m = await message.channel.send({ embeds: [embede], components: [button] });
+                const collector = m.channel.createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60000 });
+                collector.on('collect', async (i) => {
+                    switch (i.customId) {
+                        case args[0] + 'back' + message.id:
+                            if (pagination === 0) return;
+                            pagination--;
+                            embede.setDescription(chunkData[pagination - 1].join('\n'));
+                            embede.setFooter(`Page ${pagination} of ${chunkData.length}`);
+                            m.edit({ embeds: [embede], components: [button] });
+                            break;
+
+                        case args[0] + 'next' + message.id:
+                            if (pagination === chunkData.length) return;
+                            pagination++;
+                            embede.setDescription(chunkData[pagination - 1].join('\n'));
+                            embede.setFooter(`Page ${pagination} of ${chunkData.length}`);
+                            m.edit({ embeds: [embede], components: [button] });
+                            break;
+
+                        case args[0] + 'delete' + message.id:
+                            m.delete();
+                            break;
+                    };
+
+                    await i.deferUpdate();
+                });
+
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    end(message, args) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!args[1]) return message.reply('Message ID required');
+                const giveawayDataEnd = await db.findOne({ messageID: args[1] });
+                if (!giveawayDataEnd) return message.reply('Not Found!');
+                if (giveawayDataEnd.isDone) return message.reply('Giveaway already ended!');
+
+                giveawayDataEnd.time.duration = 0;
+                await db.findOneAndUpdate({ messageID: giveawayDataEnd.messageID }, giveawayDataEnd);
+
+                message.reply('Telah selesai diberhentikan, tunggu 1-10 detik ya!').then(t => setTimeout(() => t.delete(), 5000));
+
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    delete(message, args) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!args[1]) return message.reply('Message ID required!');
+                const giveawayDataDelete = await db.findOne({ messageID: args[1] });
+                if (!giveawayDataDelete) return message.reply('Not Found!');
+                if (!giveawayDataDelete.isDone) return message.reply(`Giveaway isn't over yet, pls end giveaway first!`).then(a => a.delete({ timeout: 5000 }));
+
+                await db.findOneAndDelete({ messageID: giveawayDataDelete.messageID });
+                message.reply(`Telah selesai dihapus!`);
+
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 }

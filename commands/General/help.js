@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
         const embed = new MessageEmbed()
             .setColor("RANDOM")
             .setTimestamp()
-            .setFooter(`© 2020, Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, client.user.avatarURL)
+            .setFooter(`© 2021, Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, client.user.avatarURL)
             .setDescription(`Ketik \`${prefix[0]}help [command] / ${prefix[1]}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
             .setTitle(`<:kato:750342786825584811> ${client.user.username}-Bot Command List <:kato:750342786825584811>`)
 

@@ -1,7 +1,7 @@
-const Discord = require('discord.js');
+const { Permissions } = require('discord.js');
 const path = require('path');
 exports.run = async (client, message, args) => {
-    if (!message.member.permissions.has('ADMINISTRATOR')) return;
+    if (!message.member.permissions.has([Permissions.FLAGS.ADMINISTRATOR])) return;
     if (!args[0]) return message.reply('Command Name Require!');
     try {
         const cmd = client.commands.get(args[0]) || client.commands.get(client.aliases.get(args[0]));

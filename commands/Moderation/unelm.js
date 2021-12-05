@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
 const ELM = require('../../database/schema/ELMs');
+const { Permissions } = Discord;
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.guild.me.permissions.has("MANAGE_ROLES")) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.guild.me.permissions.has(Permissions.FLAGS.MUTE_MEMBERS)) return message.channel.send("Aku tidak mempunyai akses!");
 
         let korban = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!korban) return message.channel.send("tag user yang ingin di unelm!");

@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
     const embed = new MessageEmbed()
         .setColor('RANDOM')
         .setAuthor(message.guild.name, message.guild.iconURL())
-        .setDescription(`Isi Masukan:\n${isi}`)
+        .setDescription(`**Isi Masukan:**\n${isi}`)
         .setFooter(`Dikirim oleh ${message.author.tag}`, message.author.displayAvatarURL())
     const getChannel = client.channels.cache.find(c => c.name === 'feedbacks');
     if (!getChannel) return message.reply('Kato tidak dapat mengirim saran dikarenakan Channel belum terbuat, silahkan lapor ke Staff!');

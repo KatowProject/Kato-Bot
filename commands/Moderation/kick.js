@@ -1,4 +1,4 @@
-const { Client, Message, MessageEmbed } = require('discord.js');
+const { Client, Message, MessageEmbed, Permissions } = require('discord.js');
 
 /**
  * @param {Client} client
@@ -21,11 +21,11 @@ exports.run = async (client, message, args) => {
             return message.reply('Anda tidak bisa membanned diri anda sendiri.');
 
         // Ketika yang membanned adalah member
-        if (!author.permissions.has("KICK_MEMBERS"))
+        if (!author.permissions.has([Permissions.FLAGS.KICK_MEMBERS]))
             return;
 
         // Ketika yang dibanned adalah admin/momod
-        if (member.permissions.has("KICK_MEMBERS"))
+        if (member.permissions.has([Permissions.FLAGS.KICK_MEMBERS]))
             return message.reply('Anda tidak bisa membanned staff!');
 
         member.kick({ reason: reason })

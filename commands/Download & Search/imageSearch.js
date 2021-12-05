@@ -27,7 +27,7 @@ exports.run = async (client, message, args) => {
 
             const m = await message.channel.send({ embeds: [embed], components: [button] });
             const collector = m.channel
-                .createMessageComponentCollector({ filter: msg => msg.author.id === message.author.id && msg.componentType === 'button', time: 60000 });
+                .createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60000 });
             collector.on('collect', async (i) => {
                 switch (i.customId) {
                     case args[0] + 'back' + message.id:
