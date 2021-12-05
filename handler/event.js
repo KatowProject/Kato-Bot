@@ -6,17 +6,17 @@ module.exports = client => {
         let file = require(`../events/${event}`);
 
         const musicPlayerEvents = [
-            "botDisconnect",
-            "channelEmpty",
-            "connectionCreate",
-            "connectionError",
-            "debug",
-            "error",
-            "queueEnd",
-            "trackAdd",
-            "trackEnd",
-            "tracksAdd",
-            "trackStart"
+            "botDisconnect.js",
+            "channelEmpty.js",
+            "connectionCreate.js",
+            "connectionError.js",
+            "debug.js",
+            "error.js",
+            "queueEnd.js",
+            "trackAdd.js",
+            "trackEnd.js",
+            "tracksAdd.js",
+            "trackStart.js"
         ]
         if (musicPlayerEvents.includes(event)) {
             client.player.on(event.split('.')[0], (...args) => file(client, ...args));
