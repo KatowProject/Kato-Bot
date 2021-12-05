@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const cooldowns = new Discord.Collection();
 
 module.exports = async (client, message) => {
-    if (message.type === 'DEFAULT' && message.author.bot === true && message.channel.id === '840073578963795999') require('../handler/Trakteer.js')(client, message);
+    if (message.type === 'DEFAULT' && message.author.bot === true && message.channel.id === '831475856882925629') require('../handler/Trakteer.js')(client, message);
 
     let prefix;
     if (message.content.toLowerCase().startsWith(client.config.prefix[0])) {
