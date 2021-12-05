@@ -1,0 +1,27 @@
+{
+  "name": "trakteer-scraper",
+  "version": "1.0.1",
+  "description": "trakteer-api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "KatowProject",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.6"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KatowProject/trakteer-scraper.git"
+  },
+  "keywords": [
+    "trakteer"
+  ],
+  "bugs": {
+    "url": "https://github.com/KatowProject/trakteer-scraper/issues"
+  },
+  "homepage": "https://github.com/KatowProject/trakteer-scraper#readme"
+}

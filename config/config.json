@@ -1,0 +1,17 @@
+{
+    "token": "NTg4NjU2ODM4OTA0NTEyNTMx.XQITZw.Lxr5XdL7ykTczHa8nElNEuWsmNQ",
+    "prefix": [
+        "k@",
+        "k#"
+    ],
+    "owners": [
+        "458342161474387999"
+    ],
+    "db": "mongodb+srv://kato:aezakmi123@kato.e4u5f.mongodb.net/kato",
+    "instaAuth": "2147862687%3APOl1ZkIteIC5fK%3A21",
+    "trakteer": {
+        "XSRF-TOKEN": "eyJpdiI6IkFwenZLa1JGTmxRdkJGdEM3d3U4NEE9PSIsInZhbHVlIjoiQVA5SDFaOTRmTVhKR0ZJVDIzYXNnU1hMSFR4bjc3a3N4NTdUK2JRUUVUZzlHZDNVMGlWZXFnWmdRVmJJSWZ4aCIsIm1hYyI6ImI1ODJlMWQ5NjY5ZTExMDE4NGUwZGRhZTY5MjI4OGFkN2U0NmE0MWU4MzkzMjVkNjAzODUwYmQ5M2E5NDllODcifQ%3D%3D",
+        "trakteer-id-session": "eyJpdiI6Ikh4bFR4ODFWb0wreWJPRk5XMGpVRFE9PSIsInZhbHVlIjoiTjgxZmw5VzZJZ2U2VUFRWFhVSUJ2bjNiQUxrS2VLT1FjSXp5MXp6cUVIVjljWlhBYTR4WXJvZzY0RGhRbWpMRyIsIm1hYyI6IjQ4YTIyZmJhYzEyNzY1MDI4ZjUzZWY4NTNiMTg3NTk2ZmU3ZDAxYjAyYjk4OTlhZGQ4ZWZkNGI1ZDNjMThlNTMifQ%3D%3D",
+        "webhook": "https://discord.com/api/webhooks/831760097411596289/raqDJXrBJ6Otu5s9oZPMs7VfXPlOjhHK8-RCL5EOHCVGKo1oYj3Mm9DVxVixX5vbkxcT"
+    }
+}
