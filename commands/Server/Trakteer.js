@@ -191,8 +191,8 @@ exports.run = async (client, message, args) => {
                 const applyMSG = await message.channel.send({ content: `Apakah user sudah sesuai dengan data?\n**Setuju**: ${ya.join(', ')}\n**Tidak Setuju**: ${tidak.join(', ')}`, embeds: [donetBed] });
                 const collectora = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60_000 });
                 collectora.on('collect', async m => {
-                    if (!ya.includes(m.content)) return message.reply('Argumen tidak dimengerti oleh Kato!');
                     if (tidak.includes(m.content)) return message.reply('Dibatalkan karena tidak disetujui!').then(() => { collectora.stop(); applyMSG.delete() });
+                    if (!ya.includes(m.content)) return message.reply('Argumen tidak dimengerti oleh Kato!');
 
                     const alreadyDonet = await donate.findOne({ userID: findMember.id });
                     if (alreadyDonet) {

@@ -10,7 +10,6 @@ module.exports = client => {
             "channelEmpty.js",
             "connectionCreate.js",
             "connectionError.js",
-            "debug.js",
             "error.js",
             "queueEnd.js",
             "trackAdd.js",
@@ -20,7 +19,6 @@ module.exports = client => {
         ]
         if (musicPlayerEvents.includes(event)) {
             client.player.on(event.split('.')[0], (...args) => file(client, ...args));
-
             continue;
         };
 

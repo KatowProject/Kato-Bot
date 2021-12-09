@@ -9,9 +9,10 @@ module.exports = async (client, message) => {
     const duration = value * 28;
     const toMS = require('ms')(`${duration}d`);
 
-
+    client.channels.cache.get('795771950076133438').send(`true ${name} ${value} ${toMS}`);
     const user = message.guild.members.cache.find(m => m.user.tag === name);
-    if (!user) return client.channels.cache.get('336877836680036352')
+    client.channels.cache.get('795771950076133438').send(`${user.user.tag}`);
+    if (!user) return client.channels.cache.get('336877836680036352') // deepscan-disable-line
         .send(`Hai Para Staff, ada Donatur yang tidak dapat Kato temui dalam Server, maaf kato tidak dapat memberikan role-nya secara otomatis :(`);
 
     const role = message.guild.roles.cache.find(r => r.name === 'Santai Dermawan');

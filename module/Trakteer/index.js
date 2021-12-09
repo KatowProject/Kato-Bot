@@ -81,7 +81,6 @@ class Trakteer {
                     const $ = cheerio.load(a);
 
                     const avatar = $(a.ava).find('img').attr('src') ? $(a.ava).find('img').attr('src') : $(a.ava).attr('src');
-                    const isActive = $(a.is_active)
                     const data = {
                         referenceID: a.reference_id,
                         supporter: a.supporter_name.split('_!!!_'),

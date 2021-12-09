@@ -5,7 +5,7 @@ module.exports = async (client, queue, track) => {
         embeds: [
             new Discord.MessageEmbed()
                 .setColor('GREEN')
-                .setDescription(`✅ **|** [${track.title}](${track.url}) **Added to the queue!** \n\n Durasi: \`${track.duration}\`\n\n Permintaan : ${track.requestedBy}\n\n Author: \`${track.author}\``)
+                .setDescription(`✅ **|** [${track.title}](${track.url}) **Added to the queue!**\n\nDurasi: \`${track.duration}\`\nPermintaan: ${track.requestedBy}\nAuthor: \`${track.author}\``)
                 .setThumbnail(track.thumbnail)
         ]
     });
