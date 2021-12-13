@@ -7,17 +7,19 @@ exports.run = async (client, message, args) => {
     const booster = await dbBooster.find({});
 
     //array item 15 -
+    const getUserTag = (id) => message.guild.members.cache.get(id).user.tag;
+
     const concat = [...donatur, ...booster];
     const sort = concat.sort((a, b) => b.message.daily - a.message.daily);
-    const chunk = client.util.chunk(sort, 10);
+    const map = sort.map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 20) * 0.5} XP]**`);
+    const chunk = client.util.chunk(map, 10);
 
-    const getUserTag = (id) => message.guild.members.cache.get(id).user.tag;
     let pagination = 1;
     const embed = new MessageEmbed()
         .setTitle('XP Bonus List')
         .setAuthor(message.guild.name, message.guild.iconURL())
         .setColor('#0099ff')
-        .setDescription(chunk[pagination - 1].map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 25) * 0.5} XP]**`).join('\n'))
+        .setDescription(chunk[pagination - 1].join('\n'))
         .setFooter(`Page ${pagination} of ${chunk.length}`);
 
     const btn = [
@@ -37,14 +39,14 @@ exports.run = async (client, message, args) => {
             case `back-${message.id}`:
                 if (pagination === 1) return;
                 pagination--;
-                embed.setDescription(chunk[pagination - 1].map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 25) * 0.5} XP]**`).join('\n'));
+                embed.setDescription(chunk[pagination - 1].join('\n'));
                 embed.setFooter(`Page ${pagination} of ${chunk.length}`);
                 m.edit({ embeds: [embed], components: [new MessageActionRow().addComponents(btn)] });
                 break;
             case `next-${message.id}`:
                 if (pagination === chunk.length) return;
                 pagination++;
-                embed.setDescription(chunk[pagination - 1].map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 25) * 0.5} XP]**`).join('\n'));
+                embed.setDescription(chunk[pagination - 1].join('\n'));
                 embed.setFooter(`Page ${pagination} of ${chunk.length}`);
                 m.edit({ embeds: [embed], components: [new MessageActionRow().addComponents(btn)] });
                 break;
