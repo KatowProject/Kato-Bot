@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const AFK = require('../database/schema/AFK');
 
 module.exports = async (client, message) => {
@@ -17,7 +16,7 @@ module.exports = async (client, message) => {
         const msLeft = Date.now() - waktu;
         const since = client.util.parseDur(msLeft);
 
-        message.reply(`**${mentioned.user.tag}** saat ini sedang AFK - **${since} ago**\n**Alasan:**\n${alasan}`, { disableMentions: 'all' })
+        message.reply({ content: `**${mentioned.user.tag}** saat ini sedang AFK - **${since} ago**\n**Alasan:**\n\`\`\`\n${alasan}\`\`\`` })
             .then(t => setTimeout(() => t.delete(), 5000));
     };
 

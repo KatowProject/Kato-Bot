@@ -184,9 +184,9 @@ exports.run = async (client, message, args) => {
                 const donetBed = new Discord.MessageEmbed()
                     .setColor('RANDOM')
                     .setAuthor(findMember.user.tag, findMember.user.avatarURL({ dynamic: true, size: 4096 }))
-                    .addField('ID: ', findMember.id, true)
-                    .addField('Tag: ', findMember.user.tag, true)
-                    .addField('Nickname:', findMember.nickname, true)
+                    .addField('ID: ', `${findMember.id}`, true)
+                    .addField('Tag: ', `${findMember.user.tag}`, true)
+                    .addField('Nickname:', `${findMember.nickname}`, true)
 
                 const applyMSG = await message.channel.send({ content: `Apakah user sudah sesuai dengan data?\n**Setuju**: ${ya.join(', ')}\n**Tidak Setuju**: ${tidak.join(', ')}`, embeds: [donetBed] });
                 const collectora = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60_000 });

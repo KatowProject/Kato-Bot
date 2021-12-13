@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const AFK = require('../../database/schema/AFK');
 
 exports.run = async (client, message, args) => {
@@ -11,8 +10,8 @@ exports.run = async (client, message, args) => {
 
         if (!afk) {
             const nickname = member.nickname ? member.nickname : member.user.username;
-            if (!nickname.length > 26) member.setNickname(`[AFK] ${nickname}`);
-            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' });
+            if (nickname.length < 26) member.setNickname(`[AFK] ${nickname}`);
+            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** \`\`\`\n${reason ? reason : "AFK"}\`\`\``);
             setTimeout(async () => {
                 const data = { reason: reason ? reason : "AFK", time: Date.now() };
                 await AFK.create({ userID: message.author.id, data: JSON.stringify(data) });
