@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { allCommands } = require('../../database/schema/manageCommand');
 
 exports.run = async (client, message, args) => {

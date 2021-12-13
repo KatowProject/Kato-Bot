@@ -4,14 +4,20 @@ module.exports = (client) => {
     console.log('I\'m Ready');
 
     /* Reset Collection Attachment */
-    setInterval(() => client.cacheAttachments = new Discord.Collection(), 300000);
+    setInterval(() => client.cacheAttachments = new Discord.Collection(), 300_000);
 
     /* Duration Manager [donatur, mute] */
-    setInterval(() => require('../handler/durationManager')(client), 30000);
+    setInterval(() => require('../handler/durationManager')(client), 30_000);
 
     /* Notifications */
-    client.trakteer.getNotification(true, 30000);
+    client.trakteer.getNotification(true, 30_000);
 
     /** Giveaway Check */
-    setInterval(() => require('.././module/Giveaway/handler')(client), 15000);
+    setInterval(() => require('../module/Giveaway/handler')(client), 15_000);
+
+    /** MEE6 - Level Update */
+    setInterval(() => require('../module/MEE6-Leaderboard/')(client), 20_000);
+
+    /** Benefit **/
+    require('../handler/donaturXpManager')(client);
 }

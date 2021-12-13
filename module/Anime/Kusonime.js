@@ -27,7 +27,7 @@ module.exports = class Kusonime {
                         collector.stop();
                         return message.reply('Permintaan dibatalkan!');
                     }
-                    if (typeof parseInt(f.content) !== 'number') return message.reply('Permintaan invalid, gunakanlah angka!');
+                    if (isNaN(f.content)) return message.reply('Permintaan invalid, gunakanlah angka!');
 
                     collector.stop();
                     r.delete();

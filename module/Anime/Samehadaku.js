@@ -23,7 +23,7 @@ module.exports = class Samehadaku {
 
                 const collector = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
                 collector.on('collect', async m => {
-                    if (typeof parseInt(m.content) !== 'number') return message.channel.send('Pilih menggunakan angka!');
+                    if (isNaN(m.content)) return message.channel.send('Pilih menggunakan angka!');
                     collector.stop();
                     re.delete();
 
@@ -45,7 +45,7 @@ module.exports = class Samehadaku {
                 const response = await axios.get(`https://samehadaku-rest-api.herokuapp.com/anime/${endpoint}`);
                 const res = response.data;
 
-                const infoMsg = await message.channel.send({
+                await message.channel.send({
                     embeds: [
                         new Discord.MessageEmbed()
                             .setColor('RANDOM').setTitle(res.title)

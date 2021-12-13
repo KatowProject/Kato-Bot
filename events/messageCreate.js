@@ -4,6 +4,7 @@ const cooldowns = new Discord.Collection();
 module.exports = async (client, message) => {
     if (message.type === 'DEFAULT' && message.author.bot === true && message.channel.id === '831475856882925629') require('../handler/Trakteer.js')(client, message);
 
+    if (message.author.bot) return;
     let prefix;
     if (message.content.toLowerCase().startsWith(client.config.prefix[0])) {
         prefix = client.config.prefix[0]; // Cek folder, config.json.
