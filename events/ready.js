@@ -19,5 +19,5 @@ module.exports = (client) => {
     setInterval(() => require('../module/MEE6-Leaderboard/')(client), 20_000);
 
     /** Benefit **/
-    require('../handler/donaturXpManager')(client);
+    setInterval(() => require('../handler/donaturXpManager')(client), 60_000);
 }
