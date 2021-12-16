@@ -66,6 +66,32 @@ class Trakteer {
         });
     }
 
+    getHistory() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const endpoint = fs.readFileSync(path.join(__dirname, '/endpoint/getHistory.txt'), 'utf8');
+                const res = await tools.get(endpoint, this.options);
+                const data = res.data;
+
+                const list = [];
+                for (const history of data.data) {
+                    const amount = cheerio.load(history.jumlah);
+                    const balance = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(history.current_balance);
+                    list.push({
+                        tanggal: history.created_at,
+                        balance,
+                        description: history.description.replace('\n\n', ''),
+                        amount: amount.text().trim().split('\n').shift()
+                    });
+                }
+
+                return resolve(list);
+            } catch (e) {
+                return reject(e);
+            }
+        });
+    }
+
     getSupporter() {
         return new Promise(async (resolve, reject) => {
             try {

@@ -9,6 +9,7 @@ module.exports = async (client) => {
     try {
         const getXP = await dbXp.findOne({ id: 1 });
         const getUser = await dbDonatur.find({});
+        const getBoosterdb = await dbBooster.find({});
         const getBooster = await client.guilds.cache.get('336336077755252738').members.cache.filter(member => member.roles.cache.has('589047055360589824'));
 
         if (!getXP && getUser.length < 1 || !getXP || getUser.length < 1) return console.log('Data player tidak ada!');
@@ -38,11 +39,20 @@ module.exports = async (client) => {
 
             // boostermessage
             const temp2 = [];
-            for (let user of Array.from(getBooster)) {
-                const findXP = getXP.data.find(a => a.id === user[0]);
+            for (let user of getBoosterdb) {
+                const findXP = getXP.data.find(a => a.id === user.userID);
                 if (!findXP) continue;
 
-                user = await dbBooster.findOneAndUpdate({ userID: user[0] }, { message: { daily: 0, base: findXP.message_count } });
+                // if booster expired, then delete it
+                const isExpired = getBooster.find(member => member.id === user.userID);
+                if (!isExpired) {
+                    await dbBooster.findOneAndDelete({ userID: user.userID });
+
+                    temp2.push(user);
+                    continue;
+                }
+
+                await dbBooster.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count } });
                 console.log(`${user.userID} secara otomatis reset daily message`);
                 temp2.push(user);
             }
