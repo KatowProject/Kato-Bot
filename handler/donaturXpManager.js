@@ -26,12 +26,13 @@ module.exports = async (client) => {
                 console.log(`${user.userID} secara otomatis reset daily message`);
                 temp.push(user);
             }
+
             client.channels.cache.get('894853662629834772').send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')
                         .setTitle('Daily Message Reset - Donatur')
-                        .setDescription(temp.map(user => `${user.userID} - [${user.message.daily}]`).join('\n'))
+                        .setDescription(temp.map(user => `<@${user.userID}> - [${user.message.daily}]`).join('\n'))
                         .setFooter('Daily Message Reset')
                         .setTimestamp()
                 ]
@@ -61,7 +62,7 @@ module.exports = async (client) => {
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')
                         .setTitle('Daily Message Reset - Booster')
-                        .setDescription(temp2.map(user => `${user.userID} - [${user.message.daily}]`).join('\n'))
+                        .setDescription(temp2.map(user => `<@${user.userID}> - [${user.message.daily}]`).join('\n'))
                         .setFooter('Daily Message Reset')
                         .setTimestamp()
                 ]
@@ -97,7 +98,7 @@ module.exports = async (client) => {
 
             const totalXP = findXP.message_count - user.message.base;
 
-            user = await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: isNaN(totalXP) ? 0 : totalXP, base: user.message.base } });
+            user = await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: isNaN(totalXP) ? 0 : totalXP, base: user.message.base ? user.message.base : findXP.message_count } });
             console.log(`${user.userID} - [${user.message.daily}] - Donatur`);
         }
     } catch (e) {
