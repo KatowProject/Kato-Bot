@@ -7,10 +7,12 @@ moment.locale('id');
 
 module.exports = async (client) => {
     try {
+        const guild = client.guilds.cache.get('336336077755252738');
         const getXP = await dbXp.findOne({ id: 1 });
-        const getUser = await dbDonatur.find({});
+        const getUserdb = await dbDonatur.find({});
+        const getUser = await guild.members.cache.filter(member => member.roles.cache.has('438335830726017025'));
         const getBoosterdb = await dbBooster.find({});
-        const getBooster = await client.guilds.cache.get('336336077755252738').members.cache.filter(member => member.roles.cache.has('589047055360589824'));
+        const getBooster = await guild.members.cache.filter(member => member.roles.cache.has('589047055360589824'));
 
         if (!getXP && getUser.length < 1 || !getXP || getUser.length < 1) return console.log('Data player tidak ada!');
 
@@ -18,25 +20,32 @@ module.exports = async (client) => {
         const time = moment().format('HH:mm');
         if (time === '24:00' || time === '00:00') {
             const temp = [];
-            for (let user of getUser) {
+            for (let user of getUserdb) {
                 const findXP = getXP.data.find(a => a.id === user.userID);
                 if (!findXP) continue;
 
-                await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count } });
+                await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count, isCompleted: false } });
                 console.log(`${user.userID} secara otomatis reset daily message`);
                 temp.push(user);
             }
+
+            const map = temp.map(async a => {
+                const member = await guild.members.fetch(a.userID);
+                const xp = (a.message.daily * 15) * 0.3;
+
+                return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
+            });
 
             client.channels.cache.get('894853662629834772').send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')
                         .setTitle('Daily Message Reset - Donatur')
-                        .setDescription(temp.map(user => `<@${user.userID}> - [${user.message.daily}]`).join('\n'))
+                        .setDescription(`${await Promise.all(map).then(a => a.join('\n'))}`)
                         .setFooter('Daily Message Reset')
                         .setTimestamp()
                 ]
-            })
+            });
 
             // boostermessage
             const temp2 = [];
@@ -57,18 +66,26 @@ module.exports = async (client) => {
                 console.log(`${user.userID} secara otomatis reset daily message`);
                 temp2.push(user);
             }
+
+            const map2 = temp2.map(async a => {
+                const member = await guild.members.fetch(a.userID);
+                const xp = (a.message.daily * 15) * 0.3;
+
+                return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
+            });
+
             client.channels.cache.get('894853662629834772').send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')
                         .setTitle('Daily Message Reset - Booster')
-                        .setDescription(temp2.map(user => `<@${user.userID}> - [${user.message.daily}]`).join('\n'))
+                        .setDescription(`${await Promise.all(map2).then(a => a.join('\n'))}`)
                         .setFooter('Daily Message Reset')
                         .setTimestamp()
                 ]
             });
 
-            return;
+            return 0;
         }
 
         for (let member of Array.from(getBooster)) {
@@ -87,7 +104,10 @@ module.exports = async (client) => {
             } else {
                 member = getUserBoost;
             };
+
+            member.message.base = member.message.base ? member.message.base : findXP.message_count;
             const totalXP = findXP.message_count - member.message.base;
+
             await dbBooster.findOneAndUpdate({ userID: member.userID }, { message: { daily: isNaN(totalXP) ? 0 : totalXP, base: member.message.base } });
             console.log(`${member.userID} - ${totalXP} - Booster`);
         }
@@ -96,9 +116,10 @@ module.exports = async (client) => {
             const findXP = getXP.data.find(a => a.id === user.userID);
             if (!findXP) continue;
 
+            user.message.base = user.message.base ? user.message.base : findXP.message_count;
             const totalXP = findXP.message_count - user.message.base;
 
-            user = await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: isNaN(totalXP) ? 0 : totalXP, base: user.message.base ? user.message.base : findXP.message_count } });
+            user = await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: isNaN(totalXP) ? 0 : totalXP, base: user.message.base } });
             console.log(`${user.userID} - [${user.message.daily}] - Donatur`);
         }
     } catch (e) {

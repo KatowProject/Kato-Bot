@@ -4,7 +4,8 @@ const donaturSchema = new Schema({
     userID: String,
     message: {
         daily: Number,
-        base: Number
+        base: Number,
+        isCompleted: Boolean
     }
 });
 

@@ -7,7 +7,8 @@ const donaturSchema = new Schema({
     now: Number,
     message: {
         daily: Number,
-        base: Number
+        base: Number,
+        isCompleted: Boolean
     }
 });
 
