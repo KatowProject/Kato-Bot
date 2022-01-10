@@ -17,12 +17,13 @@ exports.run = async (client, message, args) => {
         if (getChannel.length == 0) return message.reply("Data tidak ditemukan!");
         switch (option) {
             case 'off':
+                if (getChannel.channels.includes(findChannel.id)) return message.reply("Channel ini sudah dinonaktifkan sebelumnya!");
                 await allCommands.findOneAndUpdate({ guild: message.guild.id }, { channels: [...getChannel.channels, findChannel.id] });
                 message.reply("Bot telah dinonaktifkan di " + findChannel.name);
                 break;
 
             case 'on':
-                console.log(getChannel.channels);
+                if (!getChannel.channels.includes(findChannel.id)) return message.reply("Channel ini tidak dinonaktifkan!");
                 await allCommands.findOneAndUpdate({ guild: message.guild.id }, { channels: getChannel.channels.filter(a => a !== findChannel.id) });
                 message.reply("Bot telah diaktifkan di " + findChannel.name);
                 break;
