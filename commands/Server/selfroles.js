@@ -4,19 +4,19 @@ exports.run = async (client, message, args) => {
     const member = message.guild.members.cache.get(message.author.id);
     const roles = [] = member.roles.cache.map(a => a[0]);
 
-    const fps = '647779294298243082';
-    const moba = '647779361738719249';
-    const mobage = '868778296710672394';
+    const fps = '930002903798800466';
+    const moba = '930002891467554886';
+    const general = '930002867950084126';
 
     const embed = new Discord.MessageEmbed().setColor('RANDOM').setTitle('Self Roles').setAuthor(message.guild.name, message.guild.iconURL()).setTimestamp();
     embed.addField('FPS', 'Mabar/mencari teman game First-person shooter');
     embed.addField('MOBA', 'Mabar/mencari teman game Multiplayer Online Battle Arena');
-    embed.addField('MOBAGE', 'Mabar/mencari teman anime dan gacha');
+    embed.addField('General', 'Mabar/mencari teman game umum');
 
     for (const role of roles) {
         if (role === fps) embed.fields[0].name = 'FPS (Telah Terpasang)';
         if (role === moba) embed.fields[1].name = 'MOBA (Telah Terpasang)';
-        if (role === mobage) embed.fields[2].name = 'MOBAGE (Telah Terpasang)';
+        if (role === general) embed.fields[2].name = 'General (Telah Terpasang)';
     };
 
     const buttons = new Discord.MessageActionRow()
@@ -26,7 +26,7 @@ exports.run = async (client, message, args) => {
             new Discord.MessageButton()
                 .setLabel('MOBA 🏹').setStyle('SECONDARY').setCustomId(`moba-${message.id}`),
             new Discord.MessageButton()
-                .setLabel('MOBAGE 🧂').setStyle('SECONDARY').setCustomId(`mobage-${message.id}`)
+                .setLabel('General🧂').setStyle('SECONDARY').setCustomId(`general-${message.id}`)
         )
 
     const r = await message.channel.send({ embeds: [embed], components: [buttons] });
@@ -74,22 +74,22 @@ exports.run = async (client, message, args) => {
                 };
                 break;
 
-            case `mobage-${message.id}`:
-                if (roles.includes(mobage)) {
-                    member.roles.remove(mobage);
+            case `general-${message.id}`:
+                if (roles.includes(general)) {
+                    member.roles.remove(general);
 
-                    embed.fields[2].name = 'MOBAGE';
+                    embed.fields[2].name = 'General';
                     r.edit({ embeds: [embed] });
 
-                    roles.splice(roles.indexOf(mobage), 1);
+                    roles.splice(roles.indexOf(general), 1);
                     message.reply('Telah dilepas!').then(a => a.delete({ timeout: 5000 }));
                 } else {
-                    member.roles.add(mobage);
+                    member.roles.add(general);
 
-                    embed.fields[2].name = 'MOBAGE (Telah Terpasang)';
+                    embed.fields[2].name = 'General (Telah Terpasang)';
                     r.edit({ embeds: [embed] });
 
-                    roles.push(mobage);
+                    roles.push(general);
                     message.reply('Telah berhasil dipasang!').then(a => a.delete({ timeout: 5000 }));
                 };
                 break;

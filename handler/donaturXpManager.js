@@ -112,7 +112,7 @@ module.exports = async (client) => {
             console.log(`${member.userID} - ${totalXP} - Booster`);
         }
 
-        for (let user of getUser) {
+        for (let user of getUserdb) {
             const findXP = getXP.data.find(a => a.id === user.userID);
             if (!findXP) continue;
 

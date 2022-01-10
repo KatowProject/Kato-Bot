@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
 
         const channelMention = message.mentions.channels.first();
         const channelRegex = new RegExp(args.join(" "), "i");
-        const findChannel = client.channels.cache.find(a => channelRegex.test(a.name) || (a.id === request || channelMention.id));
+        const findChannel = client.channels.cache.find(a => channelRegex.test(a.name) || a.id === request || channelMention.id === a.id);
         if (!findChannel) return message.reply("Channel tidak ditemukan!");
 
         const getChannel = await allCommands.findOne({ guild: message.guild.id });
