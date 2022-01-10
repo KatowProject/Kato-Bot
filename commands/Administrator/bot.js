@@ -28,6 +28,13 @@ exports.run = async (client, message, args) => {
                 message.reply("Bot telah diaktifkan di " + findChannel.name);
                 break;
 
+            case 'list':
+                const embed = new Discord.MessageEmbed()
+                    .setColor("RANDOM")
+                    .setTitle("Channel Blacklist")
+                    .setDescription(getChannel.channels.map((a, i) => `${i + 1}. <#${a}>`).join('\n') || "~ Tidak ada Channel yang dinonaktifkan! ~");
+                message.channel.send(embed);
+                break;
             default:
                 message.reply("Opsi tidak ditemukan!");
                 break;
