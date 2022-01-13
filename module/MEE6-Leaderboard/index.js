@@ -12,7 +12,7 @@ module.exports = async (client) => {
         const response = await axios.get('https://mee6.xyz/api/plugins/levels/leaderboard/336336077755252738?page=' + i);
 
         const users = response.data.players;
-        for (const user of users) user.message_count >= 5 ? temp.push(user) : isTrue = false;
+        for (const user of users) user.message_count >= 1 ? temp.push(user) : isTrue = false;
 
         i++
     };

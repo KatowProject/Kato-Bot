@@ -31,7 +31,7 @@ module.exports = async (client) => {
 
             const map = temp.map(async a => {
                 const member = await guild.members.fetch(a.userID);
-                const xp = (a.message.daily * 15) * 0.3;
+                const xp = (a.message.daily * 10) * 0.25;
 
                 return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
             });
