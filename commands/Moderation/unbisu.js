@@ -5,7 +5,7 @@ exports.run = async (client, message, args) => {
         if (!message.guild.me.permissions.has("MUTE_MEMBERS")) return message.channel.send("Aku tidak mempunyai akses!");
         if (!message.member.permissions.has("MUTE_MEMBERS")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan perintah ini!");
 
-        if (args[0].toLowerCase() === 'voice') {
+        if (args[0] === 'voice') {
             let channel = message.member.voice.channel;
             for (let member of channel.members) {
                 member[1].voice.setMute(false)
@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
             const mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
             if (!mutee) return;
 
-            mutee.timeout(1000).then(() => {
+            mutee.timeout(null).then(() => {
                 message.channel.send(`${mutee.user.tag} telah diunmute!`);
             });
 
@@ -36,7 +36,7 @@ exports.run = async (client, message, args) => {
 }
 
 exports.conf = {
-    aliases: ['unmute'],
+    aliases: [],
     cooldown: 5,
     location: __filename
 }

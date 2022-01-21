@@ -13,6 +13,7 @@ exports.run = async (client, message, args) => {
         let timeout = args[1];
         if (!timeout) return message.reply('masukkan durasi terlebih dahulu!');
         let durasi = ms(timeout);
+        if (!durasi) return message.reply('masukkan durasi yang benar!');
         if (durasi > 2419200000) return message.reply('durasi tidak boleh lebih dari 28 hari!');
 
         let reason = args.slice(2).join(' ');
