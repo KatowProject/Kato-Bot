@@ -15,11 +15,10 @@ exports.run = async (client, message, args) => {
         } else {
             const mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
             if (!mutee) return;
-            let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
-            mutee.roles.remove(role).then(() => {
-                message.channel.send(`${mutee.user.tag} telah selesai diunbisu!`)
-            })
+            mutee.timeout(null).then(() => {
+                message.channel.send(`${mutee.user.tag} telah di unmute!`);
+            });
 
             let embed = new Discord.MessageEmbed()
                 .setAuthor(`UNMUTE | ${mutee.user.tag}`)
@@ -29,7 +28,7 @@ exports.run = async (client, message, args) => {
                 .setTimestamp()
                 .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-            client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+            client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
         }
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);

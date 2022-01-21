@@ -3,7 +3,7 @@ const { specificCommands } = require('../../database/schema/manageCommand');
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.members.permissions.has('MANAGE_SERVERS')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
+        if (!message.member.permissions.has('MANAGE_GUILD')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
 
         let request = args.join(' ');
         if (!request) return message.reply('Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**');

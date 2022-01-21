@@ -1,37 +1,30 @@
 const Discord = require('discord.js');
 const { Permissions } = Discord;
 const ms = require('ms');
-const mutees = require('../../database/schema/MuteMembers');
 
 exports.run = async (client, message, args) => {
     try {
         if (!message.guild.me.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.member.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan perintah ini!");
 
         let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!mutee) return;
-        let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
         let timeout = args[1];
         if (!timeout) return message.reply('masukkan durasi terlebih dahulu!');
         let durasi = ms(timeout);
+        if (durasi > 2419200000) return message.reply('durasi tidak boleh lebih dari 28 hari!');
 
         let reason = args.slice(2).join(' ');
         if (!reason) reason = "tidak diberi alasan";
 
-        mutee.roles.add(role).then(() => {
-            message.channel.send(`${mutee.user.tag} telah selesai di mute.\nAlasan : ${reason}`);
+        mutee.timeout(durasi, reason).then(() => {
+            message.channel.send(`${mutee.user.tag} telah di mute selama ${timeout}!`);
         });
-
-        const _mute = await mutees.findOne({ userID: mutee.id });
-        if (_mute) {
-            await mutees.findOneAndUpdate({ userID: mutee.id, guild: message.guild.id, duration: durasi, now: Date.now() });
-        } else {
-            await mutees.create({ userID: mutee.id, guild: message.guild.id, duration: durasi, now: Date.now() });
-        }
 
         let embed = new Discord.MessageEmbed()
             .setAuthor(`MUTE | ${mutee.user.tag}`)
-            .setColor(client.warna.kato)
+            .setColor("RANDOM")
             .addField("User", `<@${mutee.id}>`, true)
             .addField("Moderator", `<@${message.author}>`, true)
             .addField('Durasi', client.util.parseDur(durasi))
@@ -39,7 +32,7 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-        client.channels.cache.get("795778726930677790").send(embed);
+        client.channels.cache.get(client.config.channel["warn-activity"]).send(embed);
 
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);

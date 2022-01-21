@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
-const { Permissions } = Discord;
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.guild.me.permissions.has([Permissions.FLAGS.MUTE_MEMBERS])) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.guild.me.permissions.has("MUTE_MEMBERS")) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.member.permissions.has("MUTE_MEMBERS")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan perintah ini!");
 
         if (args[0] === 'voice') {
             let channel = message.member.voice.channel;
@@ -15,13 +15,13 @@ exports.run = async (client, message, args) => {
 
             let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
             if (!mutee) return;
-            let role = message.guild.roles.cache.find(r => r.name === "Muted");
 
             let reason = args.slice(1).join(" ");
             if (!reason) reason = "tidak diberi alasan";
 
-            mutee.roles.add(role).then(() => {
-                message.channel.send(`${mutee.user.tag} telah selesai di mute.\nAlasan : ${reason}`)
+            //give timeout
+            mutee.timeout(require('ms')("28d"), reason).then(() => {
+                message.channel.send(`${mutee.user.tag} telah di mute!`);
             });
 
             let embed = new Discord.MessageEmbed()
@@ -33,7 +33,7 @@ exports.run = async (client, message, args) => {
                 .setTimestamp()
                 .setFooter(`${message.member.id}`, message.guild.iconURL());
 
-            client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+            client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
         }
     } catch (error) {
         console.log(error);

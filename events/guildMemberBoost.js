@@ -14,7 +14,7 @@ module.exports = async (client, member) => {
     let embed = new discord.MessageEmbed()
         .setColor('RANDOM')
         .setAuthor('Member Boost', 'https://cdn.discordapp.com/emojis/638719606738911236.gif')
-        .setDescription(`Hai <@ ${member.user.id}>, terima kasih telah boost di server Perkumpulan Orang Santai ヾ(≧▽≦*)o `)
+        .setDescription(`Hai <@${member.user.id}>, terima kasih telah boost di server Perkumpulan Orang Santai ヾ(≧▽≦*)o `)
         .setImage(p[rstatus])
     client.channels.cache.find(a => a.name === 'chit-chat').send({ embeds: [embed] });
 }

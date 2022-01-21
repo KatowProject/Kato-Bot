@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const cooldowns = new Discord.Collection();
 
 module.exports = async (client, message) => {
-    if (message.channel.id === '831475856882925629') require('../handler/Trakteer.js')(client, message);
+    if (message.channel.id === '932997959388385398') require('../handler/Trakteer.js')(client, message);
 
     if (message.content.toLowerCase() === 'kato') message.reply("Cantik ❤️");
 

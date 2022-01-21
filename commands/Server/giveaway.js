@@ -1,9 +1,7 @@
-const { MessageEmbed } = require('discord.js');
-
 exports.run = async (client, message, args) => {
     const option = args[0].toLowerCase();
 
-    if (!message.member.roles.cache.has('473869471183011860')) {
+    if (!message.member.roles.cache.has('932997958759227458')) {
         if (!message.member.permissions.has('MANAGE_MESSAGES')) return message.reply('Not Enough Permission!');
     };
 

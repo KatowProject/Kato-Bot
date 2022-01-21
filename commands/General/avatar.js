@@ -23,39 +23,32 @@ exports.run = async (client, message, args) => {
         embed.setAuthor(mention.tag, mention.displayAvatarURL({ size: 4096, dynamic: true }))   //author embed
         embed.setDescription(`[Avatar URL](${mention.displayAvatarURL({ size: 4096, dynamic: true })})`) //redirect to avatar link
         embed.setImage(mention.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png')) //image of avatar
-        return message.channel.send({ embeds: [embed] }); //send this message to user
-    } else;
-    if (userID) {
+    } else if (userID) {
         embed.setAuthor(userID.user.tag, userID.user.displayAvatarURL({ size: 4096, dynamic: true }))
         embed.setDescription(`[Avatar URL](${userID.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
         embed.setImage(userID.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
-        return message.channel.send({ embeds: [embed] }); //send this message to user
-    } else;
-    if (self) {
+    } else if (self) {
         embed.setAuthor(message.author.tag, message.author.displayAvatarURL({ size: 4096, dynamic: true }))
         embed.setDescription(`[Avatar URL](${message.author.displayAvatarURL({ size: 4096, dynamic: true })})`)
         embed.setImage(message.author.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
-        return message.channel.send({ embeds: [embed] }); //send this message to user
-    } else;
-    if (server) {
+    } else if (server) {
         embed.setAuthor(message.guild.name, message.guild.iconURL())
         embed.setDescription(`[Avatar URL Link](${message.guild.iconURL({ size: 4096, dynamic: true })})`)
         embed.setImage(message.guild.iconURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
-        return message.channel.send({ embeds: [embed] }); //send this message to user
-    } else;
-    if (banner) {
+    } else if (banner) {
         const getUserBannerURL = await client.util.getUserBannerURL(message.author.id, { size: 4096 });
         embed.setAuthor(message.author.tag, message.author.displayAvatarURL({ size: 4096, dynamic: true }))
         embed.setDescription(`[Avatar URL Link](${getUserBannerURL})`)
         embed.setImage(getUserBannerURL)
-        return message.channel.send({ embeds: [embed] });
-    }
-    if (find) {
+    } else if (find) {
         embed.setAuthor(find.user.tag, find.user.displayAvatarURL({ size: 4096, dynamic: true }))
         embed.setDescription(`[Avatar URL](${find.user.displayAvatarURL({ size: 4096, dynamic: true })})`)
         embed.setImage(find.user.displayAvatarURL({ size: 4096, dynamic: true }).replace('.webp', '.png'))
-        return message.channel.send({ embeds: [embed] });
-    } else return;
+    } else {
+        return message.channel.send(`${message.author} I couldn't find that user.`);
+    }
+
+    message.channel.send(embed);
 
 
 };

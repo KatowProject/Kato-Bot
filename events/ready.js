@@ -6,7 +6,7 @@ module.exports = (client) => {
     /* Reset Collection Attachment */
     setInterval(() => client.cacheAttachments = new Discord.Collection(), 300_000);
 
-    /* Duration Manager [donatur, mute] */
+    // /* Duration Manager [donatur, mute] */
     setInterval(() => require('../handler/durationManager')(client), 30_000);
 
     /* Notifications */

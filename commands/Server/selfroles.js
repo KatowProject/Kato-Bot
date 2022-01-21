@@ -4,9 +4,9 @@ exports.run = async (client, message, args) => {
     const member = message.guild.members.cache.get(message.author.id);
     const roles = [] = member.roles.cache.map(a => a[0]);
 
-    const fps = '930002903798800466';
-    const moba = '930002891467554886';
-    const general = '930002867950084126';
+    const fps = '932997958738268252';
+    const moba = '932997958738268253';
+    const general = '932997958738268254';
 
     const embed = new Discord.MessageEmbed().setColor('RANDOM').setTitle('Self Roles').setAuthor(message.guild.name, message.guild.iconURL()).setTimestamp();
     embed.addField('FPS', 'Mabar/mencari teman game First-person shooter');

@@ -5,6 +5,7 @@ exports.run = async (client, message, args) => {
     try {
 
         if (!message.guild.me.permissions.has([Permissions.FLAGS.MUTE_MEMBERS])) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.member.permissions.has([Permissions.FLAGS.MUTE_MEMBERS])) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan perintah ini!");
 
         const mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!mutee) return;
@@ -23,7 +24,7 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-        client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+        client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
 
         setTimeout(() => {
             mutee.roles.remove(role)

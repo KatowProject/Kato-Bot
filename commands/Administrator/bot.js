@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.members.permissions.has('MANAGE_SERVERS')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
+        if (!message.member.permissions.has('MANAGE_GUILD')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
 
         const option = args[0];
         if (!option) return message.reply('pilih opsi terlebih dahulu! on / off');

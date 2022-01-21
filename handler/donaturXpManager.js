@@ -7,12 +7,12 @@ moment.locale('id');
 
 module.exports = async (client) => {
     try {
-        const guild = client.guilds.cache.get('336336077755252738');
+        const guild = client.guilds.cache.get('932997958738268251');
         const getXP = await dbXp.findOne({ id: 1 });
         const getUserdb = await dbDonatur.find({});
-        const getUser = await guild.members.cache.filter(member => member.roles.cache.has('438335830726017025'));
+        const getUser = await guild.members.cache.filter(member => member.roles.cache.has('932997958788608044'));
         const getBoosterdb = await dbBooster.find({});
-        const getBooster = await guild.members.cache.filter(member => member.roles.cache.has('589047055360589824'));
+        const getBooster = await guild.members.cache.filter(member => member.roles.cache.has('933117751264964609'));
 
         if (!getXP && getUser.length < 1 || !getXP || getUser.length < 1) return console.log('Data player tidak ada!');
 
@@ -36,7 +36,7 @@ module.exports = async (client) => {
                 return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
             });
 
-            client.channels.cache.get('894853662629834772').send({
+            client.channels.cache.get('932997960923480101').send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')
@@ -74,7 +74,7 @@ module.exports = async (client) => {
                 return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
             });
 
-            client.channels.cache.get('894853662629834772').send({
+            client.channels.cache.get('932997960923480101').send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')
@@ -124,6 +124,6 @@ module.exports = async (client) => {
         }
     } catch (e) {
         console.log(e);
-        client.channels.cache.get('795771950076133438').send(`[Error] ${e.message}`);
+        client.channels.cache.get('932997960923480099').send(`[Error Donatur XP Manager] ${e.message}`);
     }
 }

@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 exports.run = async (client, message, args) => {
     try {
         if (!message.member.voice.channel) return message.reply(':x: | You must be in a voice channel to use this command!');
-        if (!message.member.voice.channel.name === 'Nobar') return message.reply('Only `Nobar` channel can be used');
 
         message.channel.send({
             content: 'Klik tombol untuk masuk!',
@@ -11,7 +10,7 @@ exports.run = async (client, message, args) => {
                 new Discord.MessageActionRow()
                     .addComponents(
                         new Discord.MessageButton()
-                            .setStyle('LINK').setURL('https://discord.gg/Xb6S9XkMmQ')
+                            .setStyle('LINK').setURL('https://discord.gg/dnHcxPkxvV')
                             .setLabel('Join')
                     )
             ]

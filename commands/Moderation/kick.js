@@ -44,7 +44,7 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL())
 
-        client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+        client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.

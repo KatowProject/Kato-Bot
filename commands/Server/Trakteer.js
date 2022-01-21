@@ -200,7 +200,7 @@ exports.run = async (client, message, args) => {
                         await donate.findOneAndUpdate({ userID: findMember.id }, { duration: alreadyDonet.duration + time });
                     } else {
                         message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
-                        await findMember.roles.add('438335830726017025');
+                        await findMember.roles.add('932997958788608044');
                         await donate.create({ userID: findMember.id, guild: message.guild.id, duration: time, now: Date.now() });
                     }
                     applyMSG.delete();

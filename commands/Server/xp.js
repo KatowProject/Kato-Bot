@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
     const booster = await dbBooster.find({});
 
     //array item 15 -
-    const getUserTag = (id) => message.guild.members.cache.get(id).user.tag;
+    const getUserTag = (id) => message.guild.members.cache.get(id)?.user.tag;
 
     const concat = [...donatur, ...booster];
     const sort = concat.sort((a, b) => b.message.daily - a.message.daily);

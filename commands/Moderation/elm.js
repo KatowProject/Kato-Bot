@@ -5,6 +5,7 @@ exports.run = async (client, message, args) => {
     try {
 
         if (!message.guild.me.hasPermission("MUTE_MEMBERS")) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.member.hasPermission("MUTE_MEMBERS")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan perintah ini!");
 
         let elm = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!elm) return;
@@ -41,7 +42,7 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-        client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+        client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
 
         message.guild.channels.cache.find(c => c.name === "ruang-bk").send(`Hai **${elm}**, Selamat datang di <#821630026817470485>, member yang hanya bisa melihat channel ini artinya sedang dalam hukuman karena telah melanggar sesuatu. Jika anda merasa pernah melakukan sesuatu yang melanggar rules, silahkan beritahu disini agar segera diproses oleh staff dan dapat melanjukan kembali aktivitas chat secara normal.`);
     } catch (error) {

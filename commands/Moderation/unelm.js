@@ -17,7 +17,7 @@ exports.run = async (client, message, args) => {
             korban.roles.add(user);
         }
 
-        let ELMs = message.guild.roles.cache.get("505004825621168128");
+        let ELMs = message.guild.roles.cache.find(a => a.name == "ELM");
         korban.roles.remove(ELMs).then(() => {
             message.delete()
             message.channel.send(`**${korban.user.username}#${korban.user.discriminator}** telah selesai di unelm.`)
@@ -32,7 +32,7 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL)
 
-        client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+        client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.

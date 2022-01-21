@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
 
         const embed = new Discord.MessageEmbed()
             .setColor(dataSpotify.dominantColor)
-            .setAuthor('Spotify Current Playing', 'https://media.discordapp.net/attachments/795771950076133438/823136835567878194/1024px-Spotify_logo_without_text.png', dataSpotify.external_urls.spotify)
+            .setAuthor('Spotify Current Playing', 'https://cdn.discordapp.com/attachments/932997960923480099/933878227536080956/spotify.png', dataSpotify.external_urls.spotify)
             .setImage(dataSpotify.album.images[0].url)
             .addField('Title :', dataSpotify.name, true)
             .addField('Album :', dataSpotify.album.name ? dataSpotify.album.name : '-', true)

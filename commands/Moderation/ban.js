@@ -1,4 +1,4 @@
-const { Client, Message, MessageEmbed, Permissions } = require('discord.js');
+const { Client, Message, MessageEmbed, Permissions, MessageAttachment } = require('discord.js');
 
 /**
  * @param {Client} client
@@ -29,9 +29,10 @@ exports.run = async (client, message, args) => {
         if (member.permissions.has([Permissions.FLAGS.BAN_MEMBERS]))
             return message.reply('Anda tidak bisa membanned staff!');
 
+        const attchments = new MessageAttachment("https://media2.giphy.com/media/H99r2HtnYs492/200.gif");
         member.ban({ reason: reason })
             .then((banMember) => {
-                message.reply(`Anda berhasil membanned **${banMember.user.tag}**\nAlasan:\n${reason}\nhttps://media2.giphy.com/media/H99r2HtnYs492/200.gif`);
+                message.reply({ content: `Anda berhasil membanned **${banMember.user.tag}**\nAlasan:\n${reason}`, files: [attchments] });
             })
             .catch((err) => {
                 message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);
@@ -47,7 +48,7 @@ exports.run = async (client, message, args) => {
             .setTimestamp()
             .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-        client.channels.cache.get("795778726930677790").send({ embeds: [embed] });
+        client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.
