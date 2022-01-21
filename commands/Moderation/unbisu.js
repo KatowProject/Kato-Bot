@@ -1,10 +1,9 @@
 const Discord = require('discord.js');
-const { Permissions } = Discord;
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.member.permissions.has(Permissions.FLAGS.MUTE_MEMBERS) || !message.guild.owner) return;
-        if (!message.guild.me.permissions.has([Permissions.FLAGS.MUTE_MEMBERS])) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.guild.me.permissions.has("MUTE_MEMBERS")) return message.channel.send("Aku tidak mempunyai akses!");
+        if (!message.member.permissions.has("MUTE_MEMBERS")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan perintah ini!");
 
         if (args[0].toLowerCase() === 'voice') {
             let channel = message.member.voice.channel;
@@ -16,8 +15,8 @@ exports.run = async (client, message, args) => {
             const mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
             if (!mutee) return;
 
-            mutee.timeout(null).then(() => {
-                message.channel.send(`${mutee.user.tag} telah di unmute!`);
+            mutee.timeout(1000).then(() => {
+                message.channel.send(`${mutee.user.tag} telah diunmute!`);
             });
 
             let embed = new Discord.MessageEmbed()
