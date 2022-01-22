@@ -48,7 +48,7 @@ exports.run = async (client, message, args) => {
         return message.channel.send(`${message.author} I couldn't find that user.`);
     }
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
 
 
 };
