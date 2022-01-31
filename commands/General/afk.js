@@ -11,7 +11,7 @@ exports.run = async (client, message, args) => {
         if (!afk) {
             const nickname = member.nickname ? member.nickname : member.user.username;
             if (nickname.length < 26) member.setNickname(`[AFK] ${nickname}`);
-            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** \`\`\`\n${reason ? reason : "AFK"}\`\`\``);
+            message.channel.send({ content: `**${message.author.tag}** telah AFK!\n**Alasan:**${reason ? reason : "AFK"}`, allowedMentions: { parse: ["roles"] } });
             setTimeout(async () => {
                 const data = { reason: reason ? reason : "AFK", time: Date.now() };
                 await AFK.create({ userID: message.author.id, data: JSON.stringify(data) });

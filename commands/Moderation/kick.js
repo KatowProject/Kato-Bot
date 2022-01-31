@@ -37,7 +37,7 @@ exports.run = async (client, message, args) => {
             });
         let embed = new MessageEmbed()
             .setAuthor(`KICK | ${member.user.tag}`)
-            .setColor(client.warna.kato)
+            .setColor("RANDOM")
             .addField("User", `<@${member.id}>`, true)
             .addField("Moderator", `<@${message.author.id}>`, true)
             .addField("Alasan", reason, true)

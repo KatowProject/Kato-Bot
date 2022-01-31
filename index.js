@@ -14,8 +14,7 @@ const client = new Kato({
         'MESSAGE',
         'CHANNEL',
         'REACTION'
-    ],
-    allowedMentions: { parse: ["users", "roles"] }
+    ]
 });
 
 require('discord-logs')(client);

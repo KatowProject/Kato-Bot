@@ -45,7 +45,7 @@ exports.run = async (client, message, args) => {
                             .setLabel('Detail 📇').setStyle('SECONDARY').setCustomId(`detail-${message.id}`)
                     )
                 let r = await message.channel.send({ embeds: [embed], components: [buttons] });
-                const collector = r.channel.createMessageComponentCollector(msg => msg.user.id === message.author.id, { time: 60000 });
+                const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60000 });
                 collector.on('collect', async (m) => {
                     await m.deferUpdate();
 
@@ -137,7 +137,7 @@ exports.run = async (client, message, args) => {
                         )
                     let r = await message.channel.send({ embeds: [embed], components: [butonn] });
 
-                    const collector = r.channel.createMessageComponentCollector(msg => msg.author.id === message.author.id && msg.componentType === 'button', { time: 60000 });
+                    const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.author.id === message.author.id && msg.componentType === 'button', time: 60000 });
                     collector.on('collect', async (m) => {
                         await m.deferUpdate();
                         switch (m.customId) {

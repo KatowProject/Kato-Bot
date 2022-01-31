@@ -29,7 +29,7 @@ module.exports = async (client) => {
             data.embed.fields[3] = { name: 'Winners:', value: winners.map(a => `<@${a}>`).join(', '), inline: false };
 
             msg.edit({ content: '**🎉- Giveaway Ended -🎉**', embeds: [data.embed] });
-            client.channels.cache.get(data.channelID).send(`Congrats ${winners.map(a => `<@${a}>`).join(', ')}!\n${msg.url}`);
+            client.channels.cache.get(data.channelID).send({ content: `Congrats ${winners.map(a => `<@${a}>`).join(', ')}!\n${msg.url}`, allowedMentions: { parse: ["users"] } });
 
             await db.findOneAndUpdate({ messageID: data.messageID }, data);
         }

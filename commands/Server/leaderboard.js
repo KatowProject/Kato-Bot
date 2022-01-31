@@ -36,7 +36,7 @@ exports.run = async (client, message, args) => {
             );
 
         const r = await message.channel.send({ embeds: [embed], components: [button] });
-        const collector = r.channel.createMessageComponentCollector(m => m.user.id === message.author.id, { time: 60000 });
+        const collector = r.channel.createMessageComponentCollector({ filter: m => m.user.id === message.author.id, time: 60000 });
         collector.on('collect', async (m) => {
             switch (m.customId) {
                 case `back-lb-${message.id}`:
