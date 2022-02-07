@@ -24,10 +24,10 @@ exports.run = async (client, message, args) => {
         if (user.isAttend) return message.reply('Kamu sudah absen!');
         switch (opt) {
             case 1:
-                await dbDonatur.findOneAndUpdate({ userID: message.author.id }, { ticket: user.ticket ? user.ticket : 0 + 1, isAttend: true });
+                await dbDonatur.findOneAndUpdate({ userID: message.author.id }, { ticket: (user.ticket ? user.ticket : 0) + 1, isAttend: true });
                 break;
             case 2:
-                await dbBooster.findOneAndUpdate({ userID: message.author.id }, { ticket: user.ticket ? user.ticket : 0 + 1, isAttend: true });
+                await dbBooster.findOneAndUpdate({ userID: message.author.id }, { ticket: (user.ticket ? user.ticket : 0) + 1, isAttend: true });
                 break;
         }
         message.reply('Absen telah berhasil!');
