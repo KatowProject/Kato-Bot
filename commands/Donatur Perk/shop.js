@@ -38,7 +38,7 @@ exports.run = async (client, message, args) => {
             components: [buttons]
         });
 
-        const collector = r.channel.createMessageComponentCollector(m => m.user.id === message.author.id, { time: 60000 });
+        const collector = r.channel.createMessageComponentCollector({ filter: m => m.user.id === message.author.id, time: 60000 });
         collector.on('collect', async (m) => {
             await m.deferUpdate();
             switch (m.customId) {
