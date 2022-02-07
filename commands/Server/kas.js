@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
-    if (!message.member.permissions.has('MANAGE_SERVERS')) return;
+    if (!message.member.permissions.has('MANAGE_GUILD')) return;
     const getHistory = await client.trakteer.getHistory();
 
     let pagination = 1;

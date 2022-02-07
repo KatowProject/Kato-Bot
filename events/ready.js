@@ -12,11 +12,11 @@ module.exports = (client) => {
     // /* Notifications */
     // client.trakteer.getNotification(true, 30_000);
 
-    // /** Giveaway Check */
-    // setInterval(() => require('../module/Giveaway/handler')(client), 15_000);
+    /** Giveaway Check */
+    setInterval(() => require('../module/Giveaway/handler')(client), 15_000);
 
-    // /** MEE6 - Level Update */
-    // setInterval(() => require('../module/MEE6-Leaderboard/')(client), 60_000);
+    /** MEE6 - Level Update */
+    setInterval(() => require('../module/MEE6-Leaderboard/')(client), 60_000);
 
     /** Benefit **/
     setInterval(() => require('../handler/donaturXpManager')(client), 60_000);

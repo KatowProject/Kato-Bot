@@ -1,13 +1,25 @@
 const Discord = require('discord.js');
 const db = require('../../database/schema/Shop');
-const dbUser = require('../../database/schema/event');
+const dbDonatur = require('../../database/schema/Donatur');
+const dbBooster = require('../../database/schema/Booster');
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.member.roles.cache.hasAny("933117751264964609", "932997958788608044")) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!')
+        if (!message.member.roles.cache.hasAny("933117751264964609", "932997958788608044", "932997958834733080")) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!')
 
-        const getUser = await dbUser.findOne({ userID: message.author.id });
-        if (!getUser) return message.reply('Kamu bukan Partisipan.');
+        let user;
+        let opt;
+        const roles = message.member.roles.cache;
+        if (roles.hasAll('932997958788608044', '933117751264964609')) {
+            user = await dbDonatur.findOne({ userID: message.author.id });
+        } else if (roles.has('932997958788608044')) {
+            user = await dbDonatur.findOne({ userID: message.author.id });
+        } else if (roles.has('933117751264964609')) {
+            user = await dbBooster.findOne({ userID: message.author.id });
+        } else {
+            return message.reply('Kamu bukan partisipan!');
+        }
+
         const items = await db.find({});
         const buttons = new Discord.MessageActionRow()
             .addComponents([
@@ -31,7 +43,7 @@ exports.run = async (client, message, args) => {
             await m.deferUpdate();
             switch (m.customId) {
                 case `buy-${message.id}`:
-                    await buyItem(items, getUser);
+                    await buyItem(items, user, opt);
 
                     collector.stop();
                     break;
@@ -42,7 +54,7 @@ exports.run = async (client, message, args) => {
 
     }
 
-    async function buyItem(items, getUser) {
+    async function buyItem(items, getUser, opt) {
         message.reply('Pilih menggunakan angka, saat memasukkan nomor item akan langsung terbeli. hati-hati saat memasukkan nomor agar tidak salah beli!');
         const msgCollector = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60_000 });
         msgCollector.on('collect', async (msg) => {
@@ -55,25 +67,13 @@ exports.run = async (client, message, args) => {
             if (product) {
                 if (product.stock > 0) {
                     if (product.price <= getUser.ticket) {
-                        const isHave = getUser.items.find(item => item.name === product.name);
-                        if (isHave) {
-                            msgCollector.stop();
-                            return message.reply('Kamu telah memiliki Item ini, tidak dapat dibeli 2x');
-                        }
-
                         getUser.tickets = getUser.ticket -= product.price;
                         product.stock = product.stock - 1;
 
                         message.reply(`Kamu membeli ${product.name} dengan ${product.price} tickets, DM Admin yang sedang on untuk mengklaimnya!`);
-                        getUser.items.push({
-                            name: product.name,
-                            used: false,
-                            isPending: false
-                        });
                         client.channels.cache.get('932997960923480097').send(`**${message.author.tag}** membeli ${product.name} dengan ${product.price} tickets`);
                         msgCollector.stop();
 
-                        await dbUser.findOneAndUpdate({ userID: message.author.id }, getUser);
                         await db.findOneAndUpdate({ name: product.name }, product);
                     } else {
                         message.reply('Tiket kamu tidak mencukupi.');

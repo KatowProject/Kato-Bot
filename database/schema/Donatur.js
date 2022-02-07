@@ -7,9 +7,10 @@ const donaturSchema = new Schema({
     now: Number,
     message: {
         daily: Number,
-        base: Number,
-        isCompleted: Boolean
-    }
+        base: Number
+    },
+    ticket: Number,
+    isAttend: Boolean
 });
 
 const donatur = model('DONATUR', donaturSchema);

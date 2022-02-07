@@ -6,7 +6,9 @@ const donaturSchema = new Schema({
         daily: Number,
         base: Number,
         isCompleted: Boolean
-    }
+    },
+    ticket: Number,
+    isAttend: Boolean
 });
 
 const donatur = model('BOOSTER', donaturSchema);

@@ -1,7 +1,6 @@
 const dbXp = require('../database/schema/xp_player');
 const dbDonatur = require('../database/schema/Donatur');
 const dbBooster = require('../database/schema/Booster');
-const dbEvent = require('../database/schema/event');
 const Discord = require('discord.js');
 const moment = require('moment');
 moment.locale('id');
@@ -20,15 +19,13 @@ module.exports = async (client) => {
         // if time 12 pm or 24
         const time = moment().format('HH:mm');
         if (time === '24:00' || time === '00:00') {
-            const getEventdb = await dbEvent.find({});
-            for (const eventuser of getEventdb) await dbEvent.findOneAndUpdate({ userID: eventuser.userID }, { isAttend: false });
 
             const temp = [];
             for (let user of getUserdb) {
                 const findXP = getXP.data.find(a => a.id === user.userID);
                 if (!findXP) continue;
 
-                await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count, isCompleted: false } });
+                await dbDonatur.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count, isCompleted: false }, isAttend: false });
                 console.log(`${user.userID} secara otomatis reset daily message`);
                 temp.push(user);
             }
@@ -66,7 +63,7 @@ module.exports = async (client) => {
                     continue;
                 }
 
-                await dbBooster.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count } });
+                await dbBooster.findOneAndUpdate({ userID: user.userID }, { message: { daily: 0, base: findXP.message_count }, isAttend: false });
                 console.log(`${user.userID} secara otomatis reset daily message`);
                 temp2.push(user);
             }

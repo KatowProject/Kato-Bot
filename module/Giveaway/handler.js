@@ -5,6 +5,7 @@ module.exports = async (client) => {
     for (let i = 0; i < allGiveaway.length; i++) {
         const data = allGiveaway[i];
         const channel = client.channels.cache.get(data.channelID);
+        if (!channel) continue;
         const timeLeft = Date.now() - data.time.start;
 
         if (timeLeft > data.time.duration) {
