@@ -8,9 +8,10 @@ exports.run = async (client, message, args) => {
     const items = gachaLogic(roll);
     const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
-        .setTitle(`Roll ${roll}`)
-        .setDescription(items.join('\n'));
-    message.channel.send(embed);
+        .setTitle(`Bog - Gacha`)
+        .setDescription(items.join('\n'))
+        .setFooter(`Roll: ${roll}`);
+    message.channel.send({ embeds: [embed] });
 
     function gachaLogic(roll) {
         const ssr_rate = 5;
