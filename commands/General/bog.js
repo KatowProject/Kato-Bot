@@ -14,16 +14,16 @@ exports.run = async (client, message, args) => {
     message.channel.send({ embeds: [embed] });
 
     function gachaLogic(roll) {
-        const ssr_rate = 5;
-        const sr_rate = 15;
-        const r_rate = 80;
+        const ssr_rate = 0.6;
+        const sr_rate = 5.1;
+        const r_rate = 94.3;
 
         let weight = ssr_rate + sr_rate + r_rate;
-        let random = () => Math.floor(Math.random() * weight);
+        let random = () => Math.random() * weight;
 
         const items = [];
         for (i = 1; i <= roll; i++) {
-            const r = random();
+            const r = random().toFixed(2);
             if (r < ssr_rate) {
                 items.push(`**SSR** di roll ke-${i} | **${r}**%`);
             } else if (r < ssr_rate + sr_rate) {
@@ -41,7 +41,7 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
     aliases: [],
-    cooldown: 180,
+    cooldown: 5,
     location: __filename
 }
 

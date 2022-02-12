@@ -59,7 +59,7 @@ module.exports = async (client, message) => {
         if (now < expirationTime) {
 
             const timeLeft = (expirationTime - now) / 1000;
-            return message.channel.send({ embed: { color: 0xcc5353, description: `Tenang atuh cuk, tunggu **${timeLeft.toFixed(1)}** detik baru bisa pake.` } }).then(msg => msg.delete({ timeout: 5000 }));
+            return message.channel.send(`Tenang atuh cuk, tunggu **${timeLeft.toFixed(1)}** detik baru bisa pake.`);
             // Bisa diubah teks nya, kalo misalnya user nya lagi cooldown.
         }
 
