@@ -75,6 +75,7 @@ exports.run = async (client, message, args) => {
                         msgCollector.stop();
 
                         await db.findOneAndUpdate({ name: product.name }, product);
+                        await getUser.save();
                     } else {
                         message.reply('Tiket kamu tidak mencukupi.');
                         msgCollector.stop();
