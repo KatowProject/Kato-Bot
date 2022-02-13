@@ -67,7 +67,7 @@ exports.run = async (client, message, args) => {
             if (product) {
                 if (product.stock > 0) {
                     if (product.price <= getUser.ticket) {
-                        getUser.tickets = getUser.ticket -= product.price;
+                        getUser.ticket = getUser.ticket - product.price;
                         product.stock = product.stock - 1;
 
                         message.reply(`Kamu membeli ${product.name} dengan ${product.price} tickets, DM Admin yang sedang on untuk mengklaimnya!`);
