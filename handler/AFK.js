@@ -5,6 +5,15 @@ module.exports = async (client, message) => {
     const author = await AFK.findOne({ userID: message.author.id });
     const member = message.guild.members.cache.get(message.author.id);
 
+    if (author) {
+        const nickname = member.nickname;
+        if (nickname) {
+            if (nickname.includes('[AFK]')) member.setNickname(nickname.replace('[AFK]', ''));
+        }
+        message.reply('Kato telah mencabut status AFK mu!').then(t => setTimeout(() => t.delete(), 5000));
+        await AFK.findOneAndDelete({ userID: message.author.id });
+    }
+
     if (mentioned) {
         const user = await AFK.findOne({ userID: mentioned.id });
         if (!user) return;
@@ -20,12 +29,4 @@ module.exports = async (client, message) => {
             .then(t => setTimeout(() => t.delete(), 5000));
     };
 
-    if (author) {
-        const nickname = member.nickname;
-        if (nickname) {
-            if (nickname.includes('[AFK]')) member.setNickname(nickname.replace('[AFK]', ''));
-        }
-        message.reply('Kato telah mencabut status AFK mu!').then(t => setTimeout(() => t.delete(), 5000));
-        await AFK.findOneAndDelete({ userID: message.author.id });
-    }
 }
