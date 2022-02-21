@@ -20,8 +20,8 @@ module.exports = async (client) => {
 
             if (time === '24:00' || time === '00:00') {
                 const guild = client.guilds.cache.get(member.guild);
-                const user = guild.members.fetch(member.userID);
-                if (!user.roles.cache.hasAny('932997958788608044', '933117751264964609')) {
+                const user = await guild.members.fetch(member.userID);
+                if (!user && !user.roles.cache.hasAny('932997958788608044', '933117751264964609')) {
                     member.remove();
                     arr.push(member);
                     continue;
