@@ -4,14 +4,11 @@ const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 
 exports.run = async (client, message, args) => {
     const donatur = await dbDonatur.find({});
-    const booster = await dbBooster.find({});
 
     //array item 15 -
     const getUserTag = (id) => message.guild.members.cache.get(id)?.user.tag;
-
-    const concat = [...donatur, ...booster];
-    const sort = concat.sort((a, b) => b.message.daily - a.message.daily);
-    const map = sort.map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 20) * 0.5} XP]**`);
+    const sort = donatur.sort((a, b) => b.message.daily - a.message.daily);
+    const map = sort.map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 10) * 0.25} XP]**`);
     const chunk = client.util.chunk(map, 10);
 
     let pagination = 1;
