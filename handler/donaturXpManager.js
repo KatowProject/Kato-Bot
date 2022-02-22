@@ -4,7 +4,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 moment.locale('id');
 
-module.exports = async (client) => {
+module.exports = async (client, canReset = false) => {
     try {
         const datas = await db.find({});
         const xp = await xpdb.findOne({ id: 1 });
@@ -18,12 +18,9 @@ module.exports = async (client) => {
             member.message.base = member.message.base ? member.message.base : getUser.message_count;
             member.message.daily = getUser.message_count - member.message.base;
 
-            if (time === '24:00' || time === '00:00') {
+            if (time === '24:00' || time === '00:00' || canReset) {
                 const guild = client.guilds.cache.get(member.guild);
-                const user = await guild.members.fetch(member.userID).catch((t) => {
-                    member.remove();
-                    console.log(`Telah dihapus donatur ${member.userID} karena tidak ada di server`);
-                });
+                const user = await guild.members.cache.get(member.userID);
                 if (!user && !user.roles.cache.hasAny('932997958788608044', '933117751264964609')) {
                     member.remove();
                     arr.push(member);

@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Kato = require('./handler/clientBuilder.js');
+const Options = Discord.Options;
 
 const client = new Kato({
     intents: [
@@ -14,7 +15,8 @@ const client = new Kato({
         'MESSAGE',
         'CHANNEL',
         'REACTION'
-    ]
+    ],
+    makeCache: Options.cacheEverything()
 });
 
 require('discord-logs')(client);
