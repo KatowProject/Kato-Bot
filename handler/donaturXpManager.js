@@ -26,10 +26,10 @@ module.exports = async (client, canReset = false) => {
                     arr.push(member);
                     continue;
                 }
+                arr.push(member);
+
                 member.message = { daily: 0, base: getUser.message_count };
                 member.isAttend = false;
-
-                arr.push(member);
             };
 
             member.save();
@@ -37,7 +37,7 @@ module.exports = async (client, canReset = false) => {
 
         if (arr.length > 1) {
             const map = arr.map(async a => {
-                const member = await client.guilds.cache.get(a.guild).members.fetch(a.userID);
+                const member = await client.guilds.cache.get(a.guild).members.cache.get(a.userID);
                 if (!member) return;
                 const xp = (a.message.daily * 10) * 0.25;
 
