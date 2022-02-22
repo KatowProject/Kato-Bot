@@ -10,8 +10,6 @@ module.exports = async (client) => {
                 const member = guild.members.fetch(donatur.userID).catch((t) => {
                     member.remove();
                     console.log(`Telah dihapus donatur ${member.userID} karena tidak ada di server`);
-
-                    continue;
                 });;
                 if (!member) donatur.remove();
 
