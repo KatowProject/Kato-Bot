@@ -111,6 +111,7 @@ exports.run = async (client, message, args) => {
                 } else if (args.includes('--all')) {
                     const allDonatur = await donate.find({})
                     const mapDonatur = allDonatur.map((a, i) => {
+                        if (!a.now) return;
                         const timeLeft = a.duration - (Date.now() - a.now);
                         const member = message.guild.members.cache.get(a.userID);
                         if (!member) return;
@@ -137,7 +138,7 @@ exports.run = async (client, message, args) => {
                         )
                     let r = await message.channel.send({ embeds: [embed], components: [butonn] });
 
-                    const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.author.id === message.author.id && msg.componentType === 'button', time: 60000 });
+                    const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60000 });
                     collector.on('collect', async (m) => {
                         await m.deferUpdate();
                         switch (m.customId) {

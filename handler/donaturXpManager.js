@@ -13,33 +13,41 @@ module.exports = async (client, canReset = false) => {
         const time = moment().format('HH:mm');
         for (const member of datas) {
             const getUser = xp.data.find(a => a.id === member.userID);
-            if (!getUser) continue;
+            if (!getUser) {
+                member.remove();
 
+                continue;
+            }
             member.message.base = member.message.base ? member.message.base : getUser.message_count;
             member.message.daily = getUser.message_count - member.message.base;
 
             if (time === '24:00' || time === '00:00' || canReset) {
                 const guild = client.guilds.cache.get(member.guild);
                 const user = await guild.members.cache.get(member.userID);
-                if (!user && !user.roles.cache.hasAny('932997958788608044', '933117751264964609')) {
-                    member.remove();
+                if (!user?.roles.cache.hasAny('932997958788608044', '933117751264964609')) {
                     arr.push(member);
+
+                    client.users.cache.get(member.userID).send(`Hai, Status donatur kamu dicabut karna durasi donasi kamu telah habis.`);
+                    client.channels.cache.find(a => a.name === 'staff-bot').send({ content: 'true - donatur, out/no role' });
+
+                    member.remove();
                     continue;
                 }
-                arr.push(member);
+                arr.push({ userID: member.userID, guild: member.guild, daily: `${member.message.daily}` });
 
                 member.message = { daily: 0, base: getUser.message_count };
                 member.isAttend = false;
             };
 
-            member.save();
+            await member.save();
         }
 
         if (arr.length > 1) {
+            console.log(arr);
             const map = arr.map(async a => {
                 const member = await client.guilds.cache.get(a.guild).members.cache.get(a.userID);
                 if (!member) return;
-                const xp = (a.message.daily * 10) * 0.25;
+                const xp = (parseInt(a.daily) * 10) * 0.25;
 
                 return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
             });

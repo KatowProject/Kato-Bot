@@ -8,7 +8,6 @@ module.exports = async (client, interaction) => {
         //give santai role to players when clicked
         const santai = interaction.message.guild.roles.cache.find(r => r.name === 'POSer');
         const member = await interaction.message.guild.members.fetch(interaction.user.id);
-        console.log(member);
 
         if (member.roles.cache.has(santai.id)) return;
         member.roles.add(santai);

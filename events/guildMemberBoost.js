@@ -23,6 +23,9 @@ module.exports = async (client, member) => {
     const xp = await xpdb.findOne({ id: 1 });
     const getUser = xp.data.find(a => a.id === member.user.id);
     if (!getUser) return;
+    const isExits = await db.findOne({ userID: member.user.id });
+    if (isExits) return;
+
     await db.create({ userID: member.user.id, guild: member.guild.id, message: { daily: 0, base: getUser.message_count }, isAttend: false });
     client.channels.cache.get("932997960923480097").send(`\`${member.user.tag}\` terdaftar sebagai booster baru.`);
 }

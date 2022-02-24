@@ -50,8 +50,6 @@ module.exports = class Kusonime {
                 const endpoint = anime.link.endpoint;
                 const response = await axios.get(`http://posantai.bugs.today/kusonime/api/anime/${endpoint}`);
                 const res = response.data;
-
-                console.log(res);
                 message.channel.send({
                     embeds: [
                         new Discord.MessageEmbed()

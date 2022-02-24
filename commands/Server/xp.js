@@ -8,7 +8,7 @@ exports.run = async (client, message, args) => {
     //array item 15 -
     const getUserTag = (id) => message.guild.members.cache.get(id)?.user.tag;
     const sort = donatur.sort((a, b) => b.message.daily - a.message.daily);
-    const map = sort.map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)}\` **[${x.message.daily} Message | ${(x.message.daily * 10) * 0.25} XP]**`);
+    const map = sort.map((x, i) => `**${i + 1}.** \`${getUserTag(x.userID)} | ${x.userID}\` **[${x.message.daily} Message | ${(x.message.daily * 10) * 0.25} XP]**`);
     const chunk = client.util.chunk(map, 10);
 
     let pagination = 1;

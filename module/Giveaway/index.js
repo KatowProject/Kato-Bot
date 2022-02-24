@@ -18,7 +18,6 @@ module.exports = class Giveaway {
                 status = 'channel';
                 let collector = await message.channel.createMessageCollector({ filter: (m) => m.author.id === message.author.id, time: 120000 });
                 collector.on('collect', async m => {
-                    console.log(m.content);
                     switch (status) {
                         case 'channel':
                             if (m.mentions.channels.size === 0) return m.reply('Invalid Channel!')
@@ -117,7 +116,6 @@ module.exports = class Giveaway {
                                 data.values = 'title';
 
                                 msg = await message.reply('Masukkan judulnya!');
-                                console.log(data.values);
                                 break;
 
                             case 'ROLE':
