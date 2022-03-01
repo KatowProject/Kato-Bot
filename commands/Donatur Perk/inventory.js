@@ -1,20 +1,10 @@
 const Discord = require('discord.js');
 const dbDonatur = require('../../database/schema/Donatur');
-const dbBooster = require('../../database/schema/Booster');
 
 exports.run = async (client, message, args) => {
     try {
-        let user;
-        const roles = message.member.roles.cache;
-        if (roles.hasAll('932997958788608044', '933117751264964609')) {
-            user = await dbDonatur.findOne({ userID: message.author.id });
-        } else if (roles.has('932997958788608044')) {
-            user = await dbDonatur.findOne({ userID: message.author.id });
-        } else if (roles.has('933117751264964609')) {
-            user = await dbBooster.findOne({ userID: message.author.id });
-        } else {
-            return message.reply('Kamu bukan partisipan!');
-        }
+        const user = await dbDonatur.findOne({ userID: message.author.id });
+        if (!user) return message.reply('Kamu bukan donatur!');
 
         const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
