@@ -1,24 +1,11 @@
 const Discord = require('discord.js');
 const db = require('../../database/schema/Shop');
 const dbDonatur = require('../../database/schema/Donatur');
-const dbBooster = require('../../database/schema/Booster');
 
 exports.run = async (client, message, args) => {
     try {
         if (!message.member.roles.cache.hasAny("933117751264964609", "932997958788608044", "932997958834733080")) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!')
-
-        let user;
-        let opt;
-        const roles = message.member.roles.cache;
-        if (roles.hasAll('932997958788608044', '933117751264964609')) {
-            user = await dbDonatur.findOne({ userID: message.author.id });
-        } else if (roles.has('932997958788608044')) {
-            user = await dbDonatur.findOne({ userID: message.author.id });
-        } else if (roles.has('933117751264964609')) {
-            user = await dbBooster.findOne({ userID: message.author.id });
-        } else {
-            return message.reply('Kamu bukan partisipan!');
-        }
+        const user = await dbDonatur.findOne({ userID: message.author.id });
 
         const items = await db.find({});
         const buttons = new Discord.MessageActionRow()
