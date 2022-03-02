@@ -11,13 +11,13 @@ exports.run = async (client, message, args) => {
         const embed = new MessageEmbed();
 
         if (message.author.id === member.user.id) {
-            embed.setTitle('Kamu memeluk diri sendiri 😳')
+            embed.setTitle('Kamu menampar diri sendiri 😳')
             embed.setColor('RANDOM')
             embed.setImage(hug.url)
 
             message.channel.send({ embeds: [embed] });
         } else {
-            embed.setTitle(`${message.guild.members.cache.get(message.author.id).displayName} memeluk ${message.guild.members.cache.get(member.user.id).displayName} (✿◡‿◡)`)
+            embed.setTitle(`${message.guild.members.cache.get(message.author.id).displayName} menampar ${message.guild.members.cache.get(member.user.id).displayName} (✿◡‿◡)`)
             embed.setColor('RANDOM')
             embed.setImage(hug.url)
 
