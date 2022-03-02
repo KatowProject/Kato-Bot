@@ -3,12 +3,10 @@ const gis = require('g-i-s')
 
 exports.run = async (client, message, args) => {
     try {
-
         gis(args.join(' '), logResults);
         async function logResults(error, results) {
             if (error) {
                 message.reply(`sepertinya gagal mendapatkannya :(\`\`\`\n${error}\`\`\``)
-                console.log(error);
             }
             else {
                 let array = [];

@@ -7,15 +7,12 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.0",
     "cabul": "0.0.15",
     "cpu-stat": "^2.0.1",
     "dateformat": "^3.0.3",
-    "discord-buttons": "^4.0.0",
     "discord-logs": "^1.7.7",
-    "discord-player": "^3.4.0",
-    "discord.js": "^12.5.1",
+    "discord.js": "^13.6.0",
     "g-i-s": "^2.1.6",
     "got": "^11.8.2",
     "lodash": "^4.17.20",

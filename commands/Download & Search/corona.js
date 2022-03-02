@@ -95,10 +95,7 @@ exports.run = async (client, message, args) => {
       if (province.length > 2000) province = province.slice(0, 150)
       const msgProvince = await message.channel.send(province.join(', '))
       const msgBeforeSearch = await message.channel.send('Di antara provinsi tersebut, yang mana ingin anda ketahui secara detail informasinya? (Symbol Sensitive)')
-      await message.channel.awaitMessages(
-        m => m.author.id === message.author.id,
-        { max: 1, time: 300000, errors: ['time'] }
-      )
+      await message.channel.awaitMessages({ filter: m => m.author.id === message.author.id, max: 1, time: 300000, errors: ['time'] })
         .then(async collected => {
           await msgProvince.delete()
           await msgBeforeSearch.delete()
@@ -231,7 +228,7 @@ exports.run = async (client, message, args) => {
     // Kirim data
     ifError
       ? message.reply(`Sayangnya, error terjadi dengan pesan:\`\`\`${errorMsg}\`\`\``)
-      : message.channel.send(`<@!${message.author.id}>`, { embed: embed })
+      : message.channel.send(`<@!${message.author.id}>`, { embeds: [embed] })
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

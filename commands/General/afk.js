@@ -3,9 +3,7 @@ const db = require('../../database').afk;
 
 exports.run = async (client, message, args) => {
     try {
-
         const afk = await db.fetch(message.author.id);
-        //ignore AFK
         const reason = args.join(' ');
 
         if (!afk) {
@@ -16,15 +14,11 @@ exports.run = async (client, message, args) => {
         } else {
             db.delete(message.author.id);
         };
-
-
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.
     };
 };
-
-
 
 exports.conf = {
     aliases: ["away"],

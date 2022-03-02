@@ -1,16 +1,30 @@
-const Discord = require("discord.js");
-const Kato = require("./handler/ClientBuilder.js");
-const client = new Kato({ disableMentions: 'everyone', fetchAllMembers: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const recent = new Set();
+const Discord = require('discord.js');
+const Kato = require('./handler/clientBuilder.js');
+const Options = Discord.Options;
 
+const client = new Kato({
+  intents: [
+    Discord.Intents.FLAGS.GUILDS,
+    Discord.Intents.FLAGS.GUILD_MESSAGES,
+    Discord.Intents.FLAGS.GUILD_VOICE_STATES,
+    Discord.Intents.FLAGS.GUILD_PRESENCES,
+    Discord.Intents.FLAGS.GUILD_MEMBERS,
+    Discord.Intents.FLAGS.GUILD_PRESENCES,
+  ],
+  partials: [
+    'MESSAGE',
+    'CHANNEL',
+    'REACTION'
+  ],
+  makeCache: Options.cacheEverything()
+});
 
 require('discord-logs')(client);
-require('discord-buttons')(client);
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
 
 
-client.package = require("./package.json")
+client.package = require("./package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
 client.on("disconnect", () => console.log("Disconnected."));
