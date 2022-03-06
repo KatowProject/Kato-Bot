@@ -6,7 +6,7 @@ exports.run = async (client, message, args) => {
         let query = args.join(' ');
         if (!query) return message.reply('masukin dulu!');
 
-        await client.samehadaku.getSearch(query, message);
+        await client.samehadaku.getWithSearch(query, message);
     } catch (error) {
         return console.log(error);
         // Restart the bot as usual. 

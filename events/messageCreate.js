@@ -16,8 +16,9 @@ module.exports = async (client, message) => {
         const collection = client.cacheAttachments;
         const attachment = message.attachments.first();
         const image = attachment.url;
-        const buffer = await require('got')(image).buffer();
-        const file = new Discord.MessageAttachment().setFile(buffer).setName(message.id + '.png');
+        const img = await require('got')(image).buffer();
+
+        const file = new Discord.MessageAttachment().setFile(img).setName(attachment.name);
         collection.set(message.id, file);
     };
 

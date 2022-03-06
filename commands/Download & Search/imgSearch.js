@@ -1,87 +1,67 @@
 const Discord = require('discord.js');
-const gis = require('g-i-s')
+const gis = require('g-i-s');
 
 exports.run = async (client, message, args) => {
     try {
-        gis(args.join(' '), logResults);
-        async function logResults(error, results) {
-            if (error) {
-                message.reply(`sepertinya gagal mendapatkannya :(\`\`\`\n${error}\`\`\``)
-            }
-            else {
-                let array = [];
-                results.forEach(a => {
-                    array.push(a.url)
-                });
-                return await imageList(message, array);
-            }
-        }
+        gis(args.join(' '), async (err, res) => {
+            if (err) message.reply(`Error: ${err}`);
 
-        async function imageList(message, results) {
-            if (results < 1) return message.reply(`Pencarian \`${args.join(' ')}\` tidak ditemukan!`);
-            let pagination = 1
-            let embed = new Discord.MessageEmbed()
-                .setColor(client.warna.kato)
-                .setTitle(`Hasil Pencarian \`${args.join(' ')}\``)
-                .setImage(results[pagination - 1])
-                .setFooter(`Image ${pagination} of ${results.length} images`)
-            let r = await message.channel.send(embed);
-            r.react('👈');
-            r.react('♻');
-            r.react('👉');
+            let pagination = 1;
+            const embed = new Discord.MessageEmbed()
+                .setColor('RANDOM')
+                .setTitle(`Result for ${args.join(' ')}`)
+                .setFooter(`Page ${pagination} of ${res.length}`)
+                .setImage(res[pagination - 1].url);
 
-            const backwardsFilter = (reaction, user) =>
-                reaction.emoji.name === `👈` && user.id === message.author.id;
-            const deleteFilter = (reaction, user) =>
-                reaction.emoji.name === `♻` && user.id === message.author.id;
-            const forwardsFilter = (reaction, user) =>
-                reaction.emoji.name === `👉` && user.id === message.author.id;
+            const button = new Discord.MessageActionRow()
+                .addComponents(
+                    new Discord.MessageButton()
+                        .setLabel('< Back')
+                        .setStyle('SECONDARY')
+                        .setCustomId(args[0] + 'back' + message.id),
+                    new Discord.MessageButton()
+                        .setLabel('Next >')
+                        .setStyle('SECONDARY')
+                        .setCustomId(args[0] + 'next' + message.id)
+                )
 
-            const backwards = r.createReactionCollector(backwardsFilter);
-            const deletes = r.createReactionCollector(deleteFilter);
-            const forwards = r.createReactionCollector(forwardsFilter);
+            const m = await message.channel.send({ embeds: [embed], components: [button] });
+            const collector = m.channel
+                .createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60000 });
+            collector.on('collect', async (i) => {
+                switch (i.customId) {
+                    case args[0] + 'back' + message.id:
+                        if (pagination === 0) return;
+                        pagination--;
+                        embed.setImage(res[pagination - 1].url);
+                        embed.setFooter(`Page ${pagination} of ${res.length}`);
+                        m.edit({ embeds: [embed], components: [button] });
+                        break;
+                    case args[0] + 'next' + message.id:
+                        if (pagination === res.length) return;
+                        pagination++;
+                        embed.setImage(res[pagination - 1].url);
+                        embed.setFooter(`Page ${pagination} of ${res.length}`);
+                        m.edit({ embeds: [embed], components: [button] });
+                        break;
+                };
 
-            backwards.on('collect', (f) => {
-                if (pagination === 1) return;
-                pagination--;
-                embed.setImage(results[pagination - 1]);
-                embed.setFooter(`Image ${pagination} of ${results.length} Images`)
-                r.edit(embed);
-
-            })
-
-            deletes.on('collect', (f) => {
-                r.delete();
-            })
-
-            forwards.on("collect", (f) => {
-                if (pagination == results.length) return;
-                pagination++;
-                embed.setImage(results[pagination - 1]);
-                embed.setFooter(`Image ${pagination} of ${results.length} Images`);
-                r.edit(embed);
+                await i.deferUpdate();
             });
-
-        };
-
-
-
-    } catch (error) {
-        return message.channel.send(`Something went wrong: ${error.message}`);
-        // Restart the bot as usual.
+        });
+    } catch (err) {
+        message.channel.send(`\`ERROR\` \`\`\`js\n${err.stack}\n\`\`\``);
     }
-}
-
-
+};
 
 exports.conf = {
-    aliases: ["imgsearch"],
-    cooldown: 10
+    aliases: ['gis'],
+    cooldown: 5,
 }
 
 exports.help = {
-    name: 'img',
-    description: 'menambahkan status afk pada user',
-    usage: 'k!avatar [mention/userid/server]',
-    example: 'k!avatar @juned | k!avatar 458342161474387999 | k!avatar server'
-}
+    name: 'image',
+    description: 'Search image from Google Image Search',
+    usage: 'image <query>',
+    example: 'image cat'
+};

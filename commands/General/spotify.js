@@ -4,7 +4,6 @@ const spotify = require('spotify-url-info');
 exports.run = async (client, message, args) => {
 
     try {
-
         /** Get Data Member */
         const get = client.users.cache.get(args[0]) || message.author;
         const member = message.guild.members.cache.get(get.id).presence.activities;
@@ -26,10 +25,7 @@ exports.run = async (client, message, args) => {
             .addField('Link :', 'https://open.spotify.com/track/' + dataSpotify.id, true)
             .setFooter(get.tag, get.avatarURL({ size: 4096 }))
 
-
-        await message.channel.send(embed);
-
-
+        await message.channel.send({ embeds: [embed] });
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual. 

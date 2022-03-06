@@ -1,26 +1,25 @@
 const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
-
-  let prefix = client.config.discord.prefix;
+  let prefix = client.config.prefix;
 
   if (!args[0]) {
-    let module = client.helps.array();
-    // if (!client.config.discord.owners.includes(message.author.id)) 
+    let module = Array.from(client.helps.values());
+    // if (!client.config.owners.includes(message.author.id)) 
     module = module.filter(x => !x.hide)
 
 
     const embed = new MessageEmbed()
-      .setColor(client.warna.kato)
+      .setColor("RANDOM")
       .setTimestamp()
-      .setFooter(`© 2020, Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, client.user.avatarURL)
+      .setFooter(`© 2021, Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, client.user.avatarURL)
       .setDescription(`Ketik \`${prefix[0]}help [command] / ${prefix[1]}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
       .setTitle(`<:kato:750342786825584811> ${client.user.username}-Bot Command List <:kato:750342786825584811>`)
 
     for (const mod of module) {
       embed.addField(`${mod.name}`, mod.cmds.map(x => `\`${x}\``).join(' . '), true);
     }
-    return message.channel.send(embed);
+    return message.channel.send({ embeds: [embed] });
   } else {
     let cmd = args[0];
     if (client.commands.has(cmd) || client.commands.get(client.aliases.get(cmd))) {
@@ -37,7 +36,7 @@ exports.run = async (client, message, args) => {
         .addField('Aliases', aliases, true)
         .addField('Cooldown', `${cooldown} second(s)`, true)
         .addField('Example', `${example}`, true)
-      return message.channel.send(embed);
+      return message.channel.send({ embeds: [embed] });
     }
     if (!client.commands.has(cmd) || !client.commands.get(client.aliases.get(cmd))) {
       message.channel.send({ embed: { color: 0xcc5353, description: "gaada command bos, dih." } })
@@ -47,7 +46,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 5,
+  location: __filename
 }
 
 exports.help = {

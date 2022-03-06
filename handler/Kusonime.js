@@ -1,111 +1,85 @@
-const Discord = require('discord.js');
 const axios = require('axios');
-
-class Kusonime {
+const Discord = require('discord.js');
+module.exports = class Kusonime {
     constructor(client) {
         this.client = client;
     }
 
-    getBySearch(query, message) {
-        return new Promise(async (fullfill, reject) => {
+    getWithSearch(query, message) {
+        return new Promise(async (resolve, reject) => {
             try {
-
                 const response = await axios.get(`http://posantai.bugs.today/kusonime/api/cari/${query}`);
-                const data = response.data;
+                const res = response.data;
+                if (res.length === 0) return reject(`Pencarian ${query} tidak ditemukan!`);
 
-                if (data.length === 0) return message.reply(`Tidak ditemukan dengan teks ${query}!`)
-                let chunk = this.client.util.chunk(data, 5);
-                let embed = new Discord.MessageEmbed()
-                    .setTitle(`Hasil Pencarian dari ${query}`)
-                    .setColor(this.client.warna.kato)
-                    .setDescription(chunk[0].map((a, i) => `${i + 1}. ${a.title}`).join('\n'))
+                console.log('masuk')
+                let page = 1;
+                const animes = this.client.util.chunk(res, 10);
+                const embed = new Discord.MessageEmbed()
+                    .setColor('RANDOM')
+                    .setDescription(animes[page - 1].map((a, i) => `**${i + 1}.** ${a.title}`).join('\n'));
 
-                let mEmbed = await message.channel.send(embed);
-                let alertBed = await message.reply('pilih untuk melanjutkan!');
+                const r = await message.channel.send({ content: 'Pilih menggunakan angka!', embeds: [embed] });
+                const collector = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 20000 });
+                collector.on('collect', async (f) => {
+                    if (['cancel', 'gk jadi', 'gak jadi'].includes(f.content.toLowerCase())) {
+                        collector.stop();
+                        return message.reply('Permintaan dibatalkan!');
+                    }
+                    if (isNaN(f.content)) return message.reply('Permintaan invalid, gunakanlah angka!');
 
-                let req = message.author;
-                let request = await message.channel.awaitMessages((m) => m.content.toLowerCase() && m.author.id === req.id, {
+                    collector.stop();
+                    r.delete();
 
-                    max: 1,
-                    time: 100000,
-                    errors: ["time"]
-
-                }).catch((err) => {
-
-                    mEmbed.delete();
-                    alertBed.delete();
-                    message.channel.send('permintaan telah habis, silahkan buat permintaan kembali!').then(t => t.delete({ timeout: 5000 }));
-
+                    console.log(f.content);
+                    await this.getDetail(animes[0][parseInt(f.content) - 1], message);
                 });
 
-                const answer = request.first().content;
-                this.getDetail(chunk[0][answer - 1].link.endpoint, message);
-                fullfill(chunk[0][answer - 1].link.endpoint);
-
-                await mEmbed.delete();
-                await alertBed.delete();
-
-            } catch (err) {
-                reject(err);
-                message.channel.send(err.message);
-            };
-
-
+                resolve();
+            } catch (e) {
+                reject(new Error(e.message));
+                console.log(e);
+            }
         });
-    };
+    }
 
-    getDetail(query, message) {
-        return new Promise(async (fullfill, reject) => {
+    getDetail(anime, message) {
+        return new Promise(async (resolve, reject) => {
             try {
+                const endpoint = anime.link.endpoint;
+                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/anime/${endpoint}`);
+                const res = response.data;
+                message.channel.send({
+                    embeds: [
+                        new Discord.MessageEmbed()
+                            .setTitle(res.title)
+                            .setColor('RANDOM')
+                            .setDescription(res.sinopsis.slice(0, 2048))
+                            .setImage(res.thumbnail)
+                            .addField("Japanese", res.japanese, true)
+                            .addField('Genre', res.genre.map((a, i) => `[${a.name}](${a.url})`).join(', '), true)
+                            .addField('Season', `[${res.season.name}](${res.season.url})`, true)
+                            .addField('Producers', res.producers.join(', '), true)
+                            .addField('Total Eps', res.total_eps, true)
+                            .addField('Score', res.score, true)
+                    ]
+                });
 
-                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/anime/${query}`);
-                const data = response.data;
-
-                let embed = new Discord.MessageEmbed()
-                    .setTitle(data.title)
-                    .setColor(this.client.warna.kato)
-                    .setDescription(data.sinopsis.slice(0, 2048))
-                    .setImage(data.thumbnail)
-                    .addField("Japanese", data.japanese, true)
-                    .addField('Genre', data.genre.map((a, i) => `[${a.name}](${a.url})`).join(', '), true)
-                    .addField('Season', `[${data.season.name}](${data.season.url})`, true)
-                    .addField('Producers', data.producers.join(', '), true)
-                    .addField('Total Eps', data.total_eps, true)
-                    .addField('Score', data.score, true)
-
-                await message.channel.send(embed)
-                // res.list_download.map((a) => `*${a[0]}*\n${a[1].map(b => `*${b.resolusi}*\n${b.link_download.map(c => `├${c.platform}\n${c.link}`).join('\n')}`).join('\n')}`)
-                // let link_data = data.list_download.map((a, i) => `${a.resolusi}\n${a.link_download.map((a, i) => `[${a.platform}](${a.link})`).join('\n')}\n`);
-                // link_data = this.client.util.chunk(link_data, 2);
-                for (let eachTitle of data.list_download) {
+                for (const title of res.list_download) {
+                    const embed = new Discord.MessageEmbed().setColor('RANDOM').setAuthor(title[0], null, `https://kusonime.com/${endpoint}`);
 
                     const temp = [];
-                    const dlEmbed = new Discord.MessageEmbed()
-                        .setColor(this.client.warna.kato)
-                        .setAuthor(eachTitle[0], undefined, 'https://kusonime.com/' + query);
+                    for (const resolution of title[1]) temp.push(`**${resolution.resolusi}**\n${resolution.link_download.map((a, i) => `[${a.platform}](${a.link})`).join('\n')}`);
 
-                    for (let eachResolution of eachTitle[1]) {
-                        const tRes = `**${eachResolution.resolusi}**\n${eachResolution.link_download.map((a, i) => `[${a.platform}](${a.link})`).join('\n')}`;
-                        temp.push(tRes);
-                    }
-
-                    dlEmbed.setDescription(temp);
-                    message.channel.send(dlEmbed);
-
+                    embed.setDescription(temp.join('\n'));
+                    message.channel.send({ embeds: [embed] });
                 }
 
-
-            } catch (error) {
-
-                reject(error);
-                message.channel.send(error.message);
-
+                return resolve();
+            } catch (e) {
+                reject(new Error(e.message));
+                console.log(e);
             }
-
-
         });
-    };
-
-};
-
-module.exports = Kusonime;
+    }
+}

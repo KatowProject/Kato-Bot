@@ -6,7 +6,7 @@ let os = require('os')
 let cpuStat = require("cpu-stat");
 
 exports.run = async (client, message, args) => {
- 
+
   try {
     let cpuLol;
     cpuStat.usagePercent(function (err, percent) {
@@ -32,7 +32,7 @@ exports.run = async (client, message, args) => {
         .setFooter(`⌨ ${client.user.username} 2020`)
         .setColor("RANDOM")
         .setTimestamp()
-      message.channel.send(embed);
+      message.channel.send({ embeds: [embed] });
 
     });
   } catch (error) {

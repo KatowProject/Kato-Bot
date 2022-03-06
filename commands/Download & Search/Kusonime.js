@@ -6,8 +6,8 @@ exports.run = async (client, message, args) => {
         let query = args.join(' ');
         if (!query) return message.reply('masukin dulu!');
 
-        if(query.startsWith('https')) await client.kusonime.getDetail(query.replace('https://kusonime.com/', ''), message);
-            else await client.kusonime.getBySearch(query, message);
+        if (query.startsWith('https')) await client.kusonime.getDetail(query.replace('https://kusonime.com/', ''), message);
+        else await client.kusonime.getWithSearch(query, message);
     } catch (error) {
         return console.log(error);
         // Restart the bot as usual. 

@@ -1,23 +1,14 @@
-const Discord = require('discord.js');
-
 module.exports = async (client, message) => {
-
     if (!message && message.author?.bot) return;
-
-    const dataAttachment = client.dataAttachment;
+    const files = client.cacheAttachments;
 
     if (message.mentions.members.size > 0 || message.mentions.roles.size > 0) require('../plugin/ghostTag.js')(client, message);
     if (message.attachments.size > 0) {
+        const file = files.get(message.id);
+        const target = client.config.channel["message-delete"];
+        await client.channels.cache.get(target).send({ content: `**======Message Delete | ${message.author.tag}======**\n**User**: <@${message.author.id}>\n**Content**:\n${message.content ? message.content : 'Tidak ada Pesan'}\n**Location**: <#${message.channel.id}>\n**Attachment**:`, files: [file] });
 
-        const lastMessageID = message.author.lastMessageID;
-        const data = dataAttachment.get(lastMessageID);
-        if (!data.buffer && !data.filename) return;
-        const attachment = new Discord.MessageAttachment(data.buffer)
-            .setName(data.filename)
-        console.log(attachment);
-        await client.channels.cache.get('795778462018830336').send(`**======Message Delete | ${message.author.tag}======**\n**User**: ${message.author}\n**Content**:\n${message.content ? message.content : 'Tidak ada Pesan'}\n**Location**: <#${message.channel.id}>\n**Attachment**:`, { files: [attachment] });
-        dataAttachment.delete(lastMessageID);
-
+        files.delete(message.id);
     }
 
 }

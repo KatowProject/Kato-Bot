@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
         const reason = args.join(' ');
 
         if (!afk) {
-            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`, { disableMentions: 'all' })
+            message.channel.send(`**${message.author.tag}** telah AFK! \n**Alasan:** ${reason ? reason : "AFK"}`);
             setTimeout(() => {
                 db.set(message.author.id, { alasan: reason || 'AFK', time: Date.now() });
             }, 7000);

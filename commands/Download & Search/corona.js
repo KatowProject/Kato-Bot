@@ -24,8 +24,8 @@ exports.run = async (client, message, args) => {
           strTmp(
             'Kalian bisa menemukan informasi tentang COVID-19 lebih lengkapnya di sini.\n\nCara penggunaan:\n{cmd}\n\nContoh:\n{example}',
             {
-              cmd: `${client.config.discord.prefix[0]}corona [negara] [--**k**asus|--**s**ehat|--**t**ewas|--**n**egara]`,
-              example: `${client.config.discord.prefix[0]}corona ID\n${client.config.discord.prefix[0]}corona --kasus\n${client.config.discord.prefix[0]}corona --s`,
+              cmd: `${client.config.prefix[0]}corona [negara] [--**k**asus|--**s**ehat|--**t**ewas|--**n**egara]`,
+              example: `${client.config.prefix[0]}corona ID\n${client.config.prefix[0]}corona --kasus\n${client.config.prefix[0]}corona --s`,
             }
           )
         )
@@ -159,7 +159,7 @@ exports.run = async (client, message, args) => {
               .value(),
             'confirm'
           )
-          embed.setDescription(`Selengkapnya cek di \`${client.config.discord.prefix[0]}corona [negara]\`\n\n` + _data)
+          embed.setDescription(`Selengkapnya cek di \`${client.config.prefix[0]}corona [negara]\`\n\n` + _data)
         })
         .catch(err => {
           ifError = true
@@ -188,7 +188,7 @@ exports.run = async (client, message, args) => {
               .value(),
             'recover'
           )
-          embed.setDescription(`Selengkapnya cek di \`${client.config.discord.prefix[0]}corona [negara]\`\n\n` + _data)
+          embed.setDescription(`Selengkapnya cek di \`${client.config.prefix[0]}corona [negara]\`\n\n` + _data)
         })
         .catch(err => {
           ifError = true
@@ -217,7 +217,7 @@ exports.run = async (client, message, args) => {
               .value(),
             'death'
           )
-          embed.setDescription(`Selengkapnya cek di \`${client.config.discord.prefix[0]}corona [negara]\`\n\n` + _data)
+          embed.setDescription(`Selengkapnya cek di \`${client.config.prefix[0]}corona [negara]\`\n\n` + _data)
         })
         .catch(err => {
           ifError = true
@@ -228,7 +228,7 @@ exports.run = async (client, message, args) => {
     // Kirim data
     ifError
       ? message.reply(`Sayangnya, error terjadi dengan pesan:\`\`\`${errorMsg}\`\`\``)
-      : message.channel.send(`<@!${message.author.id}>`, { embeds: [embed] })
+      : message.channel.send({ content: `<@!${message.author.id}>`, embeds: [embed] })
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

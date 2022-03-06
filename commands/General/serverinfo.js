@@ -58,7 +58,7 @@ exports.run = async (client, message, args) => {
     .addField("Owner", `**${message.guild.owner.user.tag}** \n\`${message.guild.owner.user.id}\``, true)
     .addField(`Members [${total}]`, `Online: ${online} \nIdle: ${idle} \nDND: ${dnd} \nOffline: ${offline} \nBots: ${robot}`, true)
     .addField(`Channels [${totalchan}]`, `Text: ${text} \nVoice: ${vc} \nCategory: ${category}`, true)
-  message.channel.send(embed);
+  message.channel.send({ embeds: [embed] });
 }
 
 exports.conf = {

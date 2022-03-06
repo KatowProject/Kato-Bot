@@ -1,22 +1,20 @@
 const db = require('../database').cmd;
 
 module.exports = async (client, message, cmdName) => {
-    /** all_cmd */
-    let getChannel = await manager.allCommands.findOne({ guild: message.guild.id });
-    if (!getChannel) getChannel = await manager.allCommands.create({ guild: message.guild.id, channels: [] });
+    let isValid = true;
+    let getGuild = db.get(`${message.guild.id}`);
+    if (!getGuild) getGuild = db.set(`${message.guild.id}`, { all: [], cmd: [] });
 
-    const isValid = getChannel.channels.includes(message.channel.id);
-    if (isValid) return false;
+    const all = getGuild.all;
+    all.includes(message.channel.id) ? isValid = false : isValid = true;
+    if (!isValid) return false;
 
-    /** Specifict */
-    let findCmd = await manager.specificCommands.findOne({ guild: message.guild.id });
-    if (!findCmd) findCmd = await manager.specificCommands.create({ guild: message.guild.id, command: [] });
+    const cmd = getGuild.cmd;
+    const getcmd = cmd.find(a => a.name === cmdName);
+    if (!getcmd) return true;
 
-    const findChannel = findCmd.command.find(a => a.name === cmdName);
-    if (!findChannel) return true;
+    const channel = getcmd.channel;
+    channel.includes(message.channel.id) ? isValid = false : isValid = true;
 
-    const isValidCmd = findChannel.channels.includes(message.channel.id);
-    if (isValidCmd) return false;
-
-    return true;
+    return isValid;
 }

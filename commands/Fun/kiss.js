@@ -3,7 +3,6 @@ const axios = require('axios');
 
 exports.run = async (client, message, args) => {
   try {
-
     const response = await axios.get('https://nekos.life/api/v2/img/kiss');
     const kiss = response.data;
 
@@ -12,20 +11,17 @@ exports.run = async (client, message, args) => {
     const embed = new MessageEmbed();
 
     if (message.author.id === member.user.id) {
-
       embed.setTitle(`Kamu mencium diri sendiri 😳`)
       embed.setColor(client.warna.kato)
       embed.setImage(kiss.url)
 
-      message.channel.send(embed);
+      message.channel.send({ embeds: [embed] });
     } else {
-
-      embed.setTitle(`${message.guild.member(message.author).displayName} mencium ${message.guild.member(member).displayName} o(*￣▽￣*)o `)
+      embed.setTitle(`${message.guild.members.cache.get(message.author.id).displayName} mencium ${message.guild.members.cache.get(member.user.id).displayName} o(*￣▽￣*)o `)
       embed.setColor(client.warna.kato)
       embed.setImage(kiss.url)
 
-      message.channel.send(embed);
-
+      message.channel.send({ embeds: [embed] });
     }
 
   } catch (error) {

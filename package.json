@@ -12,6 +12,7 @@
     "cpu-stat": "^2.0.1",
     "dateformat": "^3.0.3",
     "discord-logs": "^1.7.7",
+    "discord-player": "^5.2.2",
     "discord.js": "^13.6.0",
     "g-i-s": "^2.1.6",
     "got": "^11.8.2",
@@ -26,7 +27,6 @@
     "yargs-parser": "^20.2.4"
   },
   "license": "CC-BY-SA-4.0",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KatowProject/Kato-Bot.git"

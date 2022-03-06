@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Kato = require('./handler/clientBuilder.js');
+const Kato = require('./handler/ClientBuilder.js');
 const Options = Discord.Options;
 
 const client = new Kato({
@@ -22,7 +22,6 @@ const client = new Kato({
 require('discord-logs')(client);
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
-
 
 client.package = require("./package.json");
 client.on("warn", console.warn);
