@@ -25,7 +25,7 @@ module.exports.run = async (client, message, args) => {
             const chunkString = client.util.chunkString(lyrics, 2048);
             embed.setDescription(chunkString.shift());
 
-            await message.channel.send({ embeds: [embed] });
+            msg = await message.channel.send({ embeds: [embed] });
 
             const embedExtra = new Discord.MessageEmbed().setColor("RANDOM");
             for (const chunk of chunkString) {
