@@ -30,7 +30,7 @@ module.exports.run = async (client, message, args) => {
             const embedExtra = new Discord.MessageEmbed().setColor("RANDOM");
             for (const chunk of chunkString) {
                 embedExtra.setDescription(chunk);
-                message.channel.send(embedExtra);
+                message.channel.send({ embeds: [embedExtra] });
             }
         } else {
             const btn = new Discord.MessageActionRow()
@@ -116,8 +116,6 @@ module.exports.run = async (client, message, args) => {
 
             return msg.edit({ embeds: [embed] });
         }
-
-
     } catch (err) {
         console.log(err);
         return message.channel.send(err.message);
