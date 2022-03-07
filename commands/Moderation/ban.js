@@ -1,6 +1,4 @@
-const Discord = require('discord.js');
-const { Client, Message, MessageEmbed } = require('discord.js');
-const db = require('../../database').log;
+const { Client, Message, MessageEmbed, Permissions, MessageAttachment } = require('discord.js');
 
 /**
  * @param {Client} client
@@ -8,8 +6,6 @@ const db = require('../../database').log;
  * @param {[]} args
  */
 exports.run = async (client, message, args) => {
-
-  const dataGuild = db.get(message.guild.id);
 
   try {
 
@@ -25,9 +21,18 @@ exports.run = async (client, message, args) => {
     if (member.user.id === message.author.id)
       return message.reply('Anda tidak bisa membanned diri anda sendiri.');
 
+    // Ketika yang membanned adalah member
+    if (!author.permissions.has([Permissions.FLAGS.BAN_MEMBERS]))
+      return;
+
+    // Ketika yang dibanned adalah admin/momod
+    if (member.permissions.has([Permissions.FLAGS.BAN_MEMBERS]))
+      return message.reply('Anda tidak bisa membanned staff!');
+
+    const attchments = new MessageAttachment("https://media2.giphy.com/media/H99r2HtnYs492/200.gif");
     member.ban({ reason: reason })
       .then((banMember) => {
-        message.reply(`Anda berhasil membanned **${banMember.user.tag}**\nAlasan:\n${reason}\nhttps://media2.giphy.com/media/H99r2HtnYs492/200.gif`);
+        message.reply({ content: `Anda berhasil membanned **${banMember.user.tag}**\nAlasan:\n${reason}`, files: [attchments] });
       })
       .catch((err) => {
         message.reply(`Sepertinya ada masalah!\n\`\`\`${err.message}\`\`\``);
@@ -43,10 +48,7 @@ exports.run = async (client, message, args) => {
       .setTimestamp()
       .setFooter(`${message.member.id}`, message.guild.iconURL);
 
-    const getChannel = dataGuild.mute;
-    if (getChannel === 'null') return message.reply('Untuk mengaktifkan Log silahkan ketik k!logs').then(msg => msg.delete({ timeout: 5000 }));
-    client.channels.cache.get(getChannel).send(embed);
-
+    client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

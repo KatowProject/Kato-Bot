@@ -1,5 +1,4 @@
-const Discord = require('discord.js');
-const { Client, Message, MessageEmbed } = require('discord.js');
+const { Permissions } = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
@@ -11,7 +10,7 @@ exports.run = async (client, message, args) => {
       return message.reply('Kamu tidak mencantumkan IDnya!');
 
     // Ketika yang mengunban adalah member
-    if (!author.hasPermission("BAN_MEMBERS"))
+    if (!author.permissions.has(Permissions.FLAGS.BAN_MEMBERS))
       return message.reply('Kamu adalah member biasa, Kamu tidak bisa menggunakan command ini!');
 
     message.guild.members.unban(member)
@@ -30,7 +29,8 @@ exports.run = async (client, message, args) => {
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 5,
+  location: __filename
 }
 
 exports.help = {

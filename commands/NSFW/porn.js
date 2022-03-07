@@ -2,11 +2,8 @@ const Discord = require('discord.js');
 const axios = require('axios');
 
 exports.run = async (client, message, args) => {
-
   if (!message.channel.nsfw) return;
-
   try {
-
     const response = await axios.get('https://scathach.redsplit.org/v3/nsfw/gif/');
     const porn = response.data;
 
@@ -14,9 +11,7 @@ exports.run = async (client, message, args) => {
       .setTitle('CROTT')
       .setColor('#985ce7')
       .setImage(porn.url)
-
-    message.channel.send(embed);
-
+    message.channel.send({ embeds: [embed] });
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);
     // Restart the bot as usual.

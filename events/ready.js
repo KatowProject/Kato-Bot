@@ -13,24 +13,35 @@ module.exports = client => {
     const allGiveaway = db.all();
     for (let i = 0; i < allGiveaway.length; i++) {
       const data = db.get(allGiveaway[i].ID);
-      const channel = client.channels.cache.get(data.message.channelID);
-      const timeLeft = Date.now() - data.time.now;
+      const channel = client.channels.cache.get(data.channelID);
+      if (!channel) continue;
+      const timeLeft = Date.now() - data.time.start;
 
       if (timeLeft > data.time.duration) {
         if (data.isDone) continue;
 
-        const winLength = data.winner;
+        const msg = await channel.messages.fetch(data.messageID);
+        if (data.entries.length === 0) {
+          data.isDone = true;
+          data.embed.fields[3] = { name: 'Pemenang:', value: 'Tidak ada yang menang', inline: false };
+
+          msg.edit({ content: '**🎉- Giveaway Ended -🎉**', embeds: [data.embed] });
+          db.set(data.messageID, data);
+
+          return client.channels.cache.get(data.channelID).send(`Tidak ada yang menang karna nol partisipan!`);
+        };
+
+        const winLength = data.winnerCount;
         const win = client.util.shuffle(data.entries);
         const winners = win.slice(0, winLength);
 
         data.isDone = true;
-        data.embed.fields[2] = { name: 'Winners:', value: winners.map(a => `<@${a}>`).join(', '), inline: false };
+        data.embed.fields[3] = { name: 'Winners:', value: winners.map(a => `<@${a}>`).join(', '), inline: false };
 
-        const msg = await channel.messages.fetch(data.message.id);
-        msg.edit('🎉- Giveaway Ended -🎉', { embed: data.embed });
-        client.channels.cache.get(data.message.channelID).send(`Congrats ${winners.map(a => `<@${a}>`).join(', ')}!\n${msg.url}`);
+        msg.edit({ content: '**🎉- Giveaway Ended -🎉**', embeds: [data.embed] });
+        client.channels.cache.get(data.channelID).send({ content: `Congrats ${winners.map(a => `<@${a}>`).join(', ')}!\n${msg.url}`, allowedMentions: { parse: ["users"] } });
 
-        db.set(allGiveaway[i].ID, data);
+        db.set(data.messageID, data);
       }
     }
   }, 10000);

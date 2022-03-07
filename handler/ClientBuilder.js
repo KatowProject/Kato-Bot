@@ -3,6 +3,7 @@ const { Player } = require('discord-player');
 const Util = require("./util");
 const Samehadaku = require('./Samehadaku.js');
 const Kusonime = require('./Kusonime.js');
+const Giveaway = require('../plugin/giveaway');
 
 module.exports = class katopos extends Client {
   constructor(opt) {
@@ -19,5 +20,6 @@ module.exports = class katopos extends Client {
     this.player = new Player(this);
     this.samehadaku = new Samehadaku(this);
     this.kusonime = new Kusonime(this);
+    this.giveaway = new Giveaway(this);
   }
 };
