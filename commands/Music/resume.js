@@ -1,44 +1,27 @@
-const Discord = require('discord.js');
-
 exports.run = async (client, message, args) => {
   try {
+    if (!message.member.voice.channelId) return message.reply('Pastikan kamu telah bergabung dalam **Voice Channel**.', { ephemeral: true });
+    if (message.guild.me.voice.channelId && message.member.voice.channelId !== message.member.voice.channelId) return message.reply('Pastikan kamu bergabung dengan **Voice Channel** yang sama.', { ephemeral: true });
 
-    if (!message.member.voice.channel) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`
-      }
-    })
+    const queue = client.player.getQueue(message.guild.id);
+    if (!queue?.playing) return message.reply('Tidak ada lagu yang diputar');
 
-    if (!client.player.isPlaying(message)) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | tidak ada musik yang diputar!`
-      }
-    });
-
-    let song = await client.player.resume(message);
-
-    message.channel.send({
-      embed: {
-        color: client.warna.success,
-        description: `${client.emoji.resume} | Dilanjutkan!`
-      }
-    });
+    const paused = queue.setPaused(false);
+    if (paused) return message.reply('Berhasil melanjutkan Lagu.');
   } catch (error) {
-    return message.channel.send(`Something went wrong: ${error.message}`);
-    // Restart the bot as usual.
+    message.reply(`Something went wrong: ${error.message}`);
   }
 }
 
 exports.conf = {
-  aliases: ['r'],
-  cooldown: 5
+  cooldown: 5,
+  aliases: [],
+  location: __filename
 }
 
 exports.help = {
   name: 'resume',
-  description: 'melanjutkan musik yang dijeda',
-  usage: 'k!resume',
-  example: 'k!resume'
+  description: 'Resume the current song.',
+  usage: 'resume',
+  example: 'resume'
 }

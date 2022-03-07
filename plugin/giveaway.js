@@ -72,11 +72,6 @@ module.exports = class Giveaway {
                             .setCustomId(`select-${message.id}`)
                             .addOptions([
                                 {
-                                    label: 'MEE6',
-                                    description: 'Menggunakan Level MEE6',
-                                    value: 'MEE6'
-                                },
-                                {
                                     label: 'Role',
                                     description: 'Menggunakan Role',
                                     value: 'ROLE'

@@ -1,38 +1,22 @@
-const Discord = require('discord.js');
+const { QueueRepeatMode } = require('discord-player');
+const { MessageButton, MessageActionRow } = require('discord.js');
 
 exports.run = async (client, message, args) => {
   try {
+    if (!message.member.voice.channelId) return message.reply('Pastikan kamu telah bergabung dalam **Voice Channel**.', { ephemeral: true });
+    if (message.guild.me.voice.channelId && message.member.voice.channelId !== message.member.voice.channelId) return message.reply('Pastikan kamu bergabung dengan **Voice Channel** yang sama.', { ephemeral: true });
 
-    if (!message.member.voice.channel) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | Kamu harus masuk Channel Voice telebih dahulu!`
-      }
-    })
-    if (!client.player.isPlaying(message)) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | You must be in a voice channel!`
-      }
-    })
+    const queue = client.player.getQueue(message.guild.id);
+    if (!queue || !queue.playing) return message.reply('Tidak ada lagu yang diputar.');
 
-    const mode = client.player.getQueue(message).repeatMode;
-    if (mode) {
-      client.player.setRepeatMode(message.guild.id, false)
-      message.channel.send('*Repeat* telah dinonaktifkan!');
-    } else {
-      client.player.setRepeatMode(message.guild.id, true)
-      message.channel.send('*Repeat* telah diaktifkan!');
-    }
-    // Get the current song
-    let song = await client.player.nowPlaying(message);
+    const btn = new MessageActionRow().addComponents([
+      new MessageButton().setCustomId(`track-${message.id}`).setLabel('🎵 Track').setStyle('SECONDARY'),
+      new MessageButton().setCustomId(`queue-${message.id}`).setLabel('🎶 Queue').setStyle('SECONDARY'),
+      new MessageButton().setCustomId(`autoplay-${message.id}`).setLabel('🔁 Autoplay').setStyle('SECONDARY'),
+      new MessageButton().setCustomId(`shuffle-${message.id}`).setLabel('❌ Off').setStyle('SECONDARY'),
+    ]);
 
-    message.channel.send({
-      embed: {
-        color: client.warna.success,
-        description: `${client.emoji.repeat} | Repeating [${song.title}](${song.url})!`
-      }
-    })
+    const msg = await message.channel.send({ components: [btn] });
 
   } catch (error) {
     return message.channel.send(`Something went wrong: ${error.message}`);

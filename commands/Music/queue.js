@@ -1,72 +1,36 @@
-const { Util } = require('discord.js');
+const { QueryType } = require("discord-player");
 
 exports.run = async (client, message, args) => {
+  if (!message.member.voice.channelId) return message.reply('Pastikan kamu telah bergabung dalam **Voice Channel**.', { ephemeral: true });
+  if (message.guild.me.voice.channelId && message.member.voice.channelId !== message.member.voice.channelId) return message.reply('Pastikan kamu bergabung dengan **Voice Channel** yang sama.', { ephemeral: true });
+
+  const track = await client.player.search(args.join(' '), {
+    requestedBy: message.author,
+    searchEngine: QueryType.AUTO,
+  });
+  if (!track || !track.tracks.length) return message.reply('No results were found!');
+
+  const queue = client.player.createQueue(message.guild, { metadata: message.channel });
   try {
-
-    if (!message.member.voice.channel) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`
-      }
-    })
-
-    let queue = client.player.getQueue(message);
-
-    if (!queue) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | Tidak ada musik yang diputar!`
-      }
-    })
-
-    const q = queue.tracks.map((track, i) => `${i + 1}. [${track.title}](${track.url}) (${track.duration}) - **${track.requestedBy}**`);
-
-    let current = await client.player.nowPlaying(message);
-    current = `▶ | **${current.title}** - **${current.author}** (${current.duration}) - [**${current.requestedBy}**]\n` || 'tidak ada antrian';
-    current += q.join('\n')
-    let chunks = client.util.splitEmbedDescription(current, "\n");
-    let total = chunks.length;
-    let first = chunks.shift();
-    message.channel.send({
-      embed: {
-        title: `Antrian Lagu`,
-        color: client.warna.success,
-        description: `${first}`,
-        footer: {
-          text: `Page 1/${total}`
-        },
-        timestamp: new Date()
-      }
-    })
-    chunks.forEach((c, i) => {
-
-      message.channel.send({
-        embed: {
-          title: `Antrian Lagu`,
-          color: client.warna.kato,
-          description: c,
-          footer: {
-            text: `Page ${i + 2}/${total}`
-          },
-          timestamp: new Date()
-        }
-      });
-    })
-
-  } catch (error) {
-    return message.channel.send(`Something went wrong: ${error.message}`);
-    // Restart the bot as usual.
+    if (!queue.connection) await queue.connect(message.member.voice.channel);
+  } catch {
+    queue.destroy();
+    return message.reply(`Tidak dapat bergabung ke Voice Channel.`);
   }
-}
+
+  track.playlist ? queue.addTracks(track.tracks) : queue.addTrack(track.tracks[0]);
+  if (!queue.playing) await queue.play();
+};
 
 exports.conf = {
-  aliases: ['q'],
-  cooldown: 5
+  aliases: ['p'],
+  cooldown: 5,
+  location: __filename
 }
 
 exports.help = {
-  name: 'queue',
-  description: 'Melihat antrian lagu',
-  usage: 'k!queue',
-  example: 'k!queue'
+  name: 'play',
+  description: 'play a music',
+  usage: 'play <query>',
+  example: 'play sayonara'
 }

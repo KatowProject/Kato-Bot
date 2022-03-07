@@ -1,44 +1,23 @@
-const Discord = require('discord.js');
-
 exports.run = async (client, message, args) => {
-  try {
+  if (!message.member.voice.channelId) return message.reply('Pastikan kamu telah bergabung dalam **Voice Channel**.', { ephemeral: true });
+  if (message.guild.me.voice.channelId && message.member.voice.channelId !== message.member.voice.channelId) return message.reply('Pastikan kamu bergabung dengan **Voice Channel** yang sama.');
 
-    if (!message.member.voice.channel) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | Kamu harus masuk Channel Voice terlebih dahulu!`
-      }
-    })
+  const queue = client.player.getQueue(message.guild.id);
+  if (!queue || !queue.playing) return message.reply('Tidak ada lagu yang diputar.');
+  queue.destroy();
 
-    if (!client.player.isPlaying(message)) return message.channel.send({
-      embed: {
-        color: client.warna.error,
-        description: `${client.emoji.error} | tidak ada yang diputar!`
-      }
-    })
-
-    let song = await client.player.stop(message);
-
-    message.channel.send({
-      embed: {
-        color: client.warna.success,
-        description: `${client.emoji.stop} | Diputuskan!`
-      }
-    })
-  } catch (error) {
-    return message.channel.send(`Something went wrong: ${error.message}`);
-    // Restart the bot as usual.
-  }
+  message.reply('Berhasil mematikan lagu.');
 }
 
 exports.conf = {
-  aliases: ["dc"],
-  cooldown: 5
+  cooldown: 5,
+  aliases: [],
+  location: __filename
 }
 
 exports.help = {
   name: 'stop',
-  description: 'menghentikan musik',
-  usage: 'k!stop',
-  example: 'k!stop'
+  description: 'Mematikan lagu yang sedang diputar.',
+  usage: 'stop',
+  example: 'stop'
 }
