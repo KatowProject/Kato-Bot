@@ -21,16 +21,11 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 
 ## Develover
 - ManLord#3143
-- Ray#1337
-- Stellarz_Munn#4554
-- The F#7252
-- Carl#5404
 
 ### Instalasi
-- Instal node.js (V14 ke atas)
-- Install yarn (jika ingin menggunakan `yarn` daripada `npm`)
+- Instal node.js (V16 ke atas)
 - Clone repo ini.
-- Instal terlebih dahulu dengan cara mengetik `npm install` atau `yarn install`.<br>
+- Instal terlebih dahulu dengan cara mengetik `npm install`.<br>
 - Edit file `config/config.json`:
 ```json
 {
@@ -38,11 +33,15 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
         "458342161474387999"
     ],
     "prefix": [
-        "k!",
-        "k."
+        "d!",
+        "d."
     ],
-    "token": "",
-    "instaAuth": ""
+    "token": "token",
+    "instaAuth": "",
+    "channel": {
+        "message-delete": "932997959669395485",
+        "warn-activity": "932997960051093564"
+    }
 }
 ```
 ### Penggunaan
