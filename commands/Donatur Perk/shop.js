@@ -30,7 +30,7 @@ exports.run = async (client, message, args) => {
             await m.deferUpdate();
             switch (m.customId) {
                 case `buy-${message.id}`:
-                    await buyItem(items, user, opt);
+                    await buyItem(items, user);
 
                     collector.stop();
                     break;
@@ -41,7 +41,7 @@ exports.run = async (client, message, args) => {
 
     }
 
-    async function buyItem(items, getUser, opt) {
+    async function buyItem(items, getUser) {
         message.reply('Pilih menggunakan angka, saat memasukkan nomor item akan langsung terbeli. hati-hati saat memasukkan nomor agar tidak salah beli!');
         const msgCollector = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60_000 });
         msgCollector.on('collect', async (msg) => {

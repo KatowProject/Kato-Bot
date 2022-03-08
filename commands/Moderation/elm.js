@@ -44,7 +44,7 @@ exports.run = async (client, message, args) => {
 
         client.channels.cache.get(client.config.channel["warn-activity"]).send({ embeds: [embed] });
 
-        message.guild.channels.cache.find(c => c.name === "ruang-bk").send(`Hai **${elm}**, Selamat datang di <#821630026817470485>, member yang hanya bisa melihat channel ini artinya sedang dalam hukuman karena telah melanggar sesuatu. Jika anda merasa pernah melakukan sesuatu yang melanggar rules, silahkan beritahu disini agar segera diproses oleh staff dan dapat melanjukan kembali aktivitas chat secara normal.`);
+        message.guild.channels.cache.find(c => c.name === "ruang-bk").send(`Hai **${elm}**, Selamat datang di <#932997960923480100>, member yang hanya bisa melihat channel ini artinya sedang dalam hukuman karena telah melanggar sesuatu. Jika anda merasa pernah melakukan sesuatu yang melanggar rules, silahkan beritahu disini agar segera diproses oleh staff dan dapat melanjukan kembali aktivitas chat secara normal.`);
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
         // Restart the bot as usual.
