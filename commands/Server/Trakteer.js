@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { Permissions } = Discord;
 const ms = require('ms');
 const donate = require('../../database/schema/Donatur');
+const xp = require('../../database/schema/xp');
 
 exports.run = async (client, message, args) => {
     try {
@@ -202,7 +203,7 @@ exports.run = async (client, message, args) => {
                     } else {
                         message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
                         await findMember.roles.add('932997958788608044');
-                        await donate.create({ userID: findMember.id, guild: message.guild.id, duration: time, now: Date.now() });
+                        await donate.create({ userID: findMember.id, guild: message.guild.id, duration: time, now: Date.now(), ticket: 0, isAttend: false });
                     }
                     applyMSG.delete();
                     collectora.stop();
