@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const { Permissions } = Discord;
 const ms = require('ms');
 const donate = require('../../database/schema/Donatur');
-const xp = require('../../database/schema/xp');
 
 exports.run = async (client, message, args) => {
     try {
@@ -177,7 +176,8 @@ exports.run = async (client, message, args) => {
                 const ya = ['ya', 'bener', 'betul', 'ok'];
                 const tidak = ['ga', 'salah', 'invalid', 'gk', 'tidak'];
 
-                const time = ms(args[1]);
+                let time = ms(args[1]);
+                if (!time && args[1] === 'booster') time = Infinity;
                 if (!time) return message.reply('Nilai yang dimasukkan invalid, silahkan buat permintaan kembali!');
 
                 const findMember = message.mentions.members.first() || message.guild.members.cache.get(args[2]);
