@@ -197,7 +197,10 @@ exports.run = async (client, message, args) => {
                     if (!ya.includes(m.content)) return message.reply('Argumen tidak dimengerti oleh Kato!');
 
                     const alreadyDonet = await donate.findOne({ userID: findMember.id });
-                    if (alreadyDonet) {
+                    if (time == Infinity) {
+                        message.reply("Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!");
+                        await donate.create({ userID: findMember.id, guild: message.guild.id, now: Date.now(), duration: time, ticket: 0, isAttended: false });
+                    } else if (alreadyDonet) {
                         message.reply('Data telah disetujui dan Durasi Role diakumulasikan dengan sekarang, silahkan cek kembali untuk memastikan!');
                         await donate.findOneAndUpdate({ userID: findMember.id }, { duration: alreadyDonet.duration + time });
                     } else {
