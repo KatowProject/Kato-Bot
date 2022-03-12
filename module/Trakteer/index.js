@@ -12,14 +12,15 @@ class Trakteer {
     getSaldo() {
         return new Promise(async (resolve, reject) => {
             try {
-                const endpoint = 'manage/balance';
+                const endpoint = 'manage/dashboard';
                 const res = await tools.get(endpoint, this.options);
                 const response = res.data;
 
                 const $ = cheerio.load(response);
-                const saldo = $('.available-balance').find('.col-md-3 > h2').text();
+                const saldo = $('.col-xs-12').eq(0).find('h3').text().trim();
+                const current_donation = $('.col-xs-12').eq(1).find('h3').text().trim();
 
-                return resolve(saldo);
+                return resolve({ saldo, current_donation });
             } catch (e) {
                 return reject(e);
             }

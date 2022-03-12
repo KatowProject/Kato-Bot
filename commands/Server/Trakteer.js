@@ -9,12 +9,18 @@ exports.run = async (client, message, args) => {
         switch (option) {
             case 'saldo':
                 if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+
+                const getMonth = monthNames[new Date().getMonth()];
                 const getSaldo = await client.trakteer.getSaldo();
                 message.channel.send({
                     embeds: [new Discord.MessageEmbed()
                         .setTitle('Cek Saldo Trakteer')
                         .setColor('RANDOM')
-                        .addField('Saldo', getSaldo)
+                        .addField('Saldo', getSaldo.saldo)
+                        .addField(`Donasi di bulan ${getMonth}`, getSaldo.current_donation)
                         .setFooter(`trakter.id/santai`, message.guild.iconURL())
                     ]
                 });
