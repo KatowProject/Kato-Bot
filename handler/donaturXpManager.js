@@ -27,7 +27,7 @@ module.exports = async (client, canReset = false) => {
                 if (!user?.roles.cache.hasAny('932997958788608044', '933117751264964609')) {
                     arr.push(member);
 
-                    client.users.cache.get(member.userID).send(`Hai, Status donatur kamu dicabut karna durasi donasi kamu telah habis.`);
+                    client.users.cache.get(member.userID)?.send(`Hai, Status donatur kamu dicabut karna durasi donasi kamu telah habis.`);
                     client.channels.cache.find(a => a.name === 'staff-bot').send({ content: 'true - donatur, out/no role' });
 
                     member.remove();
