@@ -13,5 +13,10 @@
         "XSRF-TOKEN": "",
         "trakteer-id-session": "",
         "webhook": ""
-    }
+    },
+    "channel": {
+        "message-delete": "932997959669395485",
+        "warn-activity": "932997960051093564"
+    },
+    "selfbot": []
 }

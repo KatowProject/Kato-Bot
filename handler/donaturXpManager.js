@@ -43,7 +43,6 @@ module.exports = async (client, canReset = false) => {
         }
 
         if (arr.length > 1) {
-            console.log(arr);
             const map = arr.map(async a => {
                 const member = await client.guilds.cache.get(a.guild).members.cache.get(a.userID);
                 if (!member) return;
@@ -62,6 +61,15 @@ module.exports = async (client, canReset = false) => {
                         .setTimestamp()
                 ]
             });
+
+            for (mm of arr) {
+                if (mm.daily === 'NaN') mm.daily = 0;
+                const xp = (parseInt(mm.daily) * 10) * 0.25;
+                client.selfbot.sendMessage('932997960923480099', `!give-xp <@${mm.userID}> ${xp}`, true);
+
+                //delay 3s promise
+                await new Promise(resolve => setTimeout(resolve, 3000));
+            }
         }
     } catch (err) {
         console.log(err);

@@ -1,0 +1,14 @@
+{
+  "name": "discord-selfbot",
+  "version": "1.0.0",
+  "description": "Discord Selfbot - give xp automatically for MEE6 Premium",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "KatowProject",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.1"
+  }
+}
