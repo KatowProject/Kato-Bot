@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
         const userID = xp.split('[')[1].split(']')[0];
         let exp = xp.split('`')[1];
         if (exp === 'NaN') exp = 0;
-        client.selfbot.sendMessage(message.channel.id, `<@${userID}> ${parseInt(exp)}`, true);
+        client.selfbot.request.sendMessage(message.channel.id, `give-xp <@${userID}> ${parseInt(exp)}`, true);
 
         //delay 3s
         await new Promise(resolve => setTimeout(resolve, 3000));

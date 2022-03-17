@@ -9,6 +9,7 @@
   "author": "KatowProject",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "^0.26.1",
+    "ua-parser-js": "^1.0.2"
   }
 }

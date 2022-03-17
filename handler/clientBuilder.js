@@ -1,15 +1,20 @@
 const { Client, Collection } = require('discord.js');
+const config = require('../config/config.json');
 const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 const Kuroshiro = require('@dsquare-gbu/kuroshiro');
-const Selfbot = require('../module/Discord-Selfbot');
+const Selfbot = require('../module/Discord-Selfbot/index.js');
 
 const kuroshiro = new Kuroshiro();
-(async () => await kuroshiro.init(new KuromojiAnalyzer()))();
+const selfbot = new Selfbot(config.selfbot);
+(async () => {
+    await kuroshiro.init(new KuromojiAnalyzer());
+    await selfbot.init(true);
+})();
 module.exports = class katopos extends Client {
     constructor(opt) {
         super(opt);
 
-        this.config = require('../config/config.json');
+        this.config = config;
         this.util = new (require('./util'))();
         this.commands = new Collection();
         this.cooldowns = new Collection();
@@ -24,6 +29,6 @@ module.exports = class katopos extends Client {
         this.giveaway = new (require('../module/Giveaway'))(this);
         this.player = new (require('discord-player')).Player(this);
         this.kuroshiro = kuroshiro;
-        this.selfbot = new Selfbot(this.config.selfbot);
+        this.selfbot = selfbot;
     };
 };
