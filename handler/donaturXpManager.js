@@ -65,7 +65,7 @@ module.exports = async (client, canReset = false) => {
             for (mm of arr) {
                 if (mm.daily === 'NaN') mm.daily = 0;
                 const xp = (parseInt(mm.daily) * 10) * 0.25;
-                client.selfbot.request.sendMessage('932997960923480099', `!give-xp <@${mm.userID}> ${xp}`, true);
+                client.selfbot.request.sendMessage('932997960923480099', `!give-xp <@${mm.userID}> ${parseInt(xp)}`, true);
 
                 //delay 3s promise
                 await new Promise(resolve => setTimeout(resolve, 3000));
