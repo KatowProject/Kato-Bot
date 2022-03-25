@@ -9,7 +9,7 @@ module.exports = class Kusonime {
     getWithSearch(query, message) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/cari/${query}`);
+                const response = await axios.get(`https://kusonime.kato-rest.us/api/cari/${query}`);
                 const res = response.data;
                 if (res.length === 0) return reject(`Pencarian ${query} tidak ditemukan!`);
 
@@ -48,7 +48,7 @@ module.exports = class Kusonime {
         return new Promise(async (resolve, reject) => {
             try {
                 const endpoint = anime.link.endpoint;
-                const response = await axios.get(`http://posantai.bugs.today/kusonime/api/anime/${endpoint}`);
+                const response = await axios.get(`https://kusonime.kato-rest.us/api/anime/${endpoint}`);
                 const res = response.data;
                 message.channel.send({
                     embeds: [
