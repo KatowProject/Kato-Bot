@@ -150,29 +150,9 @@ class Trakteer {
                 const donaturData = await this.getData();
 
                 const order = await this.getOrderDetail(donaturData[0].id);
+                order.date = donaturData[0].created_at;
                 const json = {
-                    'content': '<a:bell:840021626473152513> tengtong ada donatur masuk! <a:bell:840021626473152513>',
-                    'embeds': [
-                        {
-                            "title": "Donasi Trakteer",
-                            "color": 16777215,
-                            "author": {
-                                "name": "Perkumpulan Orang Santai",
-                                "url": "https://trakteer.id/santai",
-                                "icon_url": "https://cdn.discordapp.com/icons/336336077755252738/c3940657b6d2bf8bf973e1b5e4499728.png?size=4096"
-                            },
-                            "description": `**Nama:** ${order.nama}\n**Unit:** <:santai:827038555896938498> ${order.unit.length}\n**Nominal:** ${order.nominal}`,
-                            "fields": [
-                                {
-                                    name: 'Pesan Dukungan',
-                                    value: order.message,
-                                }
-                            ],
-                            "footer": {
-                                "text": `Tanggal • ${order.tanggal}`
-                            }
-                        }
-                    ]
+                    "content": JSON.stringify(order)
                 };
 
                 const isAvailable = fs.existsSync(path.join(__dirname, './latestDonatur.json'));
@@ -183,8 +163,6 @@ class Trakteer {
                     if (donaturData[0].id === donatur.id) return;
                     fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
                     await tools.post(json, this.options['webhook']);
-
-
                 } else {
                     fs.writeFileSync(path.join(__dirname, './latestDonatur.json'), JSON.stringify(donaturData[0]));
                     await tools.post(json, this.options['webhook']);

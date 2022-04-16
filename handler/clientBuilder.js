@@ -30,5 +30,6 @@ module.exports = class katopos extends Client {
         this.player = new (require('discord-player')).Player(this);
         this.kuroshiro = kuroshiro;
         this.selfbot = selfbot;
+        this.canvas = new (require('../module/Discord-Canvas'))(this);
     };
 };

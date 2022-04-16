@@ -195,6 +195,14 @@ class Util {
             }
         }
 
+        this.isJSON = (str) => {
+            try {
+                const parse = JSON.parse(str);
+                return (parse && typeof parse === "object") || typeof parse === "boolean" || typeof parse === "number" || typeof parse === "string";
+            } catch (e) {
+                return false;
+            }
+        }
     }
 }
 

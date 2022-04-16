@@ -39,7 +39,7 @@ exports.run = async (client, message, args) => {
                     break;
 
                 case `edit-${message.id}`:
-                    message.reply("Please enter the name of the product you want to edit!");
+                    message.reply("Please select the product with number you want to edit!");
                     await editProduct();
                     break;
             }
@@ -79,19 +79,22 @@ exports.run = async (client, message, args) => {
                     message.reply('You have canceled the edit process!');
                     collector.stop();
                 } else {
+                    const products = await db.find({});
                     const product = m.content.split(',');
-                    if (product.length !== 3) return message.reply('You have to enter the product name, price and stock!');
+                    if (product.length !== 4) return message.reply('You have to enter the number of product, new product name, price and stock!');
 
-                    const name = product[0];
-                    const price = product[1];
-                    const stock = product[2];
+                    const index = products[product[0] - 1];
+                    const name = product[1];
+                    const price = product[2];
+                    const stock = product[3];
 
-                    const productExists = await db.findOne({ name: name });
-                    if (!productExists) return message.reply('This product does not exist!');
                     if (isNaN(price) || isNaN(stock)) return message.reply('You have to enter a number!');
-                    if (price <= 0 || stock <= 0) return message.reply('You have to enter a number greater than 0!');
+                    index.price = price;
+                    index.stock = stock;
+                    index.name = name;
+                    if (price <= 0 || stock < 0) return message.reply('You have to enter a number greater than 0!');
 
-                    await db.findOneAndUpdate({ name: name }, { $set: { price: price, stock: stock } });
+                    await index.save();
                     message.reply('This product has been updated');
                     collector.stop();
                 }
