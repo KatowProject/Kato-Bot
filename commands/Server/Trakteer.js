@@ -116,7 +116,7 @@ exports.run = async (client, message, args) => {
                     message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
                 } else if (args.includes('--all')) {
                     const allDonatur = await donate.find({})
-                    const member = message.guild.members.fetch();
+                    const member = await message.guild.members.fetch();
                     const mapDonatur = allDonatur.map((a, i) => {
                         if (!a.now) return;
                         const timeLeft = a.duration - (Date.now() - a.now);
