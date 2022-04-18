@@ -118,9 +118,9 @@ exports.run = async (client, message, args) => {
                     const allDonatur = await donate.find({})
                     const member = await message.guild.members.fetch();
                     const mapDonatur = allDonatur.map((a, i) => {
-                        if (!a.now) return;
-                        const timeLeft = a.duration - (Date.now() - a.now);
                         const mem = member.find(b => b.id == a.userID);
+                        if (!a.now || !a.duration) return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`Booster Duration\``;
+                        const timeLeft = a.duration - (Date.now() - a.now);
                         if (!mem) return;
                         return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`${client.util.parseDur(timeLeft)}\``;
                     });
