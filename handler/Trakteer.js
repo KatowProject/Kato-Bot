@@ -1,6 +1,5 @@
 const donaturs = require('../database/schema/Donatur');
 const Discord = require('discord.js');
-const baseValue = 10000;
 
 module.exports = async (client, message, data) => {
     const name = data.nama;
@@ -40,15 +39,16 @@ module.exports = async (client, message, data) => {
         .send('Hai Para Staff, Role yang kato pasang tidak dapat ditemukan, tolong buatlah Role dengan nama **Santai Dermawan**');
 
     const findUser = await donaturs.findOne({ userID: member.id });
+    const channel = client.channels.cache.get('932997960923480097');
     if (findUser) {
         findUser.duration = findUser.duration + toMS;
         await findUser.save();
-        client.channels.cache.get('932997960923480097').send(`Hai Para Staff, Donatur **${member.user.tag}** telah diperpanjang durasinya selama **${duration} hari**.`);
+        channel.send(`Hai Para Staff, Donatur **${member.user.tag}** telah diperpanjang durasinya selama **${duration} hari**.`);
         member.send(`Hai ${member.user.tag}, kato telah memperpanjang durasi role kepada kamu selama **${duration} hari**, Terima Kasih atas dukungannya!`);
     } else {
         await donaturs.create({ userID: member.id, guild: message.guild.id, duration: toMS, now: Date.now() });
         member.roles.add(role.id);
-        client.channels.cache.get('932997960923480097').send(`Hai Para Staff, **${member.user.tag}** terdaftar sebagai Donatur baru, silahkan cek untuk memastikan!`);
+        channel.send(`Hai Para Staff, **${member.user.tag}** terdaftar sebagai Donatur baru, silahkan cek untuk memastikan!`);
         member.send(`Hai ${member.user.tag}, kato telah memberikan role **Santai Dermawan** kepada Kamu selama **${duration} hari**, Terima Kasih atas dukungannya!`);
     }
 }

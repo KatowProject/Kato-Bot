@@ -58,4 +58,21 @@ module.exports = async (client, interaction) => {
 
         interaction.user.send('Telah mengikuti giveaway!');
     }
+
+    if (interaction.customId === "giveawayCancel") {
+        await interaction.deferUpdate();
+
+        const data = await db.findOne({ messageID: interaction.message.id });
+        if (!data) return interaction.user.send('Giveaway tidak ditemukan!');
+        if (data.isDone) return interaction.user.send('Giveaway telah berakhir!');
+        if (!data.entries.includes(interaction.user.id)) return interaction.user.send('Tidak terdaftar dalam giveaway!');
+
+        data.entries.splice(data.entries.indexOf(interaction.user.id), 1);
+        data.embed.fields[2].value = `${data.entries.length}`;
+
+        await interaction.message.edit({ embeds: [data.embed] });
+        await db.findOneAndUpdate({ messageID: interaction.message.id }, data);
+
+        interaction.user.send('Telah dikeluarkan dari giveaway!');
+    }
 }

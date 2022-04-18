@@ -7,6 +7,7 @@ exports.run = async (client, message, args) => {
         if (!user) return message.reply('Kamu bukan donatur!');
         if (user.isAttend) return message.reply('Kamu sudah absen!');
 
+        if (!user.ticket) user.ticket = 0;
         await user.update({ ticket: user.ticket + 1, isAttend: true });
 
         message.reply('Absen telah berhasil!');

@@ -116,12 +116,13 @@ exports.run = async (client, message, args) => {
                     message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
                 } else if (args.includes('--all')) {
                     const allDonatur = await donate.find({})
+                    const member = message.guild.members.fetch();
                     const mapDonatur = allDonatur.map((a, i) => {
                         if (!a.now) return;
                         const timeLeft = a.duration - (Date.now() - a.now);
-                        const member = message.guild.members.cache.get(a.userID);
-                        if (!member) return;
-                        return `**${i + 1}**. <@${member.id}> - **${member.user.tag}**\n\`${client.util.parseDur(timeLeft)}\``;
+                        const mem = member.find(b => b.id == a.userID);
+                        if (!mem) return;
+                        return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`${client.util.parseDur(timeLeft)}\``;
                     });
                     const chunkDonatur = client.util.chunk(mapDonatur, 10);
 

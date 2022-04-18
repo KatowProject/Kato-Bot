@@ -210,6 +210,12 @@ module.exports = class Giveaway {
                                             .setStyle('SUCCESS')
                                             .setCustomId('giveawayID')
                                     )
+                                    .addComponents(
+                                        new Discord.MessageButton()
+                                            .setLabel('❌')
+                                            .setStyle('DANGER')
+                                            .setCustomId('giveawayCancel')
+                                    )
                             ]
                         });
 
