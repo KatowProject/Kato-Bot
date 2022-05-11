@@ -28,7 +28,9 @@ module.exports = async (client, message, data) => {
 
     const buffer = await canvas.generate();
     const attachment = new Discord.MessageAttachment(buffer, 'donation.png');
-    const webhook = new Discord.WebhookClient({ url: client.config.webhook });
+    const id = client.config.webhook.split("/")[5];
+    const token = client.config.webhook.split("/")[6];
+    const webhook = new Discord.WebhookClient({ id, token });
     webhook.send({ files: [attachment] });
 
     if (!member) return client.channels.cache.get('932997960923480097')
