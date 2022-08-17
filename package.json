@@ -1,0 +1,29 @@
+{
+  "name": "kato-bot",
+  "version": "4.0.0",
+  "description": "Kato Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KatowProject/Kato-Bot.git"
+  },
+  "author": "KatowProject",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/KatowProject/Kato-Bot/issues"
+  },
+  "homepage": "https://github.com/KatowProject/Kato-Bot#readme",
+  "dependencies": {
+    "@dsquare-gbu/kuroshiro": "^1.1.2-iedev-1",
+    "axios": "^0.27.2",
+    "discord-logs": "^2.0.1",
+    "discord.js": "^14.2.0",
+    "dotenv": "^16.0.1",
+    "g-i-s": "^2.1.6",
+    "kuroshiro-analyzer-kuromoji": "^1.1.0",
+    "mongoose": "^6.5.2"
+  }
+}
