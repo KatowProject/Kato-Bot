@@ -27,6 +27,7 @@ const client = new Kato({
 require('./handler/module')(client);
 require('./handler/event')(client);
 require('./database/index')(process.env.DB_URI);
+require('./handler/donaturXpManager')(client);
 
 client.login(process.env.DISCORD_TOKEN);
 
@@ -37,6 +38,7 @@ process.on("unhandledRejection", (reason, promise) => {
 process.on("uncaughtException", err => {
     console.error(new Date());
     console.error(`Caught exception: ${err}`);
+    console.error(err.stack);
     if (err.code == "PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR") {
         console.error("true");
     }
