@@ -27,5 +27,5 @@ module.exports = async (client, member) => {
     if (isExits) return;
 
     await db.create({ userID: member.user.id, guild: member.guild.id, message: { daily: 0, base: getUser.message_count }, isAttend: false });
-    client.channels.cache.get("932997960923480097").send(`\`${member.user.tag}\` terdaftar sebagai booster baru.`);
+    client.channels.cache.get("1013977865756356658").send(`\`${member.user.tag}\` terdaftar sebagai booster baru.`);
 }
