@@ -33,15 +33,15 @@ module.exports = async (client, message, data) => {
     const webhook = new Discord.WebhookClient({ id, token });
     webhook.send({ files: [attachment] });
 
-    if (!member) return client.channels.cache.get('932997960923480097')
+    if (!member) return client.channels.cache.get('1013977865756356658')
         .send(`Hai Para Staff, ada Donatur yang tidak dapat Kato temui dalam Server, maaf kato tidak dapat memberikan role-nya secara otomatis :(`);
 
     const role = message.guild.roles.cache.find(r => r.name === 'Santai Dermawan');
-    if (!role) return client.channels.cache.get('932997960923480097')
+    if (!role) return client.channels.cache.get('1013977865756356658')
         .send('Hai Para Staff, Role yang kato pasang tidak dapat ditemukan, tolong buatlah Role dengan nama **Santai Dermawan**');
 
     const findUser = await donaturs.findOne({ userID: member.id });
-    const channel = client.channels.cache.get('932997960923480097');
+    const channel = client.channels.cache.get('1013977865756356658');
     if (findUser) {
         findUser.duration = findUser.duration + toMS;
         await findUser.save();

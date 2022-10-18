@@ -51,7 +51,7 @@ module.exports = async (client, canReset = false) => {
                 return `**${member.user.tag} [${member.id}]** - \`${xp}\` XP`;
             });
 
-            client.channels.cache.get('932997960923480101').send({
+            client.channels.cache.get('932997960923480099').send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setColor('#0099ff')

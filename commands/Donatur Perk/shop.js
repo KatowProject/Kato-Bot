@@ -58,7 +58,7 @@ exports.run = async (client, message, args) => {
                         product.stock = product.stock - 1;
 
                         message.reply(`Kamu membeli ${product.name} dengan ${product.price} tickets, DM Admin yang sedang on untuk mengklaimnya!`);
-                        client.channels.cache.get('932997960923480097').send(`**${message.author.tag}** membeli ${product.name} dengan ${product.price} tickets`);
+                        client.channels.cache.get('1013977865756356658').send(`**${message.author.tag}** membeli ${product.name} dengan ${product.price} tickets`);
                         msgCollector.stop();
 
                         await db.findOneAndUpdate({ name: product.name }, product);
