@@ -25,6 +25,7 @@
     "got": "^11.8.3",
     "kuroshiro-analyzer-kuromoji": "^1.1.0",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.38",
     "mongoose": "^6.0.13",
     "scraper-instagram": "^1.0.17",
     "spotify-url-info": "^2.2.3",

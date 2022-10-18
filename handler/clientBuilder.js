@@ -3,7 +3,7 @@ const config = require('../config/config.json');
 const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 const Kuroshiro = require('@dsquare-gbu/kuroshiro');
 const Selfbot = require('../module/Discord-Selfbot/index.js');
-
+const TempEvent = require('../handler/tempEvent.js');
 const kuroshiro = new Kuroshiro();
 const selfbot = new Selfbot(config.selfbot);
 (async () => {
@@ -31,5 +31,12 @@ module.exports = class katopos extends Client {
         this.kuroshiro = kuroshiro;
         this.selfbot = selfbot;
         this.canvas = new (require('../module/Discord-Canvas'))(this);
+        this.tempEvent = new TempEvent({
+            client: this,
+            interval: 60_000,
+            messageCount: 50,
+            isOpen: true,
+            channel: '932997960923480099'
+        });
     };
 };

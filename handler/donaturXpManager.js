@@ -1,8 +1,9 @@
 const db = require('../database/schema/Donatur');
 const xpdb = require('../database/schema/xp_player');
-const moment = require('moment');
+const { User: userEvent } = require('../database/schema/TempEvent');
+const moment = require('moment-timezone');
 const Discord = require('discord.js');
-moment.locale('id');
+moment.tz.setDefault('Asia/Jakarta');
 
 module.exports = async (client, canReset = false) => {
     try {

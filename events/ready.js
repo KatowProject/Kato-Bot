@@ -20,4 +20,7 @@ module.exports = (client) => {
 
     /** Benefit **/
     setInterval(() => require('../handler/donaturXpManager')(client), 60_000);
+
+    /** Temp Event */
+    client.tempEvent.init();
 }
