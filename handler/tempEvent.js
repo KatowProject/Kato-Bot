@@ -94,7 +94,7 @@ class TempEvent {
             const user = await User.findOne({ userID });
             if (!user) return message.channel.send({ content: 'User belum terdaftar.' });
 
-            if (user.isAttend) return message.channel.send({ content: 'User sudah mengambil daily.' });
+            if (user.isAttend) return message.channel.send({ content: 'Kamu telah mengambil daily.' });
 
             const ticket = user.ticket;
             user.ticket = ticket + 1;
@@ -102,7 +102,7 @@ class TempEvent {
 
             await user.save();
 
-            return message.channel.send({ content: 'User berhasil mengambil daily.' });
+            return message.channel.send({ content: 'Kamu     berhasil mengambil daily.' });
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
         }

@@ -34,7 +34,7 @@ module.exports = class katopos extends Client {
         this.tempEvent = new TempEvent({
             client: this,
             interval: 60_000,
-            messageCount: 50,
+            messageCount: 10,
             isOpen: true,
             channel: '932997960923480099'
         });

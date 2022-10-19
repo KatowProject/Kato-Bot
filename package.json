@@ -20,7 +20,7 @@
     "discord-logs": "^2.0.1",
     "discord-modal": "^1.0.2",
     "discord-player": "^5.2.0",
-    "discord.js": "^13.1.0",
+    "discord.js": "^13.10.3",
     "g-i-s": "^2.1.6",
     "got": "^11.8.3",
     "kuroshiro-analyzer-kuromoji": "^1.1.0",
