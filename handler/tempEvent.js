@@ -63,7 +63,7 @@ class TempEvent {
 
             if (!user) {
                 const xpUser = xp.data.find(a => a.id === userID);
-                if (!xpUser) return message.channel.send({ content: 'User tidak ditemukan.' });
+                if (!xpUser) return message.reply({ content: 'User tidak ditemukan.' });
 
                 const newUser = new User({
                     userID: userID,
@@ -76,9 +76,9 @@ class TempEvent {
 
                 await newUser.save();
 
-                return message.channel.send({ content: 'User berhasil didaftarkan.' });
+                return message.reply({ content: 'User berhasil didaftarkan.' });
             } else {
-                return message.channel.send({ content: 'User sudah terdaftar.' });
+                return message.reply({ content: 'User sudah terdaftar.' });
             }
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
@@ -88,13 +88,13 @@ class TempEvent {
     async daily(message) {
         try {
             if (!message) throw new Error('Message is not defined');
-            if (!this.isOpen) return message.channel.send({ content: 'Event belum dibuka.' });
+            if (!this.isOpen) return message.reply({ content: 'Event belum dibuka atau sudah tidak berlaku.' });
 
             const userID = message.author.id;
             const user = await User.findOne({ userID });
-            if (!user) return message.channel.send({ content: 'User belum terdaftar.' });
+            if (!user) return message.reply({ content: 'User belum terdaftar.' });
 
-            if (user.isAttend) return message.channel.send({ content: 'Kamu telah mengambil daily.' });
+            if (user.isAttend) return message.reply({ content: 'Kamu telah mengambil daily.' });
 
             const ticket = user.ticket;
             user.ticket = ticket + 1;
@@ -102,7 +102,49 @@ class TempEvent {
 
             await user.save();
 
-            return message.channel.send({ content: 'Kamu     berhasil mengambil daily.' });
+            return message.reply({ content: 'Kamu berhasil mengambil daily.' });
+        } catch (err) {
+            return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
+        }
+    }
+
+    async ShopList(message) {
+        try {
+            const getProducts = await Shop.find({}).sort({ price: 1 });
+            if (getProducts.length < 1) return message.reply({ content: 'Product not found' });
+
+            const product = [];
+            for (const getProduct of getProducts) {
+                const { name, price, description } = getProduct;
+                product.push({ name, price, description });
+            }
+
+            const embed = new Discord.MessageEmbed()
+                .setColor('GOLD')
+                .setTitle('Shop List')
+                .setDescription('Berikut harga menu yang tersedia. Kode mana yang ingin kamu pilih?\n\n')
+                .setThumbnail('https://i.imgur.com/JWAZ7Vg.jpg')
+                // must put footer
+                .setFooter('Hak Cipta Hasil Karya © Welnay Graphy dan RnDv3')
+
+            // menggunakan format ini sangat penting
+            embed.addFields(
+                {
+                    name: 'Kode',
+                    value: product.map((t) => t.code),
+                    inline: true
+                },
+                {
+                    name: 'Menu',
+                    value: product.map(r => r.name)
+                },
+                {
+                    name: 'Harga',
+                    value: product.map(s => s.price)
+                },
+            )
+
+            return message.channel.send({ embeds: [embed] });
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
         }
