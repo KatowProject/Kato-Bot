@@ -104,12 +104,19 @@ class TempShop {
                 )
             });
 
-        const buttons = new Discord.MessageActionRow()
-            .addComponents([
-                new Discord.MessageButton().setLabel("Add").setStyle("PRIMARY").setCustomId(`add-${message.id}`),
-                new Discord.MessageButton().setLabel("Remove").setStyle("DANGER").setCustomId(`remove-${message.id}`),
-                new Discord.MessageButton().setLabel("Edit").setStyle("SECONDARY").setCustomId(`edit-${message.id}`),
-            ]);
+        const buttons = products.length > 0
+            ? new Discord.MessageActionRow()
+                .addComponents([
+                    new Discord.MessageButton().setLabel("Add").setStyle("PRIMARY").setCustomId(`add-${message.id}`),
+                    new Discord.MessageButton().setLabel("Remove").setStyle("DANGER").setCustomId(`remove-${message.id}`),
+                    new Discord.MessageButton().setLabel("Edit").setStyle("SECONDARY").setCustomId(`edit-${message.id}`),
+                ]) : new Discord.MessageActionRow()
+                    .addComponents([
+                        // disabled
+                        new Discord.MessageButton().setLabel("Add").setStyle("PRIMARY").setCustomId(`add-${message.id}`).setDisabled(true),
+                        new Discord.MessageButton().setLabel("Remove").setStyle("DANGER").setCustomId(`remove-${message.id}`).setDisabled(true),
+                        new Discord.MessageButton().setLabel("Edit").setStyle("SECONDARY").setCustomId(`edit-${message.id}`).setDisabled(true)
+                    ]);
 
         const msg = await message.channel.send({ embeds: [embed], components: [buttons] });
         const filter = (m) => m.user.id === message.author.id;

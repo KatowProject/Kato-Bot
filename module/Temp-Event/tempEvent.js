@@ -38,6 +38,9 @@ class TempEvent {
                         const ticket = user.ticket;
                         user.ticket = ticket + 1;
                         user.isComplete = true;
+
+                        const user = this.client.users.cache.get(user.userID);
+                        if (user) user.send({ content: 'Selamat kamu telah menyelesaikan event harian.' });
                     } else {
                         user.messageCount = xpUser - user.messageBase;
                     }
