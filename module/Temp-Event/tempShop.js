@@ -1,4 +1,4 @@
-const { Shop } = require('../../database/schema/TempEvent.js');
+const { Shop, User } = require('../../database/schema/TempEvent.js');
 const Discord = require('discord.js');
 
 class TempShop {
@@ -22,16 +22,31 @@ class TempShop {
                 // must put footer
                 .setFooter({ text: 'Copyright Perkumpulan Orang Santai © 2022', iconURL: message.guild.iconURL() });
 
-            for (const product of getProducts) {
+            getProducts.forEach((product, i) => {
                 embed.addFields(
                     {
-                        name: `${product.name}`,
+                        name: `${i + 1}. ${product.name}`,
                         value: `${product.price} Tickets | ${product.stock} item available`
                     }
                 )
-            }
+            });
 
-            return message.channel.send({ embeds: [embed] });
+            const buttons = new Discord.MessageActionRow()
+                .addComponents([
+                    new Discord.MessageButton().setLabel("🛒").setStyle("PRIMARY").setCustomId(`buy-${message.id}`),
+                ]);
+
+            const msg = await message.channel.send({ embeds: [embed], components: [buttons] });
+            const filter = (m) => m.user.id === message.author.id;
+            const collector = msg.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+            collector.on("collect", async (i) => {
+                if (i.customId === `buy-${message.id}`) {
+                    await i.deferUpdate();
+                    await this.buy(message, getProducts);
+                }
+            });
+
+
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
         }
@@ -39,6 +54,29 @@ class TempShop {
 
     async buy(message, args) {
         try {
+            const msg = await message.channel.send({ content: 'Masukkan nomor produk yang ingin kamu beli.' });
+            const filter = (m) => m.author.id === message.author.id;
+            const collector = msg.channel.createMessageCollector({ filter, time: 60000 });
+
+            collector.on('collect', async (m) => {
+                const productIndex = parseInt(m.content);
+                if (isNaN(productIndex)) return message.channel.send({ content: 'Kamu harus memasukkan nomor produk.' });
+
+                const product = args[productIndex - 1];
+                if (!product) return message.channel.send({ content: 'Produk tidak ditemukan.' });
+
+                const user = await User.findOne({ userID: message.author.id });
+                if (!user) return message.channel.send({ content: 'Kamu belum terdaftar.' });
+
+                if (user.ticket < product.price) return message.channel.send({ content: 'Kamu tidak memiliki cukup tiket untuk membeli produk ini.' });
+                if (product.stock < 1) return message.channel.send({ content: 'Stock produk ini telah habis.' });
+
+                await User.findOneAndUpdate({ userID: message.author.id }, { ticket: user.ticket - product.price });
+                await Shop.findOneAndUpdate({ name: product.name }, { stock: product.stock - 1 });
+
+                message.channel.send({ content: `Kamu telah membeli ${product.name} dengan harga ${product.price} tiket.` });
+                collector.stop();
+            });
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
         }
@@ -76,7 +114,7 @@ class TempShop {
         const msg = await message.channel.send({ embeds: [embed], components: [buttons] });
         const filter = (m) => m.user.id === message.author.id;
 
-        const collector = msg.createMessageComponentCollector({ filter, time: 60000 });
+        const collector = msg.createMessageComponentCollector({ filter, time: 60000, max: 1 });
         collector.on("collect", async (i) => {
             if (i.customId === `add-${message.id}`) {
                 await i.deferUpdate();
@@ -98,8 +136,8 @@ class TempShop {
 
             collector.on('collect', async (m) => {
                 // split ", ", " , " and space
-                const args = m.content.split(/, | , | /);
-
+                const args = m.content.split(/, /);
+                if (args.length < 3) return message.channel.send({ content: 'Format yang kamu masukkan tidak valid.' });
                 const name = args[0];
                 const price = parseInt(args[1]);
                 const stock = parseInt(args[2]);
@@ -144,15 +182,51 @@ class TempShop {
 
     async editProduct(message, products) {
         try {
-            const msg = await message.channel.send({ content: 'Masukkan id, harga, dan stok produk yang ingin kamu edit.' });
+            const msg = await message.channel.send({ content: 'Masukkan id' });
+            const filter = (m) => m.author.id === message.author.id;
+            const collector = await msg.channel.createMessageCollector({ filter, time: 60000, max: 1 });
+            collector.on('collect', async (m) => {
+                const id = parseInt(m.content);
+                if (id < 0 || id > products.length) return message.channel.send({ content: 'Nomor produk yang kamu masukkan tidak valid.' });
+                const product = products[id - 1];
+                if (!product) return message.channel.send({ content: 'Nomor produk yang kamu masukkan tidak valid.' });
+
+                this.__editProduct(message, product);
+                collector.stop();
+            });
+
+        } catch (err) {
+            return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
+        }
+    }
+
+    async __editProduct(message, product) {
+        try {
+            const msg = await message.channel.send({ content: 'Masukkan nama, harga, dan stok produk yang ingin kamu edit.' });
             const filter = (m) => m.author.id === message.author.id;
             const collector = msg.channel.createMessageCollector({ filter, time: 60000 });
 
             collector.on('collect', async (m) => {
-                const index = parseInt(m.content) - 1;
-                if (index < 0 || index > products.length) return message.channel.send({ content: 'Nomor produk yang kamu masukkan tidak valid.' });
-                const product = products[index];
+                // split ", ", " , " and space
+                const args = m.content.split(",")
+                console.log(args);
 
+                const name = args[0].trim();
+                const price = parseInt(args[1].trim());
+                const stock = parseInt(args[2].trim());
+
+                console.log(name, price, stock);
+
+                if (!name || !price || !stock) return message.channel.send({ content: 'Kamu harus memasukkan nama, harga, dan stok produk yang ingin kamu edit.' });
+
+                await Shop.updateOne({ id: product.id }, {
+                    name,
+                    price,
+                    stock
+                });
+
+                m.channel.send({ content: 'Produk berhasil diubah.' });
+                collector.stop();
             });
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });

@@ -10,7 +10,7 @@ module.exports = (client) => {
     setInterval(() => require('../handler/durationManager')(client), 30_000);
 
     /* Notifications */
-    client.trakteer.getNotification(true, 30_000);
+    // client.trakteer.getNotification(true, 30_000);
 
     /** Giveaway Check */
     setInterval(() => require('../module/Giveaway/handler')(client), 15_000);
