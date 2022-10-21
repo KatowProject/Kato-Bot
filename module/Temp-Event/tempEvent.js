@@ -43,6 +43,7 @@ class TempEvent {
                         if (user) user.send({ content: 'Selamat kamu telah menyelesaikan event harian.' });
                     } else {
                         user.messageCount = xpUser - user.messageBase;
+                        user.isComplete = false;
                     }
                 }
 
@@ -108,6 +109,27 @@ class TempEvent {
             await user.save();
 
             return message.reply({ content: 'Kamu berhasil mengambil daily.' });
+        } catch (err) {
+            return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
+        }
+    }
+
+    async inventory(message) {
+        try {
+            if (!message) throw new Error('Message is not defined');
+            const userID = message.author.id;
+            const user = await User.findOne({ userID });
+            if (!user) return message.reply({ content: 'User belum terdaftar.' });
+
+            const ticket = user.ticket;
+            const embed = new Discord.MessageEmbed()
+                .setTitle('Inventory')
+                .setDescription(`**Ticket:** ${ticket}\n**Daily Message:** ${user.messageCount}/${this.messageCount} (${user.isComplete ? 'Selesai' : 'Belum'})`)
+                .setColor('RANDOM')
+                .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL() })
+                .setFooter({ text: `${message.author.tag} • Reset Daily ${moment().endOf('day').fromNow()}`, iconURL: message.author.displayAvatarURL() });
+
+            return message.reply({ embeds: [embed] });
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
         }

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
     try {
-        client.tempEvent.register(message);
+        client.tempEvent.inventory(message);
     } catch (err) {
         message.channel.send({ content: 'Something wrong with: ' + err.message });
     }
@@ -14,8 +14,8 @@ exports.conf = {
 }
 
 exports.help = {
-    name: "e-register",
-    description: "Register untuk event.",
-    usage: "event-register",
-    example: "event-register"
+    name: "e-inventory",
+    description: "Menampilkan daftar item yang dimiliki.",
+    usage: "event-inventory",
+    example: "event-inventory"
 }

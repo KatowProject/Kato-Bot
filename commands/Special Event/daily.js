@@ -17,7 +17,7 @@ exports.conf = {
 }
 
 exports.help = {
-    name: "event-daily",
+    name: "e-daily",
     description: "Mendapatkan hadiah event.",
     usage: "event-daily",
     example: "event-daily"

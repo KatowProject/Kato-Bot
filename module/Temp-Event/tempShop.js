@@ -18,7 +18,6 @@ class TempShop {
                 .setColor('GOLD')
                 .setTitle('Shop List')
                 .setDescription('Berikut harga menu yang tersedia. Kode mana yang ingin kamu pilih?\n\n')
-                .setThumbnail('https://i.imgur.com/JWAZ7Vg.jpg')
                 // must put footer
                 .setFooter({ text: 'Copyright Perkumpulan Orang Santai © 2022', iconURL: message.guild.iconURL() });
 
@@ -113,7 +112,7 @@ class TempShop {
                 ]) : new Discord.MessageActionRow()
                     .addComponents([
                         // disabled
-                        new Discord.MessageButton().setLabel("Add").setStyle("PRIMARY").setCustomId(`add-${message.id}`).setDisabled(true),
+                        new Discord.MessageButton().setLabel("Add").setStyle("PRIMARY").setCustomId(`add-${message.id}`),
                         new Discord.MessageButton().setLabel("Remove").setStyle("DANGER").setCustomId(`remove-${message.id}`).setDisabled(true),
                         new Discord.MessageButton().setLabel("Edit").setStyle("SECONDARY").setCustomId(`edit-${message.id}`).setDisabled(true)
                     ]);
