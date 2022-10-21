@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const moment = require('moment-timezone');
-const { User, Shop } = require('../database/schema/TempEvent.js');
-const Xp = require('../database/schema/xp_player.js');
+const { User } = require('../../database/schema/TempEvent.js');
+const Shop = require('./tempShop.js');
+const Xp = require('../../database/schema/xp_player.js');
 
 moment.tz.setDefault('Asia/Jakarta');
 
@@ -12,6 +13,7 @@ class TempEvent {
         this.messageCount = obj.messageCount;
         this.isOpen = obj.isOpen;
         this.channel = obj.channel;
+        this.Shop = new Shop(obj);
     }
 
     async messageCheck() {
@@ -103,48 +105,6 @@ class TempEvent {
             await user.save();
 
             return message.reply({ content: 'Kamu berhasil mengambil daily.' });
-        } catch (err) {
-            return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
-        }
-    }
-
-    async ShopList(message) {
-        try {
-            const getProducts = await Shop.find({}).sort({ price: 1 });
-            if (getProducts.length < 1) return message.reply({ content: 'Product not found' });
-
-            const product = [];
-            for (const getProduct of getProducts) {
-                const { name, price, description } = getProduct;
-                product.push({ name, price, description });
-            }
-
-            const embed = new Discord.MessageEmbed()
-                .setColor('GOLD')
-                .setTitle('Shop List')
-                .setDescription('Berikut harga menu yang tersedia. Kode mana yang ingin kamu pilih?\n\n')
-                .setThumbnail('https://i.imgur.com/JWAZ7Vg.jpg')
-                // must put footer
-                .setFooter('Hak Cipta Hasil Karya © Welnay Graphy dan RnDv3')
-
-            // menggunakan format ini sangat penting
-            embed.addFields(
-                {
-                    name: 'Kode',
-                    value: product.map((t) => t.code),
-                    inline: true
-                },
-                {
-                    name: 'Menu',
-                    value: product.map(r => r.name)
-                },
-                {
-                    name: 'Harga',
-                    value: product.map(s => s.price)
-                },
-            )
-
-            return message.channel.send({ embeds: [embed] });
         } catch (err) {
             return message.channel.send({ content: 'Error: ' + err.message ?? err ?? 'Unknown error' });
         }
