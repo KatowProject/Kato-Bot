@@ -16,7 +16,7 @@ module.exports = (client) => {
     setInterval(() => require('../module/Giveaway/handler')(client), 15_000);
 
     /** MEE6 - Level Update */
-    setInterval(() => require('../module/MEE6-Leaderboard/')(client), 60_000);
+    setInterval(() => require('../module/MEE6-Leaderboard/')(client), 120_000);
 
     /** Benefit **/
     setInterval(() => require('../handler/donaturXpManager')(client), 60_000);

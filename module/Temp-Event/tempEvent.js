@@ -14,7 +14,7 @@ class TempEvent {
         this.interval = null;
     }
 
-    async messageCheck() {
+    async messageCheck(canReset = false) {
         try {
             const users = await User.find({});
             const xp = await Xp.findOne({ id: 1 });
@@ -25,7 +25,7 @@ class TempEvent {
                 const xpUser = xp.data.find(a => a.id === user.userID)?.message_count;
                 if (!xpUser) continue;
 
-                if (time === '24:00' || time === '00:00') {
+                if (time === '24:00' || time === '00:00' || canReset) {
                     user.messageCount = 0;
                     user.isAttend = false;
                     user.messageBase = xpUser;
@@ -174,6 +174,10 @@ class TempEvent {
                     .setCustomId('channel')
                     .setLabel('Channel Log')
                     .setStyle('PRIMARY'),
+                new Discord.MessageButton()
+                    .setCustomId('reset')
+                    .setLabel('Reset Daily')
+                    .setStyle('DANGER'),
             ];
 
             const msg = await message.channel.send({ embeds: [embed], components: [btn.addComponents(buttons)] });
@@ -194,7 +198,7 @@ class TempEvent {
 
                     return i.followUp({ content: `Event berhasil di${config.isOpen ? 'buka' : 'tutup'}.`, }).then(m => setTimeout(() => m.delete(), 5_000));
                 } else if (i.customId === 'messageCount') {
-                    const msg = await message.channel.send({ content: 'Silahkan masukkan jumlah pesan yang dibutuhkan untuk mendapatkan tiket.' });
+                    await message.channel.send({ content: 'Silahkan masukkan jumlah pesan yang dibutuhkan untuk mendapatkan tiket.' });
                     const filter = m => m.author.id === message.author.id;
                     const collector = message.channel.createMessageCollector({ filter, time: 60_000, max: 1 });
                     collector.on('collect', async m => {
@@ -211,7 +215,7 @@ class TempEvent {
                         i.followUp({ content: `Jumlah pesan berhasil diubah menjadi ${config.messageCount}.`, }).then(m => setTimeout(() => m.delete(), 5_000));
                     });
                 } else if (i.customId === 'channel') {
-                    const msg = await message.channel.send({ content: 'Silahkan mention channel yang akan digunakan untuk log event.' });
+                    await message.channel.send({ content: 'Silahkan mention channel yang akan digunakan untuk log event.' });
                     const filter = m => m.author.id === message.author.id;
                     const collector = message.channel.createMessageCollector({ filter, time: 60_000 });
                     collector.on('collect', async m => {
@@ -225,6 +229,32 @@ class TempEvent {
                         msg.edit({ embeds: [embed], components: [btn] });
 
                         i.followUp({ content: `Channel log berhasil diubah menjadi <#${config.channel}>.`, }).then(m => setTimeout(() => m.delete(), 5_000));
+                    });
+                } else if (i.customId === 'reset') {
+                    const btn = new Discord.MessageActionRow()
+                    const buttons = [
+                        new Discord.MessageButton()
+                            .setCustomId('reset:yes')
+                            .setLabel('Yes')
+                            .setStyle('SUCCESS'),
+                        new Discord.MessageButton()
+                            .setCustomId('reset:no')
+                            .setLabel('No')
+                            .setStyle('DANGER'),
+                    ];
+
+                    const msg = await message.channel.send({ content: 'Apakah kamu yakin ingin mereset daily?', components: [btn.addComponents(buttons)] });
+                    const filter = i => i.user.id === message.author.id;
+                    const collector = msg.createMessageComponentCollector({ filter, time: 60_000 });
+                    collector.on('collect', async i => {
+                        await i.deferUpdate();
+                        if (i.customId === 'reset:yes') {
+                            this.messageCheck(true);
+
+                            msg.edit({ content: 'Daily berhasil direset.', components: [] });
+                        } else if (i.customId === 'reset:no') {
+                            msg.edit({ content: 'Reset daily dibatalkan.', components: [] });
+                        }
                     });
                 }
             });
