@@ -1,6 +1,6 @@
 exports.run = async (client, message, args) => {
     try {
-        if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan command ini.");
+        if (!message.member.permissions.has('MANAGE_GUILD')) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan command ini.");
 
         client.tempEvent.Shop.ShopManager(message, args);
     } catch (err) {

@@ -31,12 +31,6 @@ module.exports = class katopos extends Client {
         this.kuroshiro = kuroshiro;
         this.selfbot = selfbot;
         this.canvas = new (require('../module/Discord-Canvas'))(this);
-        this.tempEvent = new TempEvent({
-            client: this,
-            interval: 30_000,
-            messageCount: 150,
-            isOpen: true,
-            channel: '932997960923480099'
-        });
+        this.tempEvent = new TempEvent(this);
     };
 };

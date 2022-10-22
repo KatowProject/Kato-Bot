@@ -18,9 +18,23 @@ const schemaShop = new Schema({
 });
 
 const schemaConfig = new Schema({
-    isOpen: Boolean,
-    messageCount: Number,
-    interval: Number,
+    id: {
+        type: String,
+        required: true,
+    },
+    isOpen: {
+        type: Boolean,
+        default: false,
+    },
+    messageCount: {
+        default: 0,
+        type: Number,
+    },
+    interval: {
+        default: 30_000,
+        type: Number,
+    },
+    channel: String,
 });
 
 
@@ -28,4 +42,5 @@ const schemaConfig = new Schema({
 module.exports = {
     User: model('userEvent', schemaUser),
     Shop: model('shopEvent', schemaShop),
+    Config: model('configEvent', schemaConfig)
 };

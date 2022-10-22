@@ -16,7 +16,7 @@ class TempShop {
 
             const embed = new Discord.MessageEmbed()
                 .setColor('GOLD')
-                .setTitle('Shop List')
+                .setTitle('Kato Shop')
                 .setDescription('Berikut harga menu yang tersedia. Kode mana yang ingin kamu pilih?\n\n')
                 // must put footer
                 .setFooter({ text: 'Copyright Perkumpulan Orang Santai © 2022', iconURL: message.guild.iconURL() });
@@ -70,10 +70,10 @@ class TempShop {
                 if (user.ticket < product.price) return message.channel.send({ content: 'Kamu tidak memiliki cukup tiket untuk membeli produk ini.' });
                 if (product.stock < 1) return message.channel.send({ content: 'Stock produk ini telah habis.' });
 
-                await User.findOneAndUpdate({ userID: message.author.id }, { ticket: user.ticket - product.price });
+                await User.findOneAndUpdate({ userID: message.author.id }, { ticket: user.ticket - product.price, alreadyPurchase: [...user.alreadyPurchase, product.name] });
                 await Shop.findOneAndUpdate({ name: product.name }, { stock: product.stock - 1 });
 
-                message.channel.send({ content: `Kamu telah membeli ${product.name} dengan harga ${product.price} tiket.` });
+                m.channel.send({ content: `Kamu telah membeli ${product.name} dengan harga ${product.price} tiket, silahkan DM Staff untuk mengambil produk.` });
                 collector.stop();
             });
         } catch (err) {
