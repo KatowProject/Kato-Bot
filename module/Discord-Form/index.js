@@ -152,21 +152,34 @@ class DiscordForm {
         });
     }
 
+    async openForm(interaction) {
+        const data = await db.findOne({ id: interaction.customId.split("-")[2] });
+
+        const modal = new Discord.Modal()
+            .setTitle(data.title)
+            .setCustomId(`form-${interaction.id}`)
+
+        for (const q of data.questions) {
+            const input = new Discord.TextInputComponent()
+                .setLabel(q)
+                .setCustomId(`form-${interaction.id}-${q}`)
+                .setRequired(true)
+                .setStyle("PARAGRAPH");
+            const row = new Discord.MessageActionRow().addComponents(input);
+            modal.addComponents(row);
+        }
+
+        await interaction.showModal(modal);
+    }
 
     async event(interaction) {
-        console.log(this.openForm)
-        if (interaction.isButton() && interaction.customId.includes("open-form")) {
-            this.openForm(interaction);
-        }
+        if (interaction.isButton() && interaction.customId.includes("open-form")) this.openForm(interaction);
+
         //     if (interaction.isModalSubmit() && interaction.customId.includes("form"))// this.submitForm(interaction);
     }
 
-    async openForm(interaction) {
-        console.log(interaction);
-    }
-
     init() {
-        this.client.on('interactionCreate', this.event);
+        this.client.on('interactionCreate', this.event.bind(this));
     }
 }
 
