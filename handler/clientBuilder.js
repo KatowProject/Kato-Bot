@@ -4,6 +4,7 @@ const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 const Kuroshiro = require('@dsquare-gbu/kuroshiro');
 const Selfbot = require('../module/Discord-Selfbot/index.js');
 const TempEvent = require('../module/Temp-Event/tempEvent.js');
+const DiscordForm = require('../module/Discord-Form/index.js');
 const kuroshiro = new Kuroshiro();
 const selfbot = new Selfbot(config.selfbot);
 (async () => {
@@ -32,5 +33,6 @@ module.exports = class katopos extends Client {
         this.selfbot = selfbot;
         this.canvas = new (require('../module/Discord-Canvas'))(this);
         this.tempEvent = new TempEvent(this);
+        this.form = new DiscordForm({ client: this });
     };
 };

@@ -23,4 +23,7 @@ module.exports = (client) => {
 
     /** Temp Event */
     client.tempEvent.init();
+
+    /** Discord Form */
+    client.form.init();
 }
