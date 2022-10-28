@@ -152,17 +152,19 @@ class DiscordForm {
         });
     }
 
-    async openForm(interaction) {
+    async _openForm(interaction) {
+        if (!interaction.isButton() && !interaction.customId.includes("open-form")) return;
         const data = await db.findOne({ id: interaction.customId.split("-")[2] });
-
+        if (!data) return interaction.reply({ content: "Form tidak ditemukan", ephemeral: true });
+        if (data.userAlreadySubmit.includes(interaction.user.id)) return interaction.reply({ content: "Kamu sudah mengisi form ini", ephemeral: true });
         const modal = new Discord.Modal()
             .setTitle(data.title)
-            .setCustomId(`form-${interaction.id}`)
+            .setCustomId(`form-${interaction.customId.split("-")[2]}`)
 
         for (const q of data.questions) {
             const input = new Discord.TextInputComponent()
                 .setLabel(q)
-                .setCustomId(`form-${interaction.id}-${q}`)
+                .setCustomId(`${q}`)
                 .setRequired(true)
                 .setStyle("PARAGRAPH");
             const row = new Discord.MessageActionRow().addComponents(input);
@@ -170,16 +172,40 @@ class DiscordForm {
         }
 
         await interaction.showModal(modal);
+
+        this.client.on('interactionCreate', this._submitForm.bind(this));
     }
 
-    async event(interaction) {
-        if (interaction.isButton() && interaction.customId.includes("open-form")) this.openForm(interaction);
+    async _submitForm(interaction) {
+        if (!interaction.isModalSubmit() && !interaction.customId.includes("form-")) return;
+        const data = await db.findOne({ id: interaction.customId.split("-")[1] });
+        const formDataChannel = this.client.channels.cache.get(data.formDataChannel);
+        if (data.userAlreadySubmit.includes(interaction.user.id)) return interaction.reply({ content: "Kamu sudah mengisi form ini", ephemeral: true });
 
-        //     if (interaction.isModalSubmit() && interaction.customId.includes("form"))// this.submitForm(interaction);
+        const embed = new Discord.MessageEmbed()
+            .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
+            .setTitle(data.title)
+            .setTimestamp();
+
+        for (const field of interaction.fields.components) {
+            for (const component of field.components) {
+                embed.addField(component.customId, component.value);
+            }
+        }
+
+        await formDataChannel.send({ embeds: [embed] });
+        await interaction.reply({ content: "Form berhasil dikirim", ephemeral: true });
+
+        if (data.isOnce) {
+            data.userAlreadySubmit.push(interaction.user.id);
+            await data.save();
+        }
+
+        this.client.off('interactionCreate', this._submitForm.bind(this));
     }
 
     init() {
-        this.client.on('interactionCreate', this.event.bind(this));
+        this.client.on('interactionCreate', this._openForm.bind(this));
     }
 }
 
