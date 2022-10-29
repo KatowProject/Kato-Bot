@@ -11,7 +11,7 @@ class TempShop {
         try {
             if (!this.isOpen) return message.channel.send({ content: 'Shop is closed.' });
 
-            const getProducts = await Shop.find({}).sort({ price: 1 });
+            const getProducts = await Shop.find({});
             if (getProducts.length < 1) return message.reply({ content: 'Product not found' });
 
             const embed = new Discord.MessageEmbed()
@@ -151,6 +151,7 @@ class TempShop {
                 if (!name || !price || !stock) return message.channel.send({ content: 'Kamu harus memasukkan nama, harga, dan stok produk yang ingin kamu tambahkan.' });
 
                 const product = new Shop({
+                    id: products.length + 1,
                     name,
                     price,
                     stock
@@ -195,6 +196,7 @@ class TempShop {
                 const id = parseInt(m.content);
                 if (id < 0 || id > products.length) return message.channel.send({ content: 'Nomor produk yang kamu masukkan tidak valid.' });
                 const product = products[id - 1];
+                console.log(product);
                 if (!product) return message.channel.send({ content: 'Nomor produk yang kamu masukkan tidak valid.' });
 
                 this.__editProduct(message, product);
