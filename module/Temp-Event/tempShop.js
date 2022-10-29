@@ -83,7 +83,7 @@ class TempShop {
 
     async ShopManager(message, args) {
         if (!message.member.permissions.has("MANAGE_GUILD")) return message.reply(`Kamu tidak memiliki izin untuk menggunakan perintah ini!`);
-        const products = await Shop.find({}).sort({ price: 1 });
+        const products = await Shop.find({});
 
         const embed = new Discord.MessageEmbed()
             .setColor('GOLD')

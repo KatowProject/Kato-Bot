@@ -153,7 +153,6 @@ class DiscordForm {
     }
 
     async _openForm(interaction) {
-        if (!interaction.isButton() && !interaction.customId.includes("open-form")) return;
         const data = await db.findOne({ id: interaction.customId.split("-")[2] });
         if (!data) return interaction.reply({ content: "Form tidak ditemukan", ephemeral: true });
         if (data.userAlreadySubmit.includes(interaction.user.id)) return interaction.reply({ content: "Kamu sudah mengisi form ini", ephemeral: true });
@@ -177,9 +176,10 @@ class DiscordForm {
     }
 
     async _submitForm(interaction) {
-        if (!interaction.isModalSubmit() && !interaction.customId.includes("form-")) return;
+        console.log(interaction.id);
         const data = await db.findOne({ id: interaction.customId.split("-")[1] });
-        const formDataChannel = this.client.channels.cache.get(data.formDataChannel);
+        if (!data) return interaction.reply({ content: "Form tidak ditemukan", ephemeral: true });
+        const formDataChannel = this.client.channels.cache.get(data?.formDataChannel);
         if (data.userAlreadySubmit.includes(interaction.user.id)) return interaction.reply({ content: "Kamu sudah mengisi form ini", ephemeral: true });
 
         const embed = new Discord.MessageEmbed()
@@ -193,19 +193,33 @@ class DiscordForm {
             }
         }
 
-        await formDataChannel.send({ embeds: [embed] });
+        // create thread is not created
+        const thread = formDataChannel.threads.cache.find(a => a.name === data.title);
+        if (!thread) {
+            const thread = await formDataChannel.threads.create({
+                name: data.title,
+                autoArchiveDuration: 'MAX',
+                reason: 'Form Thread'
+            });
+
+            await thread.send({ embeds: [embed] });
+        } else {
+            await thread.send({ embeds: [embed] });
+        }
         await interaction.reply({ content: "Form berhasil dikirim", ephemeral: true });
 
         if (data.isOnce) {
             data.userAlreadySubmit.push(interaction.user.id);
             await data.save();
         }
-
-        this.client.off('interactionCreate', this._submitForm.bind(this));
     }
 
     init() {
-        this.client.on('interactionCreate', this._openForm.bind(this));
+        this.client.on('interactionCreate', interaction => {
+            if (interaction.isButton() && interaction.customId.includes("open-form")) return this._openForm(interaction);
+            if (interaction.isModalSubmit() && interaction.customId.includes("form-")) return this._submitForm(interaction);
+
+        });
     }
 }
 
