@@ -74,6 +74,7 @@ class TempShop {
                 await Shop.findOneAndUpdate({ name: product.name }, { stock: product.stock - 1 });
 
                 m.channel.send({ content: `Kamu telah membeli ${product.name} dengan harga ${product.price} tiket, silahkan DM Staff untuk mengambil produk.` });
+                message.guild.channels.cache.get("1013977865756356658").send({ content: `${message.author.tag} telah membeli ${product.name} dengan harga ${product.price} tiket.` });
                 collector.stop();
             });
         } catch (err) {
