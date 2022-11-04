@@ -71,12 +71,11 @@ function get($query)
         "User-Agent: $user_agent"
     ]);
 
-
+    
     $output = curl_exec($ch);
 
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-
     if ($httpcode == 200) :
         header('Content-Type: application/json');
         echo $output;
@@ -90,4 +89,5 @@ function get($query)
         ]);
         return;
     endif;
+
 }
