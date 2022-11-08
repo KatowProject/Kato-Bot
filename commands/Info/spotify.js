@@ -62,12 +62,11 @@ exports.run = async (client, message, args) => {
                 const search = await ys.searchOne(`${song.name} ${song.artists[0].name}`);
                 const info = await ytdl.getInfo(search.id);
                 const audio = ytdl.filterFormats(info.formats, 'audioonly').sort((a, b) => b.audioBitrate - a.audioBitrate).shift();
-                const download = await axios.get(audio.url, { responseType: 'arraybuffer' });
-                const attachment = new Discord.MessageAttachment()
-                    .setFile(download.data)
-                    .setName(`${song.name}.mp3`);
 
-                await i.followUp({ content: 'Here is your download song!', files: [attachment] });
+                const embed = new Discord.MessageEmbed()
+                    .setDescription(`[Download](${audio.url})`)
+
+                await i.followUp({ content: 'Here is your download link!', embeds: [embed] });
             }
         });
 
