@@ -1,3 +1,4 @@
+const { default: axios } = require('axios');
 const Discord = require('discord.js');
 const fetch = require('isomorphic-unfetch');
 const spotify = require('spotify-url-info')(fetch);
@@ -61,9 +62,11 @@ exports.run = async (client, message, args) => {
                 const search = await ys.searchOne(`${song.name}}`);
                 const info = await ytdl.getInfo(search.id);
                 const audio = ytdl.filterFormats(info.formats, 'audioonly').sort((a, b) => b.audioBitrate - a.audioBitrate).shift();
+                const download = await axios.get(audio.url, { responseType: 'arraybuffer' });
                 const attachment = new Discord.MessageAttachment()
-                    .setFile(audio.url)
+                    .setFile(download.data)
                     .setName(`${song.name}.mp3`);
+
                 console.log(attachment);
 
                 await i.followUp({ content: 'Here is your download song!', files: [attachment] });
