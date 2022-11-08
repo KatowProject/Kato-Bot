@@ -218,7 +218,7 @@ class DiscordForm {
         if (!thread) {
             // get archived thread
             const archivedThread = await formDataChannel.threads.fetchArchived();
-            const archivedThreadData = archivedThread.find(a => a.name === data.title);
+            const archivedThreadData = archivedThread.threads.find(a => a.name === data.title);
             if (archivedThreadData) {
                 // unarchive thread
                 await archivedThread.send({ embeds: [embed] });
