@@ -156,6 +156,24 @@ class DiscordForm {
         const data = await db.findOne({ id: interaction.customId.split("-")[2] });
         if (!data) return interaction.reply({ content: "Form tidak ditemukan", ephemeral: true });
         if (data.userAlreadySubmit.includes(interaction.user.id)) return interaction.reply({ content: "Kamu sudah mengisi form ini", ephemeral: true });
+
+        if (!cooldown.has(data.id)) {
+            cooldown.set(data.id, new Discord.Collection());
+        }
+
+        const now = Date.now();
+        const timestamps = cooldown.get(data.id);
+        const cooldownAmount = 60000;
+
+        if (timestamps.has(interaction.user.id)) {
+            const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
+
+            if (now < expirationTime) {
+                const timeLeft = (expirationTime - now) / 1000;
+                return interaction.reply({ content: `Tunggu ${timeLeft.toFixed(1)} detik lagi sebelum kamu bisa mengisi form ini`, ephemeral: true });
+            }
+        }
+
         const modal = new Discord.Modal()
             .setTitle(data.title)
             .setCustomId(`form-${interaction.customId.split("-")[2]}`)
@@ -171,16 +189,18 @@ class DiscordForm {
         }
 
         await interaction.showModal(modal);
-
-        this.client.on('interactionCreate', this._submitForm.bind(this));
     }
 
     async _submitForm(interaction) {
-        console.log(interaction.id);
         const data = await db.findOne({ id: interaction.customId.split("-")[1] });
         if (!data) return interaction.reply({ content: "Form tidak ditemukan", ephemeral: true });
         const formDataChannel = this.client.channels.cache.get(data?.formDataChannel);
         if (data.userAlreadySubmit.includes(interaction.user.id)) return interaction.reply({ content: "Kamu sudah mengisi form ini", ephemeral: true });
+
+        // check cooldown
+        if (!cooldown.has(data.id)) {
+            cooldown.set(data.id, new Discord.Collection());
+        }
 
         const embed = new Discord.MessageEmbed()
             .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
@@ -194,15 +214,22 @@ class DiscordForm {
         }
 
         // create thread is not created
-        const thread = formDataChannel.threads.cache.find(a => a.name === data.title);
+        const thread = await formDataChannel.threads.cache.find(a => a.name === data.title);
         if (!thread) {
-            const thread = await formDataChannel.threads.create({
-                name: data.title,
-                autoArchiveDuration: 'MAX',
-                reason: 'Form Thread'
-            });
-
-            await thread.send({ embeds: [embed] });
+            // get archived thread
+            const archivedThread = await formDataChannel.threads.fetchArchived();
+            const archivedThreadData = archivedThread.find(a => a.name === data.title);
+            if (archivedThreadData) {
+                // unarchive thread
+                await archivedThread.send({ embeds: [embed] });
+            } else {
+                const thread = await formDataChannel.threads.create({
+                    name: data.title,
+                    autoArchiveDuration: 'MAX',
+                    reason: 'Form Thread'
+                });
+                await thread.send({ embeds: [embed] });
+            }
         } else {
             await thread.send({ embeds: [embed] });
         }
@@ -212,14 +239,21 @@ class DiscordForm {
             data.userAlreadySubmit.push(interaction.user.id);
             await data.save();
         }
-    }
 
+        // set cooldown
+        const now = Date.now();
+        const timestamps = cooldown.get(data.id);
+        const cooldownAmount = 60_000;
+        timestamps.set(interaction.user.id, now);
+        setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
+    }
     init() {
         this.client.on('interactionCreate', interaction => {
             if (interaction.isButton() && interaction.customId.includes("open-form")) return this._openForm(interaction);
             if (interaction.isModalSubmit() && interaction.customId.includes("form-")) return this._submitForm(interaction);
-
         });
+
+        return this;
     }
 }
 
