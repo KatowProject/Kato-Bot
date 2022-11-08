@@ -56,8 +56,8 @@ exports.run = async (client, message, args) => {
                 await i.followUp({ content: 'Here is your preview song!', files: [attachment] });
             } else if (i.customId === `spotify-download-${get.id}`) {
                 await i.deferUpdate();
-                // give alert
-                const alert = await i.followUp({ content: 'Tunggu sebentar, sedang mencari link download...' });
+
+                await i.followUp({ content: 'Tunggu sebentar, sedang mencari link download...', ephemeral: true });
                 const search = await ys.searchOne(`${song.name}}`);
                 const info = await ytdl.getInfo(search.id);
                 const audio = ytdl.filterFormats(info.formats, 'audioonly').sort((a, b) => b.audioBitrate - a.audioBitrate).shift();
@@ -65,7 +65,8 @@ exports.run = async (client, message, args) => {
                     .setFile(audio.url)
                     .setName(`${song.name}.mp3`);
                 console.log(attachment);
-                await alert.edit({ content: 'Ini link downloadnya!', files: [attachment] })
+
+                await i.followUp({ content: 'Here is your download song!', files: [attachment] });
             }
         });
 
