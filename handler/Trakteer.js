@@ -24,7 +24,7 @@ module.exports = async (client, message, data) => {
     if (member)
         await canvas.setAvatar(member.user.displayAvatarURL({ format: 'png', size: 4096 }));
     else
-        await canvas.setAvatar(data.unit.image);
+        await canvas.setAvatar("https://cdn.discordapp.com/attachments/1013977865756356658/1041700094598193253/santai1.png");
 
     const buffer = await canvas.generate();
     const attachment = new Discord.MessageAttachment(buffer, 'donation.png');
