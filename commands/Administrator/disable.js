@@ -1,9 +1,15 @@
-const Discord = require('discord.js');
+const { EmbedBuilder, Client, Message } = require('discord.js');
 const { specificCommands } = require('../../database/schemas/manageCommand');
+
+/**
+ * @param {Client} client
+ * @param {Message} message
+ * @param {[]} args
+ */
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.member.permissions.has('MANAGE_GUILD')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
+        if (!message.member.permissions.has('ManageGuild')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
 
         let request = args.join(' ');
         if (!request) return message.reply('Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**');
@@ -57,7 +63,7 @@ exports.run = async (client, message, args) => {
                 break;
 
             case 'list':
-                const embed = new Discord.EmbedBuilder()
+                const embed = new EmbedBuilder()
                     .setColor("RANDOM")
                     .setTitle(`Channel Blacklist | Perintah **${cmd.name}**`)
                     .setDescription(findCMD.channels.map((a, i) => `${i + 1}. <#${a}>`).join('\n') || `~ Tidak ada Channel yang dinonaktifkan! ~`)

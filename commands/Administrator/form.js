@@ -1,7 +1,13 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Client, Message } = require("discord.js");
+
+/**
+ * @param {Client} client
+ * @param {Message} message
+ * @param {[]} args
+ */
 
 exports.run = async (client, message, args) => {
-    if (!message.member.permissions.has("MANAGE_GUILD")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan command ini!");
+    if (!message.member.permissions.has("ManageGuild")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan command ini!");
 
     const embed = new EmbedBuilder()
         .setTitle("Menu Form")

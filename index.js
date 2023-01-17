@@ -10,7 +10,10 @@ const client = new Kato({
         GatewayIntentBits.GuildWebhooks,
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessageTyping
     ],
     partials: [
         Partials.Message,
