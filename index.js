@@ -26,11 +26,10 @@ const client = new Kato({
     makeCache: Options.cacheEverything()
 });
 
-//require('discord-logs')(client);
+require('discord-logs')(client);
 require('./handler/module')(client);
 require('./handler/event')(client);
-require('./database/index')(process.env.DB_URI);
-require('./handler/donaturXpManager')(client);
+require('./database')(process.env.DB_URI);
 
 client.login(process.env.DISCORD_TOKEN);
 

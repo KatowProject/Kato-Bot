@@ -9,8 +9,10 @@ const donaturSchema = new Schema({
         daily: Number,
         base: Number
     },
-    ticket: Number,
-    isAttend: Boolean
+    isBooster: {
+        default: false,
+        type: Boolean
+    }
 });
 
 module.exports = models.DONATUR || model('DONATUR', donaturSchema);

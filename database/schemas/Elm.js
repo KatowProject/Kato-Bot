@@ -1,13 +1,9 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, models } = require('mongoose');
 
 const ELM = new Schema({
-
     userID: String,
     guild: String,
     roles: Array
-
 });
 
-const ELMs = model('ELMs', ELM);
-
-module.exports = ELMs;
+module.exports = models.ELMs || model('ELMs', ELM);

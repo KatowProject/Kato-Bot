@@ -32,13 +32,14 @@ exports.run = async (client, message, args) => {
             .addFields(
                 { name: 'User', value: `<@${mutee.id}>`, inline: true },
                 { name: 'Moderator', value: `<@${message.author.id}>`, inline: true },
+                { name: '\u200B', value: '\u200B', inline: true },
                 { name: 'Durasi', value: client.util.parseDur(durasi), inline: true },
                 { name: 'Alasan', value: reason, inline: true }
             )
             .setTimestamp()
             .setFooter({ text: `ID: ${message.member.id}`, iconURL: message.guild.iconURL() });
 
-        client.channels.cache.get(client.config.channel["warn-activity"]).send(embed);
+        client.channels.cache.get(process.env.CHANNEL_MESSAGE_WARN).send({ embeds: [embed] });
 
     } catch (error) {
         return message.channel.send(`Something went wrong: ${error.message}`);
