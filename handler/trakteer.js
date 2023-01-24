@@ -231,8 +231,8 @@ class Donatur extends Trakteer {
             if (tidak.includes(m.content)) return message.reply('Dibatalkan karena tidak disetujui!').then(() => { collectora.stop(); applyMSG.delete() });
             if (!ya.includes(m.content)) return message.reply('Argumen tidak dimengerti oleh Kato!');
 
-            const alreadyDonet = await donate.findOne({ userID: findMember.id });
-            if (time === Infinity && !alreadyDonet) {
+            const donatur = await donate.findOne({ userID: findMember.id });
+            if (time === Infinity && !donatur) {
                 message.reply("Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!");
                 await donate.create({ userID: findMember.id, guild: message.guild.id, ticket: 0, isAttended: false, isBooster: true });
 
@@ -244,20 +244,48 @@ class Donatur extends Trakteer {
                     reason: 'Booster'
                 });
 
-            } else if (alreadyDonet) {
-                message.reply('Data telah disetujui dan Durasi Role diakumulasikan dengan sekarang, silahkan cek kembali untuk memastikan!');
-                await donate.findOneAndUpdate({ userID: findMember.id }, { duration: alreadyDonet.duration + time });
+            } else if (donatur && !donatur.duration && !donatur.now) {
+                message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
+                await donate.findOneAndUpdate({ userID: findMember.id }, { duration: time, now: Date.now() });
 
                 this.client.emit('donaturManager', {
                     type: 'addDonatur',
                     member: findMember,
                     guild: message.guild,
-                    status: 'extend',
+                    status: 'update',
                     reason: 'Donatur',
                     data: {
                         duration: time
                     }
                 });
+            } else if (donatur) {
+                message.reply('Data telah disetujui dan Durasi Role diakumulasikan dengan sekarang, silahkan cek kembali untuk memastikan!');
+                await donate.findOneAndUpdate({ userID: findMember.id }, { duration: donatur.duration + time });
+
+                // check time is negative
+                if (time < 0) {
+                    this.client.emit('donaturManager', {
+                        type: 'addDonatur',
+                        member: findMember,
+                        guild: message.guild,
+                        status: 'reduce',
+                        reason: 'Donatur',
+                        data: {
+                            duration: time
+                        }
+                    });
+                } else {
+                    this.client.emit('donaturManager', {
+                        type: 'addDonatur',
+                        member: findMember,
+                        guild: message.guild,
+                        status: 'extend',
+                        reason: 'Donatur',
+                        data: {
+                            duration: time
+                        }
+                    });
+                }
             } else {
                 message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
                 await findMember.roles.add('932997958788608044');

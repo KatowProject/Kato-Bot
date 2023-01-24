@@ -69,12 +69,12 @@ module.exports = async (client, donatur) => {
             donatur.member.send({
                 embeds: [
                     new EmbedBuilder()
-                        .setAuthor({ name: donatur.guild.name, iconURL: donatur.guild.iconURL({ dynamic: true }) })
+                        .setAuthor({ name: donatur.member.user.tag, iconURL: donatur.member.user.displayAvatarURL({ size: 4096, forceStatic: true }) })
                         .setTitle('Donatur Extended')
-                        .setDescription(`Donatur kamu di server **${donatur.guild.name}** telah diperpanjang selama **${ms(donatur.data.duration, { long: true })}**!`)
+                        .setDescription(`Donatur kamu di server **${donatur.guild.name}** telah diperpanjang selama **${ms(donatur.data.duration, { long: true })}**, terima kasih atas donasi kamu!`)
                         .setColor('Random')
                         .setTimestamp()
-                        .setFooter({ text: `Donatur Extended | ${donatur.member.user.tag}`, iconURL: donatur.member.user.displayAvatarURL({ dynamic: true }) }),
+                        .setFooter({ text: donatur.guild.name, iconURL: donatur.guild.iconURL({ size: 4096, forceStatic: true }) }),
                 ]
             });
             break;

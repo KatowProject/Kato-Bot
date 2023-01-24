@@ -174,6 +174,12 @@ class Trakteer {
             console.log('Notifikasi dinonaktifkan!');
         }
     }
+
+    disableNotification() {
+        if (!this.notification) return console.log('Notifikasi tidak aktif!');
+        clearInterval(this.notification);
+        console.log('Notifikasi dinonaktifkan!');
+    }
 }
 
 

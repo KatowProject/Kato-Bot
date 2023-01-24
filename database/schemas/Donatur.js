@@ -9,6 +9,14 @@ const donaturSchema = new Schema({
         daily: Number,
         base: Number
     },
+    ticket: {
+        default: 0,
+        type: Number
+    },
+    isAttend: {
+        default: false,
+        type: Boolean
+    },
     isBooster: {
         default: false,
         type: Boolean

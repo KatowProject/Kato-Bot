@@ -25,7 +25,7 @@ exports.run = async (client, message, args) => {
     //get avatar and send to user
     if (bannerUser) {
         const getUser = await client.users.fetch(mention?.id || userID?.id || message.author.id, { force: true });
-        const bannerURL = getUser.bannerURL({ size: 4096, dynamic: true });
+        const bannerURL = getUser.bannerURL({ size: 4096 });
         if (mention) {
             embed
                 .setAuthor({ name: mention.tag, iconURL: mention.displayAvatarURL({ size: 4096, dynamic: true }) })

@@ -5,6 +5,7 @@ const Kusonime = require('../modules/anime/kusonime');
 const Util = require('./Util');
 const Trakteer = require('./trakteer');
 const DonaturManager = require('./donaturManager');
+const Canvas = require('../modules/Discord-Canvas');
 
 module.exports = class Kato extends Client {
     constructor(opt) {
@@ -18,8 +19,10 @@ module.exports = class Kato extends Client {
         this.kusonime = new Kusonime(this);
         this.trakteer = new Trakteer(this);
         this.donaturManager = new DonaturManager(this);
+        this.canvas = new Canvas();
 
         this.kuroshiro.init(new KuromojiAnalyzer());
         this.donaturManager.init();
+        this.trakteer.getNotification(true, 30_000);
     }
 }
