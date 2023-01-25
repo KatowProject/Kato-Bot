@@ -65,7 +65,7 @@ module.exports = async (client, message) => {
     }
 
     try {
-        let command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd)); // Jalani command dengan aliases juga bisa. Misalnya: k!serverinfo, k!server, k!s
+        const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd)); // Jalani command dengan aliases juga bisa. Misalnya: k!serverinfo, k!server, k!s
         command.run(client, message, args);
     } catch (e) {
         console.log(e.message);

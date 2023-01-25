@@ -6,6 +6,7 @@ const Util = require('./Util');
 const Trakteer = require('./trakteer');
 const DonaturManager = require('./donaturManager');
 const Canvas = require('../modules/Discord-Canvas');
+const Giveaway = require('../modules/Giveaway');
 
 module.exports = class Kato extends Client {
     constructor(opt) {
@@ -20,9 +21,11 @@ module.exports = class Kato extends Client {
         this.trakteer = new Trakteer(this);
         this.donaturManager = new DonaturManager(this);
         this.canvas = new Canvas();
+        this.giveaway = new Giveaway(this, process.env.GIVEAWAY_TIME_INTERVAL);
 
         this.kuroshiro.init(new KuromojiAnalyzer());
         this.donaturManager.init();
-        this.trakteer.getNotification(true, 30_000);
+        this.giveaway.init();
+        //this.trakteer.getNotification(true, 30_000);
     }
 }
