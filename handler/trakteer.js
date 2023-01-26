@@ -308,6 +308,59 @@ class Donatur extends Trakteer {
     }
 
     /**
+     * 
+     * @param {Message} message 
+     * @param {[]} args 
+     * @returns 
+     */
+    async cekHistoryKas(message, args) {
+        if (!message.member.permissions.has('MANAGE_GUILD')) return;
+        const getHistory = await this.getHistory();
+
+        let pagination = 1;
+        const map = getHistory.map((a, i) => `**${a.tanggal}**\n\`${a.description}\` - **[${a.amount}] | [${a.balance}]**`);
+        const chunk = this.client.util.chunk(map, 15);
+
+        const embed = new EmbedBuilder()
+            .setColor(`Aqua`)
+            .setTitle('Pemasukan & Pengeluaran Kas')
+            .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ forceStatic: true, size: 4096 }) })
+            .setDescription(chunk[pagination - 1].join('\n'))
+            .setFooter({ text: `Page ${pagination} of ${chunk.length}` });
+
+        const btn = [
+            new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('< Back').setCustomId(`back-${message.id}`),
+            new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('Next >').setCustomId(`next-${message.id}`)
+        ];
+
+        const r = await message.channel.send({ embeds: [embed], components: [new ActionRowBuilder().addComponents(btn)] });
+        const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60_000 });
+        collector.on('collect', async msg => {
+            await msg.deferUpdate();
+
+            switch (msg.customId) {
+                case `back-${message.id}`:
+                    if (pagination === 1) return;
+                    pagination--;
+                    embed.setDescription(chunk[pagination - 1].join('\n'));
+                    embed.setFooter({ text: `Page ${pagination} of ${chunk.length}` })
+
+                    r.edit({ embeds: [embed], components: [new ActionRowBuilder().addComponents(btn)] });
+                    break;
+
+                case `next-${message.id}`:
+                    if (pagination === chunk.length) return;
+                    pagination++;
+                    embed.setDescription(chunk[pagination - 1].join('\n'));
+                    embed.setFooter({ text: `Page ${pagination} of ${chunk.length}` })
+
+                    r.edit({ embeds: [embed], components: [new ActionRowBuilder().addComponents(btn)] });
+                    break;
+            }
+        });
+    }
+
+    /**
      * Pilih Opsi
      * @param {Message} message 
      * Structure Discord Message
@@ -327,8 +380,13 @@ class Donatur extends Trakteer {
             case 'status':
                 this.cekStatusDonasi(message, args);
                 break;
+
             case 'apply':
                 this.applyDonatur(message, args);
+                break;
+
+            case 'history':
+                this.cekHistoryKas(message, args);
                 break;
 
             default:
@@ -341,7 +399,8 @@ class Donatur extends Trakteer {
                                 { name: 'saldo', value: 'ngecek saldo' },
                                 { name: 'status | status --all', value: 'lihat durasi role donatur' },
                                 { name: 'data', value: 'lihat data donatur dari awal hingga sekarang' },
-                                { name: 'apply', value: 'memberikan role kepada donatur yang tidak terpasang secara otomatis' }
+                                { name: 'apply', value: 'memberikan role kepada donatur yang tidak terpasang secara otomatis' },
+                                { name: 'history', value: 'lihat history kas' }
                             )
                     ]
                 });

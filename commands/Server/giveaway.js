@@ -31,7 +31,7 @@ exports.run = async (client, message, args) => {
         default:
             message.channel.send({
                 embeds: [
-                    new EmbedBuilder(true, message.author)
+                    new EmbedBuilder()
                         .setTitle('Giveaway Command List')
                         .setDescription([
                             '```',

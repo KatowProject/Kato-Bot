@@ -45,6 +45,6 @@ const GiveawaySchema = new Schema({
     },
 });
 
-const Giveaway = model('Giveawayt', GiveawaySchema);
+const Giveaway = model('Giveaway', GiveawaySchema);
 
 module.exports = Giveaway;
