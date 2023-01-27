@@ -6,7 +6,7 @@
 [![Chat](https://img.shields.io/discord/336336077755252738)]()
 
 ## About
-Bot Kato versi Publik yang dikembangkan oleh Komunitas [discord.gg/posantai](Perkumpulan Orang Santai)
+Bot Kato versi Publik yang dikembangkan oleh Komunitas [Perkumpulan Orang Santai](https://discord.gg/posantai)
 
 ## Hak Cipta
 Projek ini dilindungi oleh **Attribution-ShareAlike 4.0 International** yang dimana penggunanya boleh menggunakan, mendistribusikan, menampilkan, bahkan
