@@ -1,0 +1,25 @@
+{
+  "name": "kato-bot",
+  "version": "4.1.0",
+  "description": "Kato-Bot Public Version",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KatowProject/Kato-Bot.git"
+  },
+  "keywords": [
+    "discord-bot"
+  ],
+  "author": "ManLord#3143",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/KatowProject/Kato-Bot/issues"
+  },
+  "homepage": "https://github.com/KatowProject/Kato-Bot#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1"
+  }
+}
