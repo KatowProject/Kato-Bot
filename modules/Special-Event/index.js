@@ -79,6 +79,7 @@ class TempEvent {
     async register(message) {
         try {
             if (!message) throw new Error('Message is not defined');
+            if (!this.isOpen) return message.reply({ content: 'Event belum dibuka atau sudah tidak berlaku.' });
             const userID = message.author.id;
             const user = await User.findOne({ userID });
             const xp = await Xp.findOne({ id: 1 });

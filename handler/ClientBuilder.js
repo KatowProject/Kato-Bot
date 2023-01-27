@@ -9,6 +9,7 @@ const Canvas = require('../modules/Discord-Canvas');
 const Giveaway = require('../modules/Giveaway');
 const KatoShop = require('../modules/Special-Event');
 const Selfbot = require('../modules/Discord-Selfbot');
+
 module.exports = class Kato extends Client {
     constructor(opt) {
         super(opt);

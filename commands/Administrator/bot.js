@@ -1,5 +1,5 @@
 const { allCommands } = require('../../database/schemas/manageCommand');
-const { EmbedBuilder, Client, Message } = require('discord.js');
+const { EmbedBuilder, Client, Message, SlashCommandBuilder } = require('discord.js');
 
 /**
  * @param {Client} client
@@ -61,7 +61,7 @@ exports.run = async (client, message, args) => {
 exports.conf = {
     aliases: [],
     cooldown: 5,
-    location: __filename
+    location: __filename,
 }
 
 exports.help = {

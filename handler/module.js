@@ -1,5 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v10');
 
 module.exports = client => {
     client.commands = new Discord.Collection();

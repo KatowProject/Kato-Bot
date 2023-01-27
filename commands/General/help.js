@@ -7,52 +7,58 @@ const { EmbedBuilder, Client, Message } = require('discord.js');
  * @param {Array} args 
  */
 exports.run = async (client, message, args) => {
-    const prefix = process.env.DISCORD_PREFIX;
-    if (!args[0]) {
-        let module = Array.from(client.helps.values());
-        // if (!client.config.owners.includes(message.author.id)) 
-        module = module.filter(x => !x.hide);
+    try {
 
-        const embed = new EmbedBuilder()
-            .setColor("Random")
-            .setTimestamp()
-            .setFooter({ text: `© 2023 Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, iconURL: client.user.avatarURL() })
-            .setDescription(`Ketik \`${prefix[0]}help [command] / ${prefix[1]}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
-            .setTitle(`<:kato:750342786825584811> ${client.user.username}-Bot Command List <:kato:750342786825584811>`)
+        const prefix = process.env.DISCORD_PREFIX;
+        if (!args[0]) {
+            let module = Array.from(client.helps.values());
+            // if (!client.config.owners.includes(message.author.id)) 
+            module = module.filter(x => !x.hide);
 
-        for (const mod of module) {
-            embed.addFields({ name: `${mod.name}`, value: mod.cmds.map(x => `\`${x}\``).join(' . '), inline: true });
+            const embed = new EmbedBuilder()
+                .setColor("Random")
+                .setTimestamp()
+                .setFooter({ text: `© 2023 Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, iconURL: client.user.avatarURL() })
+                .setDescription(`Ketik \`${prefix[0]}help [command] / ${prefix[1]}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
+                .setTitle(`<:kato:750342786825584811> ${client.user.username}-Bot Command List <:kato:750342786825584811>`)
+
+            for (const mod of module) {
+                embed.addFields({ name: `${mod.name}`, value: mod.cmds.map(x => `\`${x}\``).join(' . '), inline: true });
+            }
+
+            message.channel.send({ embeds: [embed] });
+        } else {
+            const cmd = args[0];
+            if (client.commands.has(cmd) || client.commands.get(client.aliases.get(cmd))) {
+                let command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd))
+                let name = command.help.name;
+                let desc = command.help.description;
+                let cooldown = command.conf.cooldown;
+                let aliases = command.conf.aliases.join(', ') ? command.conf.aliases.join(', ') : 'No aliases provided.';
+                let usage = prefix + command.help.usage !== undefined ? command.help.usage : "No usage provided.";
+                let example = prefix + command.help.example !== undefined ? command.help.example : "No example provided."
+
+                let embed = new EmbedBuilder()
+                    .setColor("#985ce7")
+                    .setTitle(name)
+                    .setDescription(desc)
+                    .setThumbnail(client.user.avatarURL)
+                    .setFooter({ text: '[] opsional, <> diwajibkan. • Jangan tambahkan simbol ini ketika mengetik sebuah perintah.' })
+                    .addFields(
+                        { name: 'Usage', value: usage, inline: true },
+                        { name: 'Aliases', value: aliases, inline: true },
+                        { name: 'Cooldown', value: `${cooldown} second(s)`, inline: true },
+                        { name: 'Example', value: `${example}`, inline: true }
+                    )
+                return message.channel.send({ embeds: [embed] });
+            }
+            if (!client.commands.has(cmd) || !client.commands.get(client.aliases.get(cmd))) {
+                message.channel.send({ embed: { color: 0xcc5353, description: "gaada command bos, dih." } })
+            }
         }
-
-        message.channel.send({ embeds: [embed] });
-    } else {
-        const cmd = args[0];
-        if (client.commands.has(cmd) || client.commands.get(client.aliases.get(cmd))) {
-            let command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd))
-            let name = command.help.name;
-            let desc = command.help.description;
-            let cooldown = command.conf.cooldown;
-            let aliases = command.conf.aliases.join(', ') ? command.conf.aliases.join(', ') : 'No aliases provided.';
-            let usage = prefix + command.help.usage !== undefined ? command.help.usage : "No usage provided.";
-            let example = prefix + command.help.example !== undefined ? command.help.example : "No example provided."
-
-            let embed = new EmbedBuilder()
-                .setColor("#985ce7")
-                .setTitle(name)
-                .setDescription(desc)
-                .setThumbnail(client.user.avatarURL)
-                .setFooter({ text: '[] opsional, <> diwajibkan. • Jangan tambahkan simbol ini ketika mengetik sebuah perintah.' })
-                .addFields(
-                    { name: 'Usage', value: usage, inline: true },
-                    { name: 'Aliases', value: aliases, inline: true },
-                    { name: 'Cooldown', value: `${cooldown} second(s)`, inline: true },
-                    { name: 'Example', value: `${example}`, inline: true }
-                )
-            return message.channel.send({ embeds: [embed] });
-        }
-        if (!client.commands.has(cmd) || !client.commands.get(client.aliases.get(cmd))) {
-            message.channel.send({ embed: { color: 0xcc5353, description: "gaada command bos, dih." } })
-        }
+    } catch (err) {
+        console.log(err);
+        message.channel.send({ content: 'Something wrong with: ' + err.message });
     }
 }
 
