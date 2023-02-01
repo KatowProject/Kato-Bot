@@ -20,6 +20,15 @@
   },
   "homepage": "https://github.com/KatowProject/Kato-Bot#readme",
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "axios": "^1.2.5",
+    "better-sqlite3": "^8.0.1",
+    "cpu-stat": "^2.0.1",
+    "discord-logs": "^2.2.1",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "g-i-s": "^2.1.6",
+    "moment": "^2.29.4",
+    "os": "^0.1.2",
+    "quick.db": "^9.0.8"
   }
 }
