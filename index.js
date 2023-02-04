@@ -29,7 +29,6 @@ const client = new Kato({
 require('discord-logs')(client);
 require('./handler/module')(client);
 require('./handler/event')(client);
-require('./database')(client);
 
 client.login(process.env.DISCORD_TOKEN);
 

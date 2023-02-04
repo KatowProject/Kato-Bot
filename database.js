@@ -15,4 +15,6 @@ module.exports = (client) => {
     client.db.afk = afk;
     client.db.cmd = cmd;
     client.db.giveaway = giveaway;
+
+    return client.db;
 }

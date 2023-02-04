@@ -38,8 +38,8 @@ exports.run = async (client, message, args) => {
                 let desc = command.help.description;
                 let cooldown = command.conf.cooldown;
                 let aliases = command.conf.aliases.join(', ') ? command.conf.aliases.join(', ') : 'No aliases provided.';
-                let usage = prefix + command.help.usage !== undefined ? command.help.usage : "No usage provided.";
-                let example = prefix + command.help.example !== undefined ? command.help.example : "No example provided."
+                let usage = prefix[0] + command.help.usage !== undefined ? command.help.usage : "No usage provided.";
+                let example = prefix[0] + command.help.example !== undefined ? command.help.example : "No example provided."
 
                 let embed = new EmbedBuilder()
                     .setColor("#985ce7")
