@@ -42,7 +42,7 @@ exports.run = async (client, message, args) => {
                     .setColor("#985ce7")
                     .setTitle(name)
                     .setDescription(desc)
-                    .setThumbnail(client.user.avatarURL)
+                    .setThumbnail(client.user.avatarURL({ forceStatic: true, size: 4096 }))
                     .setFooter({ text: '[] opsional, <> diwajibkan. • Jangan tambahkan simbol ini ketika mengetik sebuah perintah.' })
                     .addFields(
                         { name: 'Usage', value: usage, inline: true },
