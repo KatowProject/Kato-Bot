@@ -13,7 +13,8 @@ const client = new Kato({
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildIntegrations,
         GatewayIntentBits.GuildMessageReactions,
-        GatewayIntentBits.GuildMessageTyping
+        GatewayIntentBits.GuildMessageTyping,
+        GatewayIntentBits.GuildVoiceStates,
     ],
     partials: [
         Partials.Message,

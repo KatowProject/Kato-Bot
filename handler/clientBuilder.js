@@ -1,4 +1,5 @@
 const { Client, Collection } = require('discord.js');
+const { Player } = require('discord-player');
 const Util = require('./Util');
 const Giveaway = require('./Giveaway');
 const Database = require('../database');
@@ -17,7 +18,7 @@ class Kato extends Client {
         this.aliases = new Collection();
         this.db = Database(this);
         this.giveaway = new Giveaway(this);
-
+        this.player = new Player(this);
         this.giveaway.init();
     }
 }
