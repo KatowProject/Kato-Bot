@@ -38,14 +38,14 @@ exports.run = async (client, message, args) => {
                 let desc = command.help.description;
                 let cooldown = command.conf.cooldown;
                 let aliases = command.conf.aliases.join(', ') ? command.conf.aliases.join(', ') : 'No aliases provided.';
-                let usage = prefix[0] + command.help.usage !== undefined ? command.help.usage : "No usage provided.";
-                let example = prefix[0] + command.help.example !== undefined ? command.help.example : "No example provided."
+                let usage = command.help.usage ? prefix[0] + command.help.usage : "No usage provided.";
+                let example = command.help.example ? prefix[0] + command.help.example : "No example provided."
 
                 let embed = new EmbedBuilder()
                     .setColor("#985ce7")
                     .setTitle(name)
                     .setDescription(desc)
-                    .setThumbnail(client.user.avatarURL)
+                    .setThumbnail(client.user.avatarURL({ forceStatic: true }))
                     .setFooter({ text: '[] opsional, <> diwajibkan. • Jangan tambahkan simbol ini ketika mengetik sebuah perintah.' })
                     .addFields(
                         { name: 'Usage', value: usage, inline: true },

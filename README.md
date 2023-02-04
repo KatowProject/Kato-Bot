@@ -20,14 +20,15 @@ memodifikasi projek ini ke publik. __Namun, biarkan lisensi ini sebagai credit/a
 ## Develover
 - ManLord#3143
 
-### Instalasi
-- Instal node.js (V18 ke atas)
-- Clone repo ini.
-- Instal terlebih dahulu dengan cara mengetik `npm install`.<br>
-- buat file baru dengan nama `.env` kemudian isi seperti yang ada di contoh `.example.env`
+### Init
+- Install node.js (V18 or highest version)
+- Clone this repo.
+- Install FFMPEG (Bot Musik)
+- Install package with type `npm install` in terminal
+- create `.env` file at main directory and input the config like in example file `.example.env`
   
-### Penggunaan
-ketik di terminal `node index.js` untuk menjalankan bot-nya.
+### Usage
+Type `node index.js` in terminal to running the bot.
 
 <p align="center"><font size = "5">Selamat Mencoba! </font><br></p>
 <p align="center"><img src="https://cdn.discordapp.com/attachments/519859252966457369/735280356441456641/4c64e343e788251fb15dac0f4c557337.gif" /></p>
