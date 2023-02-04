@@ -2,7 +2,7 @@
 [![Support via Trakteer](https://img.shields.io/badge/Support-me!-green)](https://trakteer.id/katowproject)
 [![License](https://img.shields.io/badge/LICENSE-CC--BY--SA--4.0-green)](https://github.com/KatowProject/Kato-Bot/blob/master/LICENSE)
 [![Discord.js Version](https://img.shields.io/badge/discord.js-v14-green)]()
-[![Server POS](https://img.shields.io/badge/discord-discord.gg%2Fposantai-blue)](https://discord.gg/3QVwskz)
+[![Server POS](https://img.shields.io/badge/discord-discord.gg%2Fposantai-blue)](https://discord.gg/posantai)
 [![Chat](https://img.shields.io/discord/336336077755252738)]()
 
 ## About
