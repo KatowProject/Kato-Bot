@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
                 .setColor("Random")
                 .setTimestamp()
                 .setFooter({ text: `© 2023 Perkumpulan Orang Santai • Total: ${client.commands.size} commands`, iconURL: client.user.avatarURL() })
-                .setDescription(`Ketik \`${prefix[0]}help [command] / ${prefix[1]}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
+                .setDescription(`Ketik \`${prefix}help [command] / ${prefix}help [command]\` untuk menambahkan informasi lebih lanjut mengenai sebuah perintah.`)
                 .setTitle(`<:kato:750342786825584811> ${client.user.username}-Bot Command List <:kato:750342786825584811>`)
 
             for (const mod of module) {
@@ -35,8 +35,8 @@ exports.run = async (client, message, args) => {
                 let desc = command.help.description;
                 let cooldown = command.conf.cooldown;
                 let aliases = command.conf.aliases.join(', ') ? command.conf.aliases.join(', ') : 'No aliases provided.';
-                let usage = prefix + command.help.usage !== undefined ? command.help.usage : "No usage provided.";
-                let example = prefix + command.help.example !== undefined ? command.help.example : "No example provided."
+                let usage = command.help.usage ? prefix + command.help.usage : "No usage provided.";
+                let example = command.help.example ? prefix + command.help.example : "No example provided."
 
                 let embed = new EmbedBuilder()
                     .setColor("#985ce7")
