@@ -6,7 +6,7 @@ const client = new Kato({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildModeration,
+        GatewayIntentBits.GuildBans,
         GatewayIntentBits.GuildWebhooks,
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMessages,

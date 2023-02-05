@@ -8,5 +8,5 @@ const { Queue, Track } = require('discord-player');
  * @param {Track} track 
  */
 module.exports = async (client, queue, track) => {
-    queue.metadata.channel.send(`Now playing ${track.title}...`);
+    queue.metadata.channel.send(`Now playing \`${track.title}\`...`);
 }

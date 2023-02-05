@@ -1,5 +1,6 @@
 const { Client, Message } = require('discord.js');
-
+const { QueryType } = require('discord-player');
+const playdl = require('play-dl');
 /**
  * @param {Client} client 
  * @param {Message} message 
@@ -21,23 +22,35 @@ exports.run = async (client, message, args) => {
         leaveOnEnd: true,
         leaveOnStop: true,
         spotifyBridge: true,
+        async onBeforeCreateStream(track, source) {
+            if (source === 'youtube') {
+                const stream = await playdl.stream(track.url, { discordPlayerCompatibility: true });
+
+                return stream.stream;
+            }
+        }
     });
     try {
         if (!queue.connection) await queue.connect(message.member.voice.channel);
 
     } catch (err) {
-        client.player.deleteQueue(message.guild);
+        queue.destroy();
         return message.reply(`There was an error connecting to the voice channel: ${err}`);
     }
 
-    const track = await client.player.search(query, { requestedBy: message.author }).then(x => x.tracks[0]);
+    const track = await client.player.search(query, { requestedBy: message.author, searchEngine: QueryType.AUTO }).then(x => x.tracks[0]);
     if (!track) return message.reply('No results were found.');
 
-    queue.addTrack(track);
+    if (!queue.playing) {
+        queue.addTrack(track);
 
-    message.reply(`Loading your track \`${track.title}\`...`);
-
-    queue.play();
+        await queue.play();
+        queue.playing = true;
+        return message.reply(`Loading your track \`${track.title}\`...`);
+    } else {
+        queue.addTrack(track);
+        return message.reply(`Added \`${track.title}\` to the queue!`);
+    }
 }
 
 exports.conf = {
