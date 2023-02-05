@@ -13,25 +13,27 @@ exports.run = async (client, message, args) => {
         const queue = client.player.getQueue(message.guild);
         if (!queue) return message.reply('Track is not playing.');
 
-        const now = queue.current;
-        const timestamp = queue.getPlayerTimestamp();
-        const tracks = queue.tracks.map((track, i) => `**${i + 1}. ${track.title}** [${track.duration}] \`${track.url}\` - Requested by: ${track.requestedBy.tag}`);
-        const list = typeof tracks === 'object' ? tracks.join('\n') : 'No tracks in the queue.';
+        const volume = parseInt(args[0]);
+        if (isNaN(volume)) return message.reply('Please enter a valid number.');
+        if (volume < 0 || volume > 100) return message.reply('Please enter a number between 0 and 100.');
+        if (queue.volume === volume) return message.reply(`The volume is already set to ${volume}.`);
 
-        message.channel.send(`**Now Playing:**\n**${now.title}** \`[${timestamp.current} - ${now.duration}]\` **- Requested by: ${now.requestedBy.tag}**\n[${now.url}]\n**Current Queue:**\n${list}`);
+        const v = queue.setVolume(volume);
+        console.log(v);
+        if (v) message.reply(`The volume has been set to ${volume}.`);
     } catch (err) {
         message.channel.send(`There was an error: ${err}`);
     }
 }
 
 exports.conf = {
-    aliases: ['q'],
+    aliases: ['vol', 'volume'],
     cooldown: 5,
 }
 
 exports.help = {
-    name: 'queue',
-    description: 'Shows the current queue.',
-    usage: 'queue',
-    example: 'queue',
+    name: 'set-volume',
+    description: 'Sets the volume of the queue.',
+    usage: 'set-volume <number>',
+    example: 'set-volume 50',
 }
