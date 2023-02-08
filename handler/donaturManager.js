@@ -122,7 +122,7 @@ class DonaturManager {
                 if (time === '24:00' || time === '00:00' || canReset) {
                     const guild = this.client.guilds.cache.get(member.guild)
                     const user1 = await guild.members.fetch({ id: member.userID, force: true });
-                    if (!user1.roles.cache.hasAny(this.donaturRole, this.donaturRole2)) {
+                    if (!user1.roles?.cache.hasAny(this.donaturRole, this.donaturRole2)) {
                         arr.push({ userID: member.userID, guild: member.guild, daily: `${member.message.daily}` });
                         this.client.emit('donaturManager', {
                             type: 'donaturXp',
