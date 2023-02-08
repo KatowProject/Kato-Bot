@@ -62,7 +62,6 @@ class TempEvent {
 
             if (time === '24:00' || time === '00:00') {
                 this.client.channels.cache.get(this.channel).send({ content: 'Daily telah direset.' });
-
                 await new Promise(resolve => setTimeout(resolve, 60_000));
             }
         } catch (err) {
@@ -305,7 +304,6 @@ class TempEvent {
                 this.Shop = new Shop(this);
             }
 
-            this.messageCheck();
             setInterval(() => {
                 this.messageCheck();
             }, this.interval);

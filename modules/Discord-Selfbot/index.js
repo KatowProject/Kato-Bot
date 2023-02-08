@@ -11,8 +11,6 @@ class Discord {
     async init(f) {
         const createDevice = async () => {
             const UAs = await axios.get('https://jnrbsn.github.io/user-agents/user-agents.json').then(res => res.data);
-            const distok = await axios.get('http://distok.top/state.json').then(res => res.data);
-
             const UserAgent = new UAParser(UAs[Math.floor(Math.random() * UAs.length)]);
             this.device = {
                 os: UserAgent.getOS().name,
@@ -27,7 +25,7 @@ class Discord {
                 referrer_current: '',
                 referring_domain_current: '',
                 release_channel: 'stable',
-                client_build_number: 119446,
+                client_build_number: 172394,
                 client_event_source: null
             }
 
