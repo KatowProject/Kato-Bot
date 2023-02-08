@@ -218,14 +218,16 @@ class DonaturManager {
             if (!member) return this.client.emit('donaturManagerError', {
                 type: 'donaturNotification',
                 status: 'error',
-                error: 'member not found'
+                error: 'member not found',
+                guild: message.guild,
             });
 
             const role = message.guild.roles.cache.find(r => r.name === 'Santai Dermawan');
             if (!role) return this.client.emit('donaturManagerError', {
                 type: 'donaturNotification',
                 status: 'error',
-                error: 'role not found'
+                error: 'role not found',
+                guild: message.guild,
             });
 
             const findUser = await donate.findOne({ userID: member.id });
