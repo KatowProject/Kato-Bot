@@ -121,19 +121,22 @@ class DonaturManager {
 
                 if (time === '24:00' || time === '00:00' || canReset) {
                     const guild = this.client.guilds.cache.get(member.guild)
-                    const user1 = await guild.members.fetch({ id: member.userID, force: true });
+                    const user1 = guild.members.cache.get(member.userID);
                     if (!user1.roles?.cache.hasAny(this.donaturRole, this.donaturRole2)) {
                         arr.push({ userID: member.userID, guild: member.guild, daily: `${member.message.daily}` });
                         this.client.emit('donaturManager', {
                             type: 'donaturXp',
-                            member: user1,
+                            member: user1 || member.userID,
                             guild: guild,
                             status: 'no role',
                             reason: 'out/no role'
                         });
 
                         const XpTotal = DonaturManager.convertXp(member.message.daily);
-                        this.client.selfbot.request.sendMessage(this.selfbotChannel, `!give-xp <@${member.userID}> ${XpTotal}`, true);
+                        await this.client.selfbot.request.sendMessage(this.selfbotChannel, `!give-xp <@${member.userID}> ${XpTotal}`, true);
+
+                        // sleep 2 seconds
+                        await new Promise(resolve => setTimeout(resolve, 2000));
 
                         await member.remove();
                         continue;
@@ -141,11 +144,14 @@ class DonaturManager {
 
                     arr.push({ userID: member.userID, guild: member.guild, daily: `${member.message.daily}` });
 
+                    const XpTotal = DonaturManager.convertXp(member.message.daily);
+                    await this.client.selfbot.request.sendMessage(this.selfbotChannel, `!give-xp <@${member.userID}> ${parseInt(XpTotal)}`, true);
+
                     member.message = { daily: 0, base: user.message_count };
                     member.isAttend = false;
 
-                    const XpTotal = convertXp(member.message.daily);
-                    this.client.selfbot.request.sendMessage(this.selfbotChannel`!give-xp <@${member.userID}> ${XpTotal}`, true);
+                    await member.save();
+                    continue;
                 }
                 await member.save();
             }
@@ -154,8 +160,8 @@ class DonaturManager {
             const embed = new EmbedBuilder()
                 .setTitle('Daily Reset')
                 .setColor('#00ff00')
-                .setDescription(`${arr.map(a => `<@${a.userID}> [${a.userID}] - ${convertXp(a.daily)}`).join('\n')}`)
-                .setFooter('Daily Reset')
+                .setDescription(`${arr.map(a => `<@${a.userID}> [${a.userID}] - ${DonaturManager.convertXp(a.daily)}`).join('\n')}`)
+                .setFooter({ text: `Total: ${arr.length} donatur` })
                 .setTimestamp();
 
             this.client.channels.cache.get('932997960923480101').send({ embeds: [embed] });
@@ -248,6 +254,7 @@ class DonaturManager {
                     }
                 });
             } else {
+                console.log(toMS);
                 await donate.create({ userID: member.id, guild: message.guild.id, duration: toMS, now: Date.now() });
                 member.roles.add(role.id);
                 channel.send(`Hai Para Staff, **${member.user.tag}** terdaftar sebagai Donatur baru, silahkan cek untuk memastikan!`);

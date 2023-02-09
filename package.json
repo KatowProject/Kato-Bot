@@ -31,6 +31,7 @@
     "moment-timezone": "^0.5.40",
     "mongoose": "^6.5.2",
     "ms": "^2.1.3",
+    "readline-sync": "^1.4.10",
     "spotify-url-info": "^3.2.3",
     "ua-parser-js": "^1.0.33",
     "upgrade": "^1.1.0",

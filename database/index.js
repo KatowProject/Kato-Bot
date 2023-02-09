@@ -1,6 +1,7 @@
 const db = require('mongoose');
 
 module.exports = (url) => {
+    db.set('strictQuery', true);
     db.connect(url);
 
     db.connection

@@ -26,13 +26,12 @@ module.exports = async (client, message) => {
     require('../handler/Afk')(client, message);
 
     if (!message.content.toLowerCase().startsWith(prefix)) return;
-
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     //let msg = message.content.toLowerCase();
     let cmd = args.shift().toLowerCase();
     let sender = message.author;
 
-    let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
+    const commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
     if (!commandFile) return;
 
     if (!cooldowns.has(commandFile.help.name)) {
@@ -43,6 +42,7 @@ module.exports = async (client, message) => {
     const thisCommandIsSolve = await require('../handler/cmdManager')(client, message, cmd);
     if (!thisCommandIsSolve) return;
 
+    console.log(message.content);
     const member = message.member;
     const now = Date.now();
     const timestamps = cooldowns.get(commandFile.help.name);
@@ -65,8 +65,7 @@ module.exports = async (client, message) => {
     }
 
     try {
-        const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd)); // Jalani command dengan aliases juga bisa. Misalnya: k!serverinfo, k!server, k!s
-        command.run(client, message, args);
+        commandFile.run(client, message, args);
     } catch (e) {
         console.log(e.message);
     } finally {

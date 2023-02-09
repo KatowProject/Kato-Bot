@@ -135,7 +135,8 @@ class Donatur extends Trakteer {
             const timeLeft = donatur.duration - (Date.now() - donatur.now);
             message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
         } else if (args.includes('--all')) {
-            const allDonatur = await donate.find({})
+            const allDonatur = await donate.find({});
+            if (allDonatur.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
             const member = await message.guild.members.fetch();
             const mapDonatur = allDonatur.map((a, i) => {
                 const mem = member.find(b => b.id == a.userID);
@@ -164,7 +165,7 @@ class Donatur extends Trakteer {
                         .setLabel('Next >').setStyle(ButtonStyle.Secondary).setCustomId(`next-${message.id}-all`)
                 )
             const r = await message.channel.send({ embeds: [embed], components: [butonn] });
-            const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id, time: 60000 });
+            const collector = r.channel.createMessageComponentCollector({ filter: msg => msg.user.id === message.author.id && msg.customId.includes(message.id), time: 60000 });
             collector.on('collect', async (m) => {
                 await m.deferUpdate();
                 switch (m.customId) {
