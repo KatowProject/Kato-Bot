@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "63abf9d9d89677b62f4e1aeb",
+    "id": "1",
+    "name": "Discord Nitro Boost",
+    "price": 14,
+    "stock": 0,
+    "__v": 0
+  },
+  {
+    "_id": "63abf9fcd89677b62f4e1b24",
+    "id": "2",
+    "name": "Custom Role (Durasi 2 Minggu)",
+    "price": 12,
+    "stock": 0,
+    "__v": 0
+  },
+  {
+    "_id": "63abfa1fd89677b62f4e1b80",
+    "id": "3",
+    "name": "Google Play Card Rp 50.000",
+    "price": 14,
+    "stock": 0,
+    "__v": 0
+  },
+  {
+    "_id": "63abfa3cd89677b62f4e1bb7",
+    "id": "4",
+    "name": "E-Wallet Rp 20.000",
+    "price": 12,
+    "stock": 0,
+    "__v": 0
+  },
+  {
+    "_id": "63abfa5cd89677b62f4e1c11",
+    "id": "5",
+    "name": "E-Wallet Rp 10.000",
+    "price": 10,
+    "stock": 0,
+    "__v": 0
+  },
+  {
+    "_id": "63abfa6fd89677b62f4e1c46",
+    "id": "6",
+    "name": "E-Wallet Rp 5.000",
+    "price": 7,
+    "stock": 0,
+    "__v": 0
+  }
+]

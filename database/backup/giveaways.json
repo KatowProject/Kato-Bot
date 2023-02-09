@@ -1,0 +1,48 @@
+[
+  {
+    "time": {
+      "start": 1674642823050,
+      "duration": 0
+    },
+    "_id": "63d1058792ab761f04369f5e",
+    "messageID": "1067754133769166888",
+    "guildID": "932997958738268251",
+    "channelID": "932997960923480099",
+    "require": {
+      "name": "NONE"
+    },
+    "winnerCount": 1,
+    "entries": [
+      "458342161474387999"
+    ],
+    "embed": {
+      "color": 10501090,
+      "description": "**how to be anime**",
+      "fields": [
+        {
+          "name": "Dibuat oleh:",
+          "value": "<@458342161474387999>"
+        },
+        {
+          "name": "Dibutuhkan:",
+          "value": "**Tidak ada**"
+        },
+        {
+          "name": "Entries:",
+          "value": "1"
+        },
+        {
+          "name": "Winners:",
+          "value": "<@458342161474387999>",
+          "inline": false
+        }
+      ],
+      "footer": {
+        "text": "1 pemenang | Berakhir pada"
+      },
+      "timestamp": "2023-01-25T10:43:37.950Z"
+    },
+    "isDone": true,
+    "__v": 0
+  }
+]
