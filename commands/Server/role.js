@@ -3,7 +3,7 @@ const { ButtonBuilder, ActionRowBuilder, ButtonStyle, EmbedBuilder } = require('
 exports.run = async (client, message, args) => {
     try {
         const embed = new EmbedBuilder()
-            .setColor('Random')
+            .setColor('#ff8d07')
             .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ forceStatic: true, size: 4096 }) })
             .setDescription(`
                 **Selamat datang di server kami, Perkumpulan Orang Santai!**\n\nBerdiri sejak 2018, Perkumpulan Orang Santai (POS) hadir memberikan kalian tempat yang santai dan nyaman untuk berbincang dengan sesama member lainnya. Selain itu, POS menyediakan ruang dengan topik utama yang berbeda-beda (anime, tech, game, meme, dll.) sesuai dengan hobi kalian. Sebagai satu keluarga, kita berharap kalian semua bisa saling respect satu sama lain, serta taat pada aturan yang berlaku.\n\nUntuk mengakses server ini, kalian pahami dahulu dengan rules server <#932997959388385392>. Setelah itu, silahkan pencet emot (<:santai:1061950814316417054>) dibawah pesan ini untuk mendapatkan role <@&1074184657693851688> agar bisa mengakses channel lainnya.\n\n> *"Saya sudah klik tapi kenapa tetap tidak bisa masuk?"*
