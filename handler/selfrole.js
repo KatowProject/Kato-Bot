@@ -1,17 +1,15 @@
 const { Client, BaseInteraction, ButtonInteraction } = require('discord.js');
 
 /**
- * 
  * @param {Client} client 
  * @param {ButtonInteraction} interaction 
- * @returns 
  */
 module.exports = async (client, interaction) => {
     if (interaction.customId !== 'santai') return;
     await interaction.deferUpdate();
 
     //give santai role to players when clicked
-    const santai = interaction.message.guild.roles.cache.find(r => r.name === 'POSer');
+    const santai = interaction.message.guild.roles.cache.find(r => r.name === 'Santai');
     const member = await interaction.message.guild.members.fetch(interaction.user.id);
 
     if (member.roles.cache.has(santai.id)) return;
@@ -19,4 +17,6 @@ module.exports = async (client, interaction) => {
 
     //send on dm 
     interaction.followUp({ content: `Selamat, kamu mendapatkan role ${santai.name}!`, ephemeral: true });
+
+    client.channels.cache.find(c => c.name === 'chit-chat').send(`Halo <@${interaction.user.id}>, kamu sudah bisa mengakses channel POS. Selamat berinteraksi dan semoga nyaman disini.`);
 }

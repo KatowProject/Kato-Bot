@@ -3,6 +3,7 @@ const axios = require('axios');
 const cooldowns = new Collection();
 
 module.exports = async (client, message) => {
+    if (process.env.OWNER_ONLY === 'true' && !process.env.DISCORD_OWNERS.includes(message.author.id)) return;
     if (message.content.toLowerCase() === 'kato') message.reply("Cantik ❤️");
 
     if (message.author.bot) return;
