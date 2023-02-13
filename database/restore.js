@@ -9,7 +9,7 @@ const restore = async (url, isOnce = false, schemaName = false) => {
     }
 
     // import from json
-    const modelsImport = fs.readdirSync(path.join(__dirname, 'schemas')).filter(file => schemaName ? file === `${schemaName}.js` : file.endsWith('.js'));
+    const modelsImport = fs.readdirSync(path.join(__dirname, 'schemas')).filter(file => file.endsWith('.js'));
     for (const file of modelsImport) {
         // get model
         const db = require(`./schemas/${file}`);
@@ -19,6 +19,7 @@ const restore = async (url, isOnce = false, schemaName = false) => {
         }
 
         const modelName = db.collection.collectionName;
+        if (schemaName && schemaName !== modelName) continue;
 
         // read file
         const data = fs.readFileSync(path.join(__dirname, 'backup', `${modelName}.json`), 'utf8');
