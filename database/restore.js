@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
-const restore = async (url, isOnce = false, schemaName = false) => {
+const restore = async (url, isOnce = false, schemaName = false, skipObject = false) => {
     // check mongoose is connected
     if (!mongoose.connection.readyState) {
         mongoose.connect(url);
@@ -13,7 +13,7 @@ const restore = async (url, isOnce = false, schemaName = false) => {
     for (const file of modelsImport) {
         // get model
         const db = require(`./schemas/${file}`);
-        if (typeof db === 'object') {
+        if (typeof db === 'object' && !skipObject) {
             await objectSchema(db);
             continue;
         }
