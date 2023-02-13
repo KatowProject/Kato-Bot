@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
-const restore = async (url, isOnce = false) => {
+const restore = async (url, isOnce = false, schemaName = false) => {
     // check mongoose is connected
     if (!mongoose.connection.readyState) {
         mongoose.connect(url);
     }
 
     // import from json
-    const modelsImport = fs.readdirSync(path.join(__dirname, 'schemas')).filter(file => file.endsWith('.js'));
+    const modelsImport = fs.readdirSync(path.join(__dirname, 'schemas')).filter(file => schemaName ? file === `${schemaName}.js` : file.endsWith('.js'));
     for (const file of modelsImport) {
         // get model
         const db = require(`./schemas/${file}`);

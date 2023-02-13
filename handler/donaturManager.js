@@ -111,10 +111,7 @@ class DonaturManager {
 
             for (const member of donatur) {
                 const user = xp.data.find(a => a.id === member.userID);
-                if (!user) {
-                    await member.remove();
-                    continue;
-                }
+                if (!user) continue;
 
                 member.message.base = member.message.base ? member.message.base : user.message_count;
                 member.message.daily = user.message_count - member.message.base;
