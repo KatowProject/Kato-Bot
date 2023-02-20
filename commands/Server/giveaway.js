@@ -1,8 +1,15 @@
 const { EmbedBuilder } = require('discord.js');
+const { Client, Message } = require('discord.js');
 
+/**
+ * 
+ * @param {Client} client 
+ * @param {Message} message 
+ * @param {[]} args 
+ */
 exports.run = async (client, message, args) => {
     const option = args[0]?.toLowerCase() || null;
-    if (!message.member.permissions.has('MANAGE_MESSAGES')) return message.reply('Not Enough Permission!');
+    if (!message.member.permissions.has('ManageMessages')) return message.reply('Not Enough Permission!');
 
     switch (option) {
         case 'create':
