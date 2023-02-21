@@ -1,8 +1,8 @@
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 registerFont(path.join(__dirname, 'font', 'Kollektif.ttf'), { family: 'Kollektif' });
-registerFont(path.join(__dirname, 'font', 'Kollektif-Bold.ttf'), { family: 'Kollektif-Bold' });
-registerFont(path.join(__dirname, 'font', 'Kollektif-Italic.ttf'), { family: 'Kollektif-Italic' });
+registerFont(path.join(__dirname, 'font', 'Kollektif-Bold.ttf'), { family: 'Kollektif Bold' });
+registerFont(path.join(__dirname, 'font', 'Kollektif-Italic.ttf'), { family: 'Kollektif Italic' });
 
 class Canvas {
     constructor() {
@@ -87,7 +87,7 @@ class Canvas {
         const dates = this.date.split(' ');
 
         const tgl = dates[0]
-        ctx.font = "30px Kollektif-Bold";
+        ctx.font = "30px Kollektif Bold";
         ctx.fillStyle = "#000000";
         ctx.textAlign = 'left'
         ctx.fillText(tgl.split("/").join(" / "), 30, 40);
@@ -98,23 +98,23 @@ class Canvas {
 
         const username = this.username;
         if (username.length > 25) {
-            ctx.font = '20px Kollektif-Bold';
+            ctx.font = '20px Kollektif Bold';
         } else if (username.length > 17) {
-            ctx.font = '25px Kollektif-Bold';
+            ctx.font = '25px Kollektif Bold';
         } else {
-            ctx.font = '30px Kollektif-Bold';
+            ctx.font = '30px Kollektif Bold';
         }
 
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
         ctx.fillText(username, this.template.width - 662, this.template.height / 2 + 45);
 
-        ctx.font = "27px Kollektif-Bold";
+        ctx.font = "27px Kollektif Bold";
         ctx.fillStyle = '#000000';
         ctx.fillText(this.nominal, this.template.width - 350, this.template.height / 2 + 45);
 
         const donation = this.donation;
-        ctx.font = '70px Kollektif-Italic';
+        ctx.font = '70px Kollektif Italic';
         ctx.fillStyle = '#ffffff';
         ctx.fillText(donation, 715, 150);
 
