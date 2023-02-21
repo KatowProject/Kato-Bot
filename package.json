@@ -26,6 +26,7 @@
     "dotenv": "^16.0.1",
     "g-i-s": "^2.1.6",
     "isomorphic-unfetch": "^4.0.2",
+    "jszip": "^3.10.1",
     "kuroshiro-analyzer-kuromoji": "^1.1.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.40",
@@ -37,5 +38,10 @@
     "upgrade": "^1.1.0",
     "youtube-sr": "^4.3.4",
     "ytdl-core": "^4.11.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "database/backup/*"
+    ]
   }
 }
