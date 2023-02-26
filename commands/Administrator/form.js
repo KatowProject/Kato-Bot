@@ -7,7 +7,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Client, Mess
  */
 
 exports.run = async (client, message, args) => {
-    if (!message.member.permissions.has("ManageGuild")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan command ini!");
+    if (!message.member.permissions.has("ManageChannels")) return message.channel.send("Kamu tidak memiliki izin untuk menggunakan command ini!");
 
     const embed = new EmbedBuilder()
         .setTitle("Menu Form")

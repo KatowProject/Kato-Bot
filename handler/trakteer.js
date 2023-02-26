@@ -23,7 +23,7 @@ class Donatur extends Trakteer {
      * @param {Message} message
     */
     async cekSaldo(message) {
-        if (!message.member.permissions.has('ManageGuild')) return;
+        if (!message.member.permissions.has('ManageChannels')) return;
         const getSaldo = await this.getSaldo();
         const { saldo, current_donation } = getSaldo;
         const month = moment().format('MMMM');
@@ -202,7 +202,7 @@ class Donatur extends Trakteer {
      * @param {Array} args 
      */
     async applyDonatur(message, args) {
-        if (!message.member.permissions.has('ManageGuild')) return;
+        if (!message.member.permissions.has('ManageChannels')) return;
         if (!args[1]) return message.reply('Masukkan waktu/durasi telebih dahulu!');
 
         const ya = ['ya', 'bener', 'betul', 'ok'];

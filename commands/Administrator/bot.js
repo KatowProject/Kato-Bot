@@ -9,7 +9,7 @@ const { EmbedBuilder, Client, Message, SlashCommandBuilder } = require('discord.
 
 exports.run = async (client, message, args) => {
     try {
-        if (!message.member.permissions.has('ManageGuild')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
+        if (!message.member.permissions.has('ManageChannels')) return message.reply('Kamu tidak memiliki izin untuk menggunakan perintah ini!');
 
         const option = args[0];
         if (!option) return message.reply('pilih opsi terlebih dahulu! on / off / list');
