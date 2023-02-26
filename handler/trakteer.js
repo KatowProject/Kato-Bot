@@ -93,7 +93,7 @@ class Donatur extends Trakteer {
                     let data = awaitMessages.first();
                     if (!parseInt(data.content)) return msg.edit('Pilihan tidak valid!');
 
-                    data = await client.trakteer.getOrderDetail(getData[data.content - 1].id);
+                    data = await this.client.trakteer.getOrderDetail(getData[data.content - 1].id);
                     if (!data) return msg.edit('Data tidak ditemukan!');
 
                     msg.edit({

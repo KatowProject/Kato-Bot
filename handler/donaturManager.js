@@ -251,7 +251,6 @@ class DonaturManager {
                     }
                 });
             } else {
-                console.log(toMS);
                 await donate.create({ userID: member.id, guild: message.guild.id, duration: toMS, now: Date.now() });
                 member.roles.add(role.id);
                 channel.send(`Hai Para Staff, **${member.user.tag}** terdaftar sebagai Donatur baru, silahkan cek untuk memastikan!`);
@@ -262,6 +261,7 @@ class DonaturManager {
                     member,
                     guild: message.guild,
                     reason: 'new donation',
+                    data: { duration: toMS }
                 });
             }
         } catch (err) {
