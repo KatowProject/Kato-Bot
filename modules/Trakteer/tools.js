@@ -7,13 +7,13 @@ const bypass = (url, method, headers = {}, data = {}) => {
         try {
             const bs64 = Buffer.from(url).toString('base64');
             if (method === 'get') {
-                const res = await axios.get("https://bypass.kato-rest.us/trakteer.php?q=" + bs64, {
+                const res = await axios.get("https://bypass.katowproject.my.id/trakteer.php?q=" + bs64, {
                     headers: headers
                 });
                 if (res.status === 200) return resolve(res);
                 else reject(res);
             } else if (method === 'post') {
-                const res = await axios.post("https://bypass.kato-rest.us/?q=" + bs64, data);
+                const res = await axios.post("https://bypass.katowproject.my.id/?q=" + bs64, data);
                 if (res.status === 200) return resolve(res);
                 else reject(res);
             } else reject('Method not found');

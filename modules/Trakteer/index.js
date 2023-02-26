@@ -140,7 +140,7 @@ class Trakteer {
         const notify = async () => {
             try {
                 const donaturData = await this.getData();
-
+                if (donaturData?.length === 0) return;
                 const order = await this.getOrderDetail(donaturData[0].id);
                 order.date = donaturData[0].created_at;
                 const json = {

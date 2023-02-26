@@ -305,7 +305,8 @@ class TempEvent {
             }
 
             setInterval(() => {
-                this.messageCheck();
+                if (this.isOpen)
+                    this.messageCheck();
             }, this.interval);
         } catch (err) {
             console.log(err);

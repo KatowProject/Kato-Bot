@@ -281,7 +281,7 @@ class DonaturManager {
         setInterval(() => {
             this.donaturDuration();
             this.donaturXp();
-        }, 30_000);
+        }, 60_000);
 
         this.client.on('messageCreate', this.donaturNotification.bind(this));
         this.client.on('guildMemberBoost', this.addDonaturBooster.bind(this));
