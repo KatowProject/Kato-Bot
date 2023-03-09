@@ -236,7 +236,7 @@ class DonaturManager {
             const findUser = await donate.findOne({ userID: member.id });
             const channel = message.guild.channels.cache.get('1013977865756356658');
             if (findUser) {
-                findUser.duration = findUser.duration + toMS;
+                findUser.duration = findUser.duration ?? 0 + toMS;
                 await findUser.save();
                 channel.send(`Hai Para Staff, Donatur **${member.user.tag}** telah diperpanjang durasinya selama **${duration} hari**.`);
 
