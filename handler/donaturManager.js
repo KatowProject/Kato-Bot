@@ -31,7 +31,7 @@ class DonaturManager {
      */
     async addDonaturBooster(member) {
         try {
-            const xp = await xpdb.findOne({ id: 1 });
+            const xp = await Xps.findOne({ id: 1 });
             const getUser = xp.data.find(a => a.id === member.user.id);
             if (!getUser) return;
 
