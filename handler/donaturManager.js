@@ -284,8 +284,6 @@ class DonaturManager {
         }, 60_000);
 
         this.client.on('messageCreate', this.donaturNotification.bind(this));
-        this.client.on('guildMemberBoost', this.addDonaturBooster.bind(this));
-
         console.log('[DonaturManager] running');
     }
 }
