@@ -33,6 +33,6 @@ module.exports = class Kato extends Client {
         this.katoShop.init();
         this.selfbot.init(true);
         this.trakteer.getNotification(true, 60_000);
-        setInterval(() => require('../modules/MEE6-Leaderboard/')(this), 240_000);
+        setInterval(() => require('../modules/MEE6-Leaderboard/')(this), 360_000);
     }
 }
