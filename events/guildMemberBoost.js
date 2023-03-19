@@ -1,5 +1,5 @@
-const { Client, Message } = require('discord.js');
-
+const { Client, Message, EmbedBuilder } = require('discord.js');
+const { } = require('discord-logs')
 const images = [
     'https://media1.tenor.com/images/bc58975b4797d945c2cdffe2dda64a0f/tenor.gif',
     'https://www.animefeminist.com/wp-content/uploads/2018/03/Samantha-Coming-Out-003-20180312.jpg',
