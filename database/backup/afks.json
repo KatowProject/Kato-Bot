@@ -90,9 +90,21 @@
     "__v": 0
   },
   {
-    "_id": "63e127788bf484e781721c60",
-    "userID": "713792156799598662",
-    "data": "{\"reason\":\"AFK\",\"time\":1675700088551}",
+    "_id": "641b737e3d36dad568edb00a",
+    "userID": "472564718750531586",
+    "data": "{\"reason\":\"AFK\",\"time\":1679520638757}",
+    "__v": 0
+  },
+  {
+    "_id": "642ac4ad91ebe561d0b5259b",
+    "userID": "469722446468218880",
+    "data": "{\"reason\":\"https://cdn.discordapp.com/attachments/804727458829565983/1092423348757209088/Screenshot_2023-04-03-20-19-27-184_com.riotgames.league.wildrift.jpg udah gede masih ...\",\"time\":1680524461730}",
+    "__v": 0
+  },
+  {
+    "_id": "64318b930b09a8b5b4595402",
+    "userID": "398461788334718987",
+    "data": "{\"reason\":\"takbiran ya lembur\",\"time\":1680968595512}",
     "__v": 0
   }
 ]

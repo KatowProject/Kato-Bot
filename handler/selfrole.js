@@ -16,7 +16,7 @@ module.exports = async (client, interaction) => {
     if (member.roles.cache.has(santai.id)) return;
     member.roles.add(santai);
 
-    const template = await loadImage('https://cdn.discordapp.com/attachments/812005987204595752/1086917715350011934/met_datang.png');
+    const template = await loadImage('https://cdn.discordapp.com/attachments/933281391821619214/1093822983606390815/POS_Welcome.png');
     const canvas = createCanvas(template.width, template.height);
     const ctx = canvas.getContext('2d');
 
