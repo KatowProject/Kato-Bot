@@ -193,8 +193,17 @@ class DonaturManager {
             const toMS = require('ms')(`${duration}d`);
             const msg = data.message.split("\n").join(" ");
             const date = data.date;
+
+            const u_d = name.split("#");
+            const username = u_d[0];
+            const discriminator = u_d[1];
             const members = await message.guild.members.fetch();
-            const member = members.find(m => m.user.tag.toLowerCase() === name.toLowerCase());
+            const member = members.find(m => {
+                if (discriminator)
+                    return m.user.tag === `${username}#${discriminator}`;
+                else
+                    return m.user.username === username;
+            });
 
             const canvas = this.client.canvas;
             canvas.setUsername(name);
