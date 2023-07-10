@@ -3,18 +3,16 @@ const moment = require('moment');
 const ms = require('ms');
 const donate = require('../database/schemas/Donatur');
 const Trakteer = require('../modules/Trakteer');
+const T = require('../modules/trakteer-scraper/dist').default;
 
-class Donatur extends Trakteer {
+class Donatur extends T {
     /**
      * 
      * @param {Client} client 
      */
     constructor(client) {
-        super({
-            "trakteer-id-session": process.env.TRAKTEER_ID_SESSION,
-            "XSRF-TOKEN": process.env.TRAKTEER_XSRF_TOKEN,
-            "webhook": process.env.TRAKTEER_LOGS_WEBHOOK
-        });
+        super();
+
         this.client = client;
     }
 
@@ -27,9 +25,13 @@ class Donatur extends Trakteer {
         const getSaldo = await this.getSaldo();
         const { saldo, current_donation } = getSaldo;
         const month = moment().format('MMMM');
+
+        const rupiahSaldo = saldo.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
+        const rupiahDonasi = current_donation.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
+
         const embed = new EmbedBuilder()
             .setTitle(`Donasi Bulan ${month}`)
-            .setDescription(`**Saldo:** ${saldo}\n**Donasi Bulan Ini:** ${current_donation}`)
+            .setDescription(`**Saldo:** ${rupiahSaldo}\n**Donasi Bulan Ini:** ${rupiahDonasi}`)
             .setColor('Random')
             .setFooter({ text: 'trakteer.id/santai', iconURL: message.guild.iconURL() })
 
@@ -41,15 +43,15 @@ class Donatur extends Trakteer {
      * @param {Message} message
     */
     async cekDonatur(message) {
-        const getData = await this.getData();
+        const { data } = await this.getDonaturData();
         if (getData.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
 
         let pagination = 1;
-        const chunk = this.client.util.chunk(getData.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``), 15);
+        const donatur = data.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``);
         const embed = new EmbedBuilder()
             .setTitle('Data Donatur Perkumpulan Orang Santai')
             .setColor('Random')
-            .setDescription(chunk[pagination - 1].join('\n'))
+            .setDescription(donatur.join('\n'))
             .setFooter({ text: 'Pilih menggunakan angka untuk melanjutkan!' });
 
         const buttons = new ActionRowBuilder()
@@ -72,7 +74,8 @@ class Donatur extends Trakteer {
                     if (pagination === 1) return;
                     pagination--;
 
-                    embed.setDescription(chunk[pagination - 1].join('\n'));
+                    const { data: back } = await this.getDonaturData(pagination);
+                    embed.setDescription(back.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``).join('\n'));
                     r.edit({ embeds: [embed], components: [buttons] });
                     break;
 
@@ -84,7 +87,9 @@ class Donatur extends Trakteer {
                     if (pagination === chunk.length) return;
                     pagination++;
 
-                    embed.setDescription(chunk[pagination - 1].join('\n'));
+                    const { data: next } = await this.getDonaturData(pagination);
+                    embed.setDescription(next.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``).join('\n'));
+
                     r.edit({ embeds: [embed], components: [buttons] });
                     break;
                 case `detail-${message.id}`:
@@ -316,18 +321,19 @@ class Donatur extends Trakteer {
      */
     async cekHistoryKas(message, args) {
         if (!message.member.permissions.has('MANAGE_GUILD')) return;
-        const getHistory = await this.getHistory();
-
         let pagination = 1;
-        const map = getHistory.map((a, i) => `**${a.tanggal}**\n\`${a.description}\` - **[${a.amount}] | [${a.balance}]**`);
-        const chunk = this.client.util.chunk(map, 15);
+
+        const { recordsTotal, data } = await this.getHistory(pagination, 15);
+        const pages = Math.ceil(recordsTotal / 15);
+
+        const map = data.map((a, i) => `**${a.created_at}**\n\`${a.description}\` - **[${a.jumlah}] | [${a.current_balance}]**`);
 
         const embed = new EmbedBuilder()
             .setColor(`Aqua`)
             .setTitle('Pemasukan & Pengeluaran Kas')
             .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ forceStatic: true, size: 4096 }) })
-            .setDescription(chunk[pagination - 1].join('\n'))
-            .setFooter({ text: `Page ${pagination} of ${chunk.length}` });
+            .setDescription(map.join('\n'))
+            .setFooter({ text: `Page ${pagination} of ${pages}` });
 
         const btn = [
             new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('< Back').setCustomId(`back-${message.id}`),
@@ -343,23 +349,78 @@ class Donatur extends Trakteer {
                 case `back-${message.id}`:
                     if (pagination === 1) return;
                     pagination--;
-                    embed.setDescription(chunk[pagination - 1].join('\n'));
-                    embed.setFooter({ text: `Page ${pagination} of ${chunk.length}` })
+
+                    const { data: back } = await this.getHistory(pagination, 15);
+                    const map_back = back.map((a, i) => `**${a.created_at}**\n\`${a.description}\` - **[${a.jumlah}] | [${a.current_balance}]**`);
+                    embed.setDescription(map_back.join('\n'));
+                    embed.setFooter({ text: `Page ${pagination} of ${pages}` })
 
                     r.edit({ embeds: [embed], components: [new ActionRowBuilder().addComponents(btn)] });
                     break;
 
                 case `next-${message.id}`:
-                    if (pagination === chunk.length) return;
+                    if (pagination === pages) return;
                     pagination++;
-                    embed.setDescription(chunk[pagination - 1].join('\n'));
-                    embed.setFooter({ text: `Page ${pagination} of ${chunk.length}` })
+
+                    const { data: next } = await this.getHistory(pagination, 15);
+                    const map_next = next.map((a, i) => `**${a.created_at}**\n\`${a.description}\` - **[${a.jumlah}] | [${a.current_balance}]**`);
+                    embed.setDescription(map_next.join('\n'));
+                    embed.setFooter({ text: `Page ${pagination} of ${pages}` })
 
                     r.edit({ embeds: [embed], components: [new ActionRowBuilder().addComponents(btn)] });
                     break;
             }
         });
     }
+
+    /**
+     * 
+     * @param {Message} message 
+     * @param {[]} args 
+     */
+    async leaderboard(message, args) {
+        try {
+            const lb = await this.getLeaderboard();
+
+            const monthName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Oktober', 'November', 'Desember'];
+            const month = monthName[new Date().getMonth()];
+
+            const data = lb.find(a => a.title.includes(month));
+            const map = data.supporter.map((a, i) => `**${i + 1}.** ${a.name} - <:santai:1099907159145332757> **${a.unit}x** Kesantaian`);
+            const embed = new EmbedBuilder()
+                .setColor(`Aqua`)
+                .setTitle(`Leaderboard Donasi Bulan ${month}`)
+                .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ forceStatic: true, size: 4096 }) })
+                .setDescription(map.join('\n'))
+                .setTimestamp();
+
+            message.channel.send({ embeds: [embed] });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async donaturLeaderboardAnnouncement(message, args) {
+        try {
+            // check if is new month
+            const date = moment().format('DD');
+            // if (date !== '01') return;
+
+            const donatur = await this.getLeaderboard();
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Oktober', 'November', 'Desember'];
+            const monthName = months[new Date().getMonth()];
+
+            const data = donatur.find(a => a.title.includes(monthName));
+            console.log(data);
+        } catch (e) {
+            this.client.emit('donaturManagerError', {
+                type: 'donaturLeaderboardAnnouncement',
+                status: 'error',
+                error: e
+            });
+        }
+    }
+
 
     /**
      * Pilih Opsi
@@ -388,6 +449,14 @@ class Donatur extends Trakteer {
 
             case 'history':
                 this.cekHistoryKas(message, args);
+                break;
+
+            case 'leaderboard':
+                this.leaderboard(message, args);
+                break;
+
+            case 'lb':
+                this.donaturLeaderboardAnnouncement(message, args);
                 break;
 
             default:

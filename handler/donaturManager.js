@@ -2,6 +2,7 @@ const { Client, Message, EmbedBuilder, GuildMember, WebhookClient, AttachmentBui
 const { Query } = require('mongoose');
 const donate = require('../database/schemas/Donatur');
 const Xps = require('../database/schemas/Xp');
+const DiscordCanvas = require('../modules/Discord-Canvas');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Jakarta').locale('id');
 
@@ -16,6 +17,7 @@ class DonaturManager {
         this.donaturRole = '932997958788608044';
         this.donaturRole2 = '933117751264964609';
         this.logNotification = '932997960923480102';
+        this.logNotificationDev = '932997960923480099'
     }
 
     static convertXp(xp) {
@@ -130,7 +132,7 @@ class DonaturManager {
                         });
 
                         const XpTotal = DonaturManager.convertXp(member.message.daily);
-                        await this.client.selfbot.request.sendMessage(this.selfbotChannel, `!give-xp <@${member.userID}> ${XpTotal}`, true);
+                        await this.client.selfbot.request.sendMessage(this.selfbotChannel, `!give-xp <@${member.userID}> ${parseInt(XpTotal)}`, true);
 
                         // sleep 2 seconds
                         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -172,6 +174,52 @@ class DonaturManager {
         }
     }
 
+    async donaturLeaderboardAnnouncement() {
+        try {
+            // check if is new month
+            const date = moment().format('DD');
+            if (date !== '01') return;
+
+            const donatur = await this.client.trakteer.getLeaderboard();
+            const monthName = moment().locale('en').format('MMMM');
+            const monthId = moment().locale('en').format('MM');
+
+            const data = donatur.find(a => a.title.includes(monthName));
+            const supporters = data.supporter.slice(0, 3);
+
+            const canvas = new DiscordCanvas().loadLeaderboardDonatur();
+            const guild = this.client.guilds.cache.get('932997958738268251');
+            const members = await guild.members.fetch({ force: true });
+
+            canvas.setMonth(monthId);
+            canvas.setDonatur(
+                supporters.map((a, i) => {
+                    const unit = parseInt(a.unit);
+                    const total = unit * 10000;
+
+                    const member = members.find(b => b.user.username === a.name || b.user.tag.includes(a.name));
+                    if (!member) return { username: a.name, avatar: "https://cdn.discordapp.com/attachments/932997960923480099/1127658362713165945/ikhsantai.png", donation: `Rp${total.toLocaleString()}` };
+
+                    const avatar = member.user.displayAvatarURL({ extension: 'png', size: 4096 });
+                    return { username: a.name, avatar: avatar, donation: `Rp${total.toLocaleString()}` };
+                })
+            );
+
+            const buffer = await canvas.generate();
+            const attachment = new AttachmentBuilder(buffer, { name: 'donatur-leaderboard.png' });
+
+            this.client.channels.cache.get('932997960923480099').send({ files: [attachment] });
+
+        } catch (e) {
+            console.log(e);
+            this.client.emit('donaturManagerError', {
+                type: 'donaturLeaderboardAnnouncement',
+                status: 'error',
+                error: e
+            });
+        }
+    }
+
     /**
      * donaturNotification handler, bind this event to messageCreate
      * @param {Message} message 
@@ -182,17 +230,19 @@ class DonaturManager {
      */
     async donaturNotification(message) {
         try {
-            if (message.channel.id !== this.logNotification) return;
-            const data = this.client.util.isJSON(message.content) ? JSON.parse(message.content) : null;
-            if (!data) return;
+            if (message.channel.id !== this.logNotificationDev) return;
+            const _data = this.client.util.isJSON(message.content) ? JSON.parse(message.content) : null;
+            if (!_data) return;
+
+            const data = await this.client.trakteer.getOrderDetail(_data.id);
 
             const name = data.nama;
-            const value = data.unit.length.split('x').pop().trim();
+            const value = _data.quantity;
             const nominal = data.nominal.split("v")[0].trim();
             const duration = value * 28;
             const toMS = require('ms')(`${duration}d`);
             const msg = data.message.split("\n").join(" ");
-            const date = data.date;
+            const date = _data.created_at;
 
             const u_d = name.split("#");
             const username = u_d[0];
@@ -205,14 +255,13 @@ class DonaturManager {
                     return m.user.username === username;
             });
 
-            const canvas = this.client.canvas;
+            const canvas = new DiscordCanvas().loadDonaturNotification();
             canvas.setUsername(name);
             canvas.setDonation(`x${value}`);
             canvas.setSupportMessage(`"${msg}"`);
             canvas.setDate(date);
             canvas.setNominal(nominal);
 
-            await canvas.setTemplate();
             if (member)
                 await canvas.setAvatar(member.user.displayAvatarURL({ extension: 'png', size: 4096 }));
             else
@@ -274,7 +323,6 @@ class DonaturManager {
                 });
             }
         } catch (err) {
-            console.log(err);
             this.client.emit('donaturManagerError', {
                 type: 'donaturNotification',
                 status: 'error',

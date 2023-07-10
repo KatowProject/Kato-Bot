@@ -420,7 +420,6 @@ module.exports = class Giveaway {
      * 
      */
     async __timeHandler() {
-        console.log('Giveaway Time Handler Started!');
         const allGiveaway = await db.find({});
         for (const data of allGiveaway) {
             const channel = this.client.channels.cache.get(data.channelID);
