@@ -191,25 +191,33 @@ class DonaturManager {
             const guild = this.client.guilds.cache.get('932997958738268251');
             const members = await guild.members.fetch({ force: true });
 
+            const supporter = supporters.map((a, i) => {
+                const unit = parseInt(a.unit);
+                const total = unit * 10000;
+
+                const member = members.find(b => b.user.username === a.name || b.user.tag.includes(a.name));
+                if (!member) return { username: a.name, avatar: "https://cdn.discordapp.com/attachments/932997960923480099/1127658362713165945/ikhsantai.png", donation: `Rp${total.toLocaleString()}`, userID: null, unit };
+
+                const avatar = member.user.displayAvatarURL({ extension: 'png', size: 4096 });
+                return { username: a.name, avatar: avatar, donation: `Rp${total.toLocaleString()}`, userID: member.id, unit };
+            });
+
             canvas.setMonth(monthId);
-            canvas.setDonatur(
-                supporters.map((a, i) => {
-                    const unit = parseInt(a.unit);
-                    const total = unit * 10000;
-
-                    const member = members.find(b => b.user.username === a.name || b.user.tag.includes(a.name));
-                    if (!member) return { username: a.name, avatar: "https://cdn.discordapp.com/attachments/932997960923480099/1127658362713165945/ikhsantai.png", donation: `Rp${total.toLocaleString()}` };
-
-                    const avatar = member.user.displayAvatarURL({ extension: 'png', size: 4096 });
-                    return { username: a.name, avatar: avatar, donation: `Rp${total.toLocaleString()}` };
-                })
-            );
+            canvas.setDonatur(supporter);
 
             const buffer = await canvas.generate();
             const attachment = new AttachmentBuilder(buffer, { name: 'donatur-leaderboard.png' });
             
-            const content = ``;
-            this.client.channels.cache.get('932997960923480099').send({ files: [attachment], });
+            const userContent = supporter.map((a, i) => {
+                if (!a.userID)
+                    return `${i + 1}. ${a.username}: ${a.unit} Kesantaian / \`${a.donation}\``
+                else
+                    return `${i + 1}. <@${a.userID}>: ${a.unit} Kesantaian / \`${a.donation}\``
+            });
+
+            const year = moment().format('YYYY');
+            const content = `## Top 3 Trakteer Donations - ${monthName} ${year}\n@here Terima kasih kepada semua donatur yang telah memberikan dukungan kepada kami di Trakteer POS! <:yoi:1099909400396836978>\nBerikut adalah 3 donatur terbesar pada bulan #### lalu:\n${userContent.join('\n')}\n\n**Khusus untuk ketiga donatur di atas, kalian berhak mengambil Custom Role (cusrole)*** dari staff <@&1102087714842607618> atau <@&932997958834733080> yang sedang aktif.\n*Cusrole hanya berlaku dari tanggal 1 s.d. 31 ${monthName} ${year}.`;
+            this.client.channels.cache.get('932997959388385398').send({ files: [attachment], content: content});
 
         } catch (e) {
             console.log(e);
@@ -231,7 +239,7 @@ class DonaturManager {
      */
     async donaturNotification(message) {
         try {
-            if (message.channel.id !== this.logNotificationDev) return;
+            if (message.channel.id !== this.logNotification) return;
             const _data = this.client.util.isJSON(message.content) ? JSON.parse(message.content) : null;
             if (!_data) return;
 

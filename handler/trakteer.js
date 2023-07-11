@@ -43,10 +43,12 @@ class Donatur extends T {
      * @param {Message} message
     */
     async cekDonatur(message) {
-        const { data } = await this.getDonaturData();
-        if (getData.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
+        let { data, recordsTotal } = await this.getDonaturData();
+        if (data.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
 
         let pagination = 1;
+        const pages = Math.ceil(recordsTotal / 15);
+
         const donatur = data.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``);
         const embed = new EmbedBuilder()
             .setTitle('Data Donatur Perkumpulan Orang Santai')
@@ -74,8 +76,8 @@ class Donatur extends T {
                     if (pagination === 1) return;
                     pagination--;
 
-                    const { data: back } = await this.getDonaturData(pagination);
-                    embed.setDescription(back.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``).join('\n'));
+                    data = await this.getDonaturData(pagination);
+                    embed.setDescription(data.data.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``).join('\n'));
                     r.edit({ embeds: [embed], components: [buttons] });
                     break;
 
@@ -84,21 +86,21 @@ class Donatur extends T {
                     break;
 
                 case `next-${message.id}`:
-                    if (pagination === chunk.length) return;
+                    if (pagination === pages) return;
                     pagination++;
 
-                    const { data: next } = await this.getDonaturData(pagination);
-                    embed.setDescription(next.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``).join('\n'));
+                    data = await this.getDonaturData(pagination);
+                    embed.setDescription(data.data.map((a, i) => `**${i + 1}. ${a.supporter}** | \`ID: ${a.id}\``).join('\n'));
 
                     r.edit({ embeds: [embed], components: [buttons] });
                     break;
                 case `detail-${message.id}`:
                     const msg = await message.channel.send('Silahkan pilih data yang ingin dilihat!');
                     const awaitMessages = await message.channel.awaitMessages({ filter: msg => msg.author.id === message.author.id, max: 1, time: 60_000, errors: ['time'] });
-                    let data = awaitMessages.first();
+                    let index = awaitMessages.first();
                     if (!parseInt(data.content)) return msg.edit('Pilihan tidak valid!');
 
-                    data = await this.client.trakteer.getOrderDetail(getData[data.content - 1].id);
+                    data = await this.getOrderDetail(data.data[index - 1].id)
                     if (!data) return msg.edit('Data tidak ditemukan!');
 
                     msg.edit({
