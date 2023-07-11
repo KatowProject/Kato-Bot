@@ -35,6 +35,28 @@ class AxiosRequest {
                 return resolve(response);
             }
             catch (err) {
+                // if 403 bypass the cloudflare
+                if (err.response.status === 403) {
+                    const response = yield this.__bypass(endpoint, "GET", this.request.defaults.headers, {}, params);
+                    return resolve(response);
+                }
+                return reject(err);
+            }
+        }));
+    }
+    __bypass(endpoint, method, headers = {}, data = {}, params = {}) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const bs64 = Buffer.from(endpoint).toString("base64");
+                const response = yield this.self({
+                    url: `https://bypass.katowproject.my.id/trakteer.php?q=${bs64}`,
+                    method: method,
+                    headers: headers,
+                    data: data
+                });
+                return resolve(response);
+            }
+            catch (err) {
                 return reject(err);
             }
         }));

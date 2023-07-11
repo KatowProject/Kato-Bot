@@ -23,6 +23,30 @@ class AxiosRequest {
             try {
                 const response = await this.request.get(endpoint, { params: params });
                 return resolve(response);
+            } catch (err: any) {
+                // if 403 bypass the cloudflare
+                if (err.response.status === 403) {
+                    const response = await this.__bypass(endpoint, "GET", this.request.defaults.headers, {}, params);
+                    return resolve(response);
+                }
+
+                return reject(err);
+            }
+        });
+    }
+
+    private __bypass(endpoint: string, method: string, headers = {}, data = {}, params = {}): Promise<AxiosResponse | undefined> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const bs64 = Buffer.from(endpoint).toString("base64");
+                const response = await this.self({
+                    url: `https://bypass.katowproject.my.id/trakteer.php?q=${bs64}`,
+                    method: method,
+                    headers: headers,
+                    data: data
+                });
+
+                return resolve(response);
             } catch (err) {
                 return reject(err);
             }
