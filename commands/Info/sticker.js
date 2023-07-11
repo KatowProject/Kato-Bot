@@ -6,11 +6,29 @@ const { Client, Message, AttachmentBuilder } = require('discord.js');
  * @param {Message} message 
  * @param {[]} args 
  */
-
 exports.run = async (client, message, args) => {
     try {
         const sticker = message.stickers.first();
-        if (!sticker) return message.channel.send({ content: 'You must provide a sticker!' });
+        if (!sticker) {
+            const msg = await message.channel.send({ content: 'Kirim sticker yang diinginkan!' });
+            const collector = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 20000 })
+                .on('collect', async (f) => {
+                    if (['cancel', 'gk jadi', 'gak jadi'].includes(f.content.toLowerCase())) {
+                        collector.stop();
+                        return message.reply('Permintaan dibatalkan!');
+                    }
+                    if (!f.stickers.first()) return message.reply('Permintaan invalid, gunakanlah sticker!');
+
+                    msg.delete();
+                    collector.stop();
+
+                    const sticker = f.stickers.first();
+                    const attachment = new AttachmentBuilder().setFile(sticker.url);
+                    message.channel.send({ files: [attachment] });
+                });
+                
+            return;
+        }
 
         const attachment = new AttachmentBuilder().setFile(sticker.url);
         message.channel.send({ files: [attachment] });
