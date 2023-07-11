@@ -119,6 +119,8 @@ class DonaturManager {
                 member.message.daily = user.message_count - member.message.base;
 
                 if (time === '24:00' || time === '00:00' || canReset) {
+                    this.donaturLeaderboardAnnouncement();
+
                     const guild = this.client.guilds.cache.get(member.guild)
                     const user1 = guild.members.cache.get(member.userID);
                     if (!user1.roles?.cache.hasAny(this.donaturRole, this.donaturRole2)) {
