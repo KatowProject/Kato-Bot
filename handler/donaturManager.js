@@ -207,8 +207,9 @@ class DonaturManager {
 
             const buffer = await canvas.generate();
             const attachment = new AttachmentBuilder(buffer, { name: 'donatur-leaderboard.png' });
-
-            this.client.channels.cache.get('932997960923480099').send({ files: [attachment] });
+            
+            const content = ``;
+            this.client.channels.cache.get('932997960923480099').send({ files: [attachment], });
 
         } catch (e) {
             console.log(e);

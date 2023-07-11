@@ -1,27 +1,32 @@
 const axios = require('axios');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, Message } = require('discord.js');
 
 module.exports = class Kusonime {
     constructor(client) {
         this.client = client;
     }
 
+    /**
+     * 
+     * @param {String} query 
+     * @param {Message} message 
+     * @returns Promise<void>
+     */
     getWithSearch(query, message) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.get(`https://kusonime.katowproject.app/api/cari/${query}`);
-                const res = response.data;
-                if (res.length === 0) return reject(`Pencarian ${query} tidak ditemukan!`);
-
-                console.log('masuk')
                 let page = 1;
-                const animes = this.client.util.chunk(res, 10);
+                const { data } = await axios.get(`https://kusonime.katowproject.app/api/search/page/${page}/?s=${query}`);
+                const res = data?.data.listAnime;
+                if (res?.length === 0) return message.reply('Tidak ada hasil yang ditemukan!');
+
+                const anime = res.map((a, i) => `**${i + 1}.** [${a.title}](${a.url})`).join('\n');
                 const embed = new EmbedBuilder()
                     .setColor('Random')
-                    .setDescription(animes[page - 1].map((a, i) => `**${i + 1}.** ${a.title}`).join('\n'));
+                    .setDescription(anime);
 
                 const r = await message.channel.send({ content: 'Pilih menggunakan angka!', embeds: [embed] });
-                const collector = await message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 20000 });
+                const collector = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 20000 });
                 collector.on('collect', async (f) => {
                     if (['cancel', 'gk jadi', 'gak jadi'].includes(f.content.toLowerCase())) {
                         collector.stop();
@@ -29,12 +34,12 @@ module.exports = class Kusonime {
                     }
                     if (isNaN(f.content)) return message.reply('Permintaan invalid, gunakanlah angka!');
 
-                    collector.stop();
                     r.delete();
-                    await this.getDetail(animes[0][parseInt(f.content) - 1], message);
-                });
+                    collector.stop();
 
-                resolve();
+                    const index = parseInt(f.content) - 1;
+                    await this.getDetail(message, res[index]);
+                });
             } catch (e) {
                 reject(new Error(e.message));
                 console.log(e);
@@ -42,37 +47,47 @@ module.exports = class Kusonime {
         });
     }
 
-    getDetail(anime, message) {
+    getDetail(message, anime) {
         return new Promise(async (resolve, reject) => {
             try {
-                const endpoint = anime.link.endpoint;
-                const response = await axios.get(`https://kusonime.katowproject.app/api/anime/${endpoint}`);
-                const res = response.data;
+                const endpoint = anime.endpoint;
+                const { data } = await axios.get(`https://kusonime.katowproject.app/api/anime/${endpoint}`);
+                const res = data.data;
+
                 message.channel.send({
                     embeds: [
                         new EmbedBuilder()
                             .setTitle(`${res.title}`)
+                            .setURL(`https://kusonime.com/${endpoint}`)
                             .setColor('Random')
                             .setDescription(res.sinopsis.slice(0, 2048))
                             .setImage(res.thumbnail)
                             .addFields([
                                 { name: "Japanese", value: res.japanese, inline: true },
-                                { name: 'Genre', value: res.genre.map((a, i) => `[${a.name}](${a.url})`).join(', '), inline: true },
-                                { name: 'Season', value: `[${res.season.name}](${res.season.url})`, inline: true },
-                                { name: 'Producers', value: res.producers.join(', '), inline: true },
-                                { name: 'Total Eps', value: res.total_eps, inline: true },
+                                { name: 'Genre', value: res.genre, inline: true },
+                                { name: 'Season', value: res.seasons, inline: true },
+                                { name: 'Producers', value: res.producers, inline: true },
+                                { name: 'Total Eps', value: res.total_episode, inline: true },
                                 { name: 'Score', value: res.score, inline: true }
                             ])
                     ]
                 });
+                for (const anime of res.list_download) {
+                    const resolutions = [];
+                    for (const resolution of anime.download_link) {
+                        const links = [];
+                        for (const link of resolution.links) {
+                            links.push(`[${link.name}](${link.url})`);
+                        }
 
-                for (const title of res.list_download) {
-                    const embed = new EmbedBuilder().setColor('Random').setAuthor({ name: title[0], url: `https://kusonime.com/${endpoint}` });
+                        resolutions.push(`**${resolution.type}**\n${links.join(' | ')}`);
+                    }
 
-                    const temp = [];
-                    for (const resolution of title[1]) temp.push(`**${resolution.resolusi}**\n${resolution.link_download.map((a, i) => `[${a.platform}](${a.link})`).join('\n')}`);
+                    const embed = new EmbedBuilder()
+                        .setAuthor({ name: anime.title, url: anime.url })
+                        .setColor('Random')
+                        .setDescription(resolutions.join('\n'));
 
-                    embed.setDescription(temp.join('\n'));
                     message.channel.send({ embeds: [embed] });
                 }
 
