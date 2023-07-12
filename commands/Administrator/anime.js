@@ -19,6 +19,7 @@ exports.run = async (client, message, args) => {
         member.roles.add(role);
 
         message.reply(`Berhasil menambahkan role ${role.name} ke ${member.user.tag}`);
+        member.send(`Selamat kamu telah bergabung dalam Kelas Web Programming, silahkan tunggu info selanjutnya di <#1128611945226977290>!`);
     } catch (err) {
         console.log(err);
         message.reply(`Error: ${err}`);
