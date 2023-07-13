@@ -47,7 +47,7 @@ class AxiosRequest {
     __bypass(endpoint, method, headers = {}, data = {}, params = {}) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const bs64 = Buffer.from(`${this.BASE_URL}${endpoint}`).toString("base64");
+                const bs64 = Buffer.from(`${this.BASE_URL}${endpoint}?${new URLSearchParams(params).toString()}`).toString("base64");
                 const response = yield this.self({
                     url: `https://bypass.katowproject.my.id/trakteer.php?q=${bs64}`,
                     method: method,

@@ -140,7 +140,7 @@ class Donatur extends T {
 
             if (!donatur.now || !donatur.duration) return message.channel.send('Status mu adalah **Booster**');
             const timeLeft = donatur.duration - (Date.now() - donatur.now);
-            message.channel.send(`Waktu role mu tersisa **${client.util.parseDur(timeLeft)}**`);
+            message.channel.send(`Waktu role mu tersisa **${this.client.util.parseDur(timeLeft)}**`);
         } else if (args.includes('--all')) {
             const allDonatur = await donate.find({});
             if (allDonatur.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
@@ -472,7 +472,8 @@ class Donatur extends T {
                                 { name: 'status | status --all', value: 'lihat durasi role donatur' },
                                 { name: 'data', value: 'lihat data donatur dari awal hingga sekarang' },
                                 { name: 'apply', value: 'memberikan role kepada donatur yang tidak terpasang secara otomatis' },
-                                { name: 'history', value: 'lihat history kas' }
+                                { name: 'history', value: 'lihat history kas' },
+                                { name: 'leaderboard', value: 'lihat leaderboard donatur' },
                             )
                     ]
                 });
