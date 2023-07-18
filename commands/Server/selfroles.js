@@ -21,8 +21,8 @@ exports.run = async (client, message, args) => {
         { name: 'FPS', value: 'Mabar/mencari teman game First-person shooter' },
         { name: 'MOBA', value: 'Mabar/mencari teman game Multiplayer Online Battle Arena' },
         { name: 'General', value: 'Mabar/mencari teman game umum' },
-        { name: 'Zomboid', value: 'Mabar/mencari teman game Project Zomboid' },
-        { name: 'Rust', value: 'Mabar/mencari teman game Rust' }
+        { name: 'Zomboid', value: 'Mabar/mencari teman game Project Zomboid di <#1130797567081447514>' },
+        { name: 'Rust', value: 'Mabar/mencari teman game Rust di <#1130041536558669935>' }
     );
 
     for (const role of roles) {
