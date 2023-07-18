@@ -13,18 +13,24 @@ exports.run = async (client, message, args) => {
     const fps = '932997958738268252';
     const moba = '932997958738268253';
     const general = '932997958738268254';
+    const zomboid = '968116058865164318';
+    const rust = '1130049980707643492';
 
     const embed = new EmbedBuilder().setColor('Random').setTitle('Self Roles').setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL() }).setTimestamp();
     embed.addFields(
         { name: 'FPS', value: 'Mabar/mencari teman game First-person shooter' },
         { name: 'MOBA', value: 'Mabar/mencari teman game Multiplayer Online Battle Arena' },
-        { name: 'General', value: 'Mabar/mencari teman game umum' }
+        { name: 'General', value: 'Mabar/mencari teman game umum' },
+        { name: 'Zomboid', value: 'Mabar/mencari teman game Project Zomboid' },
+        { name: 'Rust', value: 'Mabar/mencari teman game Rust' }
     );
 
     for (const role of roles) {
         if (role === fps) embed.data.fields[0].name = 'FPS (Telah Terpasang)';
         if (role === moba) embed.data.fields[1].name = 'MOBA (Telah Terpasang)';
         if (role === general) embed.data.fields[2].name = 'General (Telah Terpasang)';
+        if (role === zomboid) embed.data.fields[3].name = 'Zomboid (Telah Terpasang)';
+        if (role === rust) embed.data.fields[4].name = 'Rust (Telah Terpasang)';
     };
 
     const buttons = new ActionRowBuilder()
@@ -34,7 +40,12 @@ exports.run = async (client, message, args) => {
             new ButtonBuilder()
                 .setLabel('MOBA 🏹').setStyle(ButtonStyle.Secondary).setCustomId(`moba-${message.id}`),
             new ButtonBuilder()
-                .setLabel('General🧂').setStyle(ButtonStyle.Secondary).setCustomId(`general-${message.id}`)
+                .setLabel('General🧂').setStyle(ButtonStyle.Secondary).setCustomId(`general-${message.id}`),
+            new ButtonBuilder()
+                .setLabel('Zomboid 🧟').setStyle(ButtonStyle.Secondary).setCustomId(`zomboid-${message.id}`),
+            new ButtonBuilder()
+                .setLabel('Rust 🪓').setStyle(ButtonStyle.Secondary).setCustomId(`rust-${message.id}`)
+
         )
 
     const r = await message.channel.send({ embeds: [embed], components: [buttons] });
@@ -100,6 +111,49 @@ exports.run = async (client, message, args) => {
                     roles.push(general);
                     message.reply('Telah berhasil dipasang!').then(a => setTimeout(() => a.delete(), 5000));
                 };
+                break;
+
+            case `zomboid-${message.id}`:
+                if (roles.includes(zomboid)) {
+                    member.roles.remove(zomboid);
+
+                    embed.data.fields[3].name = 'Zomboid';
+                    r.edit({ embeds: [embed] });
+
+                    roles.splice(roles.indexOf(zomboid), 1);
+                    message.reply('Telah dilepas!').then(a => setTimeout(() => a.delete(), 5000));
+                } else {
+                    member.roles.add(zomboid);
+
+                    embed.data.fields[3].name = 'Zomboid (Telah Terpasang)';
+                    r.edit({ embeds: [embed] });
+
+                    roles.push(zomboid);
+                    message.reply('Telah berhasil dipasang!').then(a => setTimeout(() => a.delete(), 5000));
+                }
+                break;
+
+            case `rust-${message.id}`:
+                if (roles.includes(rust)) {
+                    member.roles.remove(rust);
+
+                    embed.data.fields[4].name = 'Rust';
+                    r.edit({ embeds: [embed] });
+
+                    roles.splice(roles.indexOf(rust), 1);
+                    message.reply('Telah dilepas!').then(a => setTimeout(() => a.delete(), 5000));
+                } else {
+                    member.roles.add(rust);
+
+                    embed.data.fields[4].name = 'Rust (Telah Terpasang)';
+                    r.edit({ embeds: [embed] });
+
+                    roles.push(rust);
+                    message.reply('Telah berhasil dipasang!').then(a => setTimeout(() => a.delete(), 5000));
+                }
+                break;
+
+            default:
                 break;
         }
     });
