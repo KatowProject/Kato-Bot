@@ -180,9 +180,9 @@ class DonaturManager {
             const date = moment().format('DD');
             if (date !== '01') return;
 
-            // get before month
-            const monthName = moment().locale('en').subtract(1, 'months').format('MMMM');
-            const monthId = moment().locale('en').subtract(1, 'months').format('MM');
+            // get before old month
+            const monthName = moment().subtract(1, 'months').format('MMMM');
+            const monthId = moment().subtract(1, 'months').format('MM');
 
             const donatur = await this.client.trakteer.getLeaderboard();
             const data = donatur.find(a => a.title.includes(monthName));
