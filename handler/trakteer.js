@@ -1,9 +1,10 @@
 const { Client, Message, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const ms = require('ms');
 const donate = require('../database/schemas/Donatur');
 const Trakteer = require('../modules/Trakteer');
 const T = require('../modules/trakteer-scraper/dist').default;
+moment.tz.setDefault('Asia/Jakarta');
 
 class Donatur extends T {
     /**
