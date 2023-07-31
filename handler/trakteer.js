@@ -386,7 +386,7 @@ class Donatur extends T {
             const lb = await this.getLeaderboard();
 
             const monthName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Oktober', 'November', 'Desember'];
-            const month = monthName[new Date().getMonth()];
+            const month = monthName[moment().month()];
 
             const data = lb.find(a => a.title.includes(month));
             const map = data.supporter.map((a, i) => `**${i + 1}.** ${a.name} - <:santai:1099907159145332757> **${a.unit}x** Kesantaian`);
@@ -400,27 +400,6 @@ class Donatur extends T {
             message.channel.send({ embeds: [embed] });
         } catch (err) {
             console.log(err);
-        }
-    }
-
-    async donaturLeaderboardAnnouncement(message, args) {
-        try {
-            // check if is new month
-            const date = moment().format('DD');
-            // if (date !== '01') return;
-
-            const donatur = await this.getLeaderboard();
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Oktober', 'November', 'Desember'];
-            const monthName = months[new Date().getMonth()];
-
-            const data = donatur.find(a => a.title.includes(monthName));
-            console.log(data);
-        } catch (e) {
-            this.client.emit('donaturManagerError', {
-                type: 'donaturLeaderboardAnnouncement',
-                status: 'error',
-                error: e
-            });
         }
     }
 
@@ -456,10 +435,6 @@ class Donatur extends T {
 
             case 'leaderboard':
                 this.leaderboard(message, args);
-                break;
-
-            case 'lb':
-                this.donaturLeaderboardAnnouncement(message, args);
                 break;
 
             default:
