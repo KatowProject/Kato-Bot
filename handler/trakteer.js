@@ -390,12 +390,11 @@ class Donatur extends T {
 
             const data = lb.find(a => a.title.includes(month));
             const map = data.supporter.map((a, i) => `**${i + 1}.** ${a.name} - <:santai:1099907159145332757> **${a.unit}x** Kesantaian`);
-
             const embed = new EmbedBuilder()
                 .setColor(`Aqua`)
                 .setTitle(`Leaderboard Donasi Bulan ${month}`)
                 .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ forceStatic: true, size: 4096 }) })
-                .setDescription(map ? map.join('\n') : 'Belum ada data donasi bulan ini')
+                .setDescription(map.length === 0 ? 'Belum ada yang donasi di bulan ini' : map.join('\n'))
                 .setTimestamp();
 
             message.channel.send({ embeds: [embed] });
@@ -403,7 +402,6 @@ class Donatur extends T {
             console.log(err);
         }
     }
-
 
     /**
      * Pilih Opsi
