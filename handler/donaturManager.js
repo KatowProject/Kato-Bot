@@ -119,8 +119,6 @@ class DonaturManager {
                 member.message.daily = user.message_count - member.message.base;
 
                 if (time === '24:00' || time === '00:00' || canReset) {
-                    this.donaturLeaderboardAnnouncement();
-
                     const guild = this.client.guilds.cache.get(member.guild)
                     const user1 = guild.members.cache.get(member.userID);
                     if (!user1.roles?.cache.hasAny(this.donaturRole, this.donaturRole2)) {
@@ -182,10 +180,11 @@ class DonaturManager {
             const date = moment().format('DD');
             if (date !== '01') return;
 
-            const donatur = await this.client.trakteer.getLeaderboard();
-            const monthName = moment().locale('en').format('MMMM');
-            const monthId = moment().locale('en').format('MM');
+            // get before month
+            const monthName = moment().locale('en').subtract(1, 'months').format('MMMM');
+            const monthId = moment().locale('en').subtract(1, 'months').format('MM');
 
+            const donatur = await this.client.trakteer.getLeaderboard();
             const data = donatur.find(a => a.title.includes(monthName));
             const supporters = data.supporter.slice(0, 3);
 
@@ -209,7 +208,7 @@ class DonaturManager {
 
             const buffer = await canvas.generate();
             const attachment = new AttachmentBuilder(buffer, { name: 'donatur-leaderboard.png' });
-            
+
             const userContent = supporter.map((a, i) => {
                 if (!a.userID)
                     return `${i + 1}. ${a.username}: ${a.unit} Kesantaian / \`${a.donation}\``
@@ -218,8 +217,8 @@ class DonaturManager {
             });
 
             const year = moment().format('YYYY');
-            const content = `## Top 3 Trakteer Donations - ${monthName} ${year}\n@here Terima kasih kepada semua donatur yang telah memberikan dukungan kepada kami di Trakteer POS! <:yoi:1099909400396836978>\nBerikut adalah 3 donatur terbesar pada bulan #### lalu:\n${userContent.join('\n')}\n\n**Khusus untuk ketiga donatur di atas, kalian berhak mengambil Custom Role (cusrole)*** dari staff <@&1102087714842607618> atau <@&932997958834733080> yang sedang aktif.\n*Cusrole hanya berlaku dari tanggal 1 s.d. 31 ${monthName} ${year}.`;
-            this.client.channels.cache.get('932997959388385398').send({ files: [attachment], content: content});
+            const content = `## Top 3 Trakteer Donations - ${monthName} ${year}\n@here Terima kasih kepada semua donatur yang telah memberikan dukungan kepada kami di Trakteer POS! <:yoi:1099909400396836978>\nBerikut adalah 3 donatur terbesar pada bulan ${monthName} lalu:\n${userContent.join('\n')}\n\n**Khusus untuk ketiga donatur di atas, kalian berhak mengambil Custom Role (cusrole)*** dari staff <@&1102087714842607618> atau <@&932997958834733080> yang sedang aktif.\n*Cusrole hanya berlaku dari tanggal 1 s.d. 31 ${monthName} ${year}.`;
+            this.client.channels.cache.get('932997959388385398').send({ files: [attachment], content: content });
 
         } catch (e) {
             console.log(e);
@@ -349,6 +348,11 @@ class DonaturManager {
         setInterval(() => {
             this.donaturDuration();
             this.donaturXp();
+
+            // if time is 00:00 and DD is 01
+            if (moment().format('HH:mm') === '00:00' && moment().format('DD') === '01') {
+                this.donaturLeaderboardAnnouncement();
+            }
         }, 60_000);
 
         this.client.on('messageCreate', this.donaturNotification.bind(this));
