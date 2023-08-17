@@ -6,7 +6,7 @@ const { Client, BaseInteraction, ButtonStyle, AttachmentBuilder, ButtonBuilder, 
  * @param {BaseInteraction} interaction 
  */
 module.exports = async (client, interaction) => {
-    if (!interaction.isButton()) return;
+    if (!interaction.customId.includes('selfrole')) return;
 
     const role = interaction.customId.split('-')[0];
     const id = interaction.customId.split('-')[1];

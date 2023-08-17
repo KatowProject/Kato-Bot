@@ -33,6 +33,7 @@ module.exports = class Kato extends Client {
         this.katoShop.init();
         this.trakteer.init(process.env.TRAKTEER_XSRF_TOKEN, process.env.TRAKTEER_ID_SESSION);
         this.selfbot.init(true);
+        this.form.init();
 
         // this.trakteer.webhookNotification(true, process.env.TRAKTEER_LOGS_WEBHOOK, 60_000);
 
