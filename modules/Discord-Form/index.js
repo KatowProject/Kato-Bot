@@ -151,7 +151,7 @@ class DiscordForm {
                             .setStyle(ButtonStyle.Secondary)
                     );
 
-                message.channel.send({ embeds: [embed], components: [btn] });
+                message.guild.channels.cache.get(obj.channel).send({ embeds: [embed], components: [btn] });
 
 
                 const form = new db({
