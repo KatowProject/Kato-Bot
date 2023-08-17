@@ -285,7 +285,7 @@ class DiscordForm {
 
         const embed = new EmbedBuilder()
             .setTitle("Form yang tersedia")
-            .setDescription(data.map((d, i) => `${i + 1}. ${d.questionData.title}`).join("\n"))
+            .setDescription(data.map((d, i) => `${i + 1}. ${d.questionData.title} \`[${d.formId}]\``).join("\n"))
             .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ dynamic: true }) })
 
         message.channel.send({ embeds: [embed], content: "Silahkan pilih form yang akan dikirim ulang" });
