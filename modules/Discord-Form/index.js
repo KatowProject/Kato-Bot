@@ -177,7 +177,7 @@ class DiscordForm {
      * @param {BaseInteraction} interaction 
      */
     async openForm(interaction) {
-        if (!interaction.isButton() && !interaction.customId.startsWith('open-form')) return;
+        if (!interaction.customId.startsWith('open-form')) return;
         const formId = interaction.customId.split('-')[2];
 
         const form = await db.findOne({ formId });
