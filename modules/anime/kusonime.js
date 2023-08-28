@@ -16,7 +16,7 @@ module.exports = class Kusonime {
         return new Promise(async (resolve, reject) => {
             try {
                 let page = 1;
-                const { data } = await axios.get(`https://kusonime.katowproject.app/api/search/page/${page}/?s=${query}`);
+                const { data } = await axios.get(`https://kusonime.katowproject.dev/api/search/page/${page}/?s=${query}`);
                 const res = data?.data.listAnime;
                 if (res?.length === 0) return message.reply('Tidak ada hasil yang ditemukan!');
 
@@ -51,7 +51,7 @@ module.exports = class Kusonime {
         return new Promise(async (resolve, reject) => {
             try {
                 const endpoint = anime.endpoint;
-                const { data } = await axios.get(`https://kusonime.katowproject.app/api/anime/${endpoint}`);
+                const { data } = await axios.get(`https://kusonime.katowproject.dev/api/anime/${endpoint}`);
                 const res = data.data;
 
                 message.channel.send({
