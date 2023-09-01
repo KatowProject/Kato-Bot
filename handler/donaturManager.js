@@ -184,6 +184,8 @@ class DonaturManager {
             const monthName = moment().locale('en').subtract(1, 'months').format('MMMM');
             const monthId = moment().subtract(1, 'months').format('MM');
 
+            const monthNameAfter = moment().locale('en').format('MMMM');
+
             const donatur = await this.client.trakteer.getLeaderboard();
             const data = donatur.find(a => a.title.includes(monthName));
             const supporters = data.supporter.slice(0, 3);
@@ -217,7 +219,7 @@ class DonaturManager {
             });
 
             const year = moment().format('YYYY');
-            const content = `## Top 3 Trakteer Donations - ${monthName} ${year}\n@here Terima kasih kepada semua donatur yang telah memberikan dukungan kepada kami di Trakteer POS! <:yoi:1099909400396836978>\nBerikut adalah 3 donatur terbesar pada bulan ${monthName} lalu:\n${userContent.join('\n')}\n\n**Khusus untuk ketiga donatur di atas, kalian berhak mengambil Custom Role (cusrole)*** dari staff <@&1102087714842607618> atau <@&932997958834733080> yang sedang aktif.\n*Cusrole hanya berlaku dari tanggal 1 s.d. 31 ${monthName} ${year}.`;
+            const content = `## Top 3 Trakteer Donations - ${monthName} ${year}\n@here Terima kasih kepada semua donatur yang telah memberikan dukungan kepada kami di Trakteer POS! <:yoi:1099909400396836978>\nBerikut adalah 3 donatur terbesar pada bulan ${monthName} lalu:\n${userContent.join('\n')}\n\n**Khusus untuk ketiga donatur di atas, kalian berhak mengambil Custom Role (cusrole)*** dari staff <@&1102087714842607618> atau <@&932997958834733080> yang sedang aktif.\n*Cusrole hanya berlaku dari tanggal 1 s.d. 31 ${monthNameAfter} ${year}.`;
             this.client.channels.cache.get('932997959388385398').send({ files: [attachment], content: content });
 
         } catch (e) {
