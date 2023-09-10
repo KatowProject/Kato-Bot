@@ -145,7 +145,7 @@ class Donatur extends T {
         } else if (args.includes('--all')) {
             const allDonatur = await donate.find({});
             if (allDonatur.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
-            const member = await message.guild.members.fetch();
+            const member = await message.guild.members.fetch({ force: true });
             const mapDonatur = allDonatur.map((a, i) => {
                 const mem = member.find(b => b.id == a.userID);
                 if (!a.now || !a.duration) return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`Booster Duration\``;
