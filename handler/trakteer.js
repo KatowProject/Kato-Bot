@@ -145,7 +145,7 @@ class Donatur extends T {
         } else if (args.includes('--all')) {
             const allDonatur = await donate.find({});
             if (allDonatur.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
-            const member = await message.guild.members.fetch();
+            const member = await message.guild.members.fetch({ force: true });
             const mapDonatur = allDonatur.map((a, i) => {
                 const mem = member.find(b => b.id == a.userID);
                 if (!a.now || !a.duration) return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`Booster Duration\``;
@@ -257,6 +257,12 @@ class Donatur extends T {
                 message.reply('Data telah disetujui dan telah masuk ke dalam Database, silahkan cek kembali untuk memastikan!');
                 await donate.findOneAndUpdate({ userID: findMember.id }, { duration: time, now: Date.now() });
 
+                // check role donatur is exist
+                const role = message.guild.roles.cache.get('932997958788608044');
+                if (!role) return message.reply('Role Donatur tidak ditemukan!');
+                findMember.roles.add(role);
+
+
                 this.client.emit('donaturManager', {
                     type: 'addDonatur',
                     member: findMember,
@@ -272,7 +278,7 @@ class Donatur extends T {
                 await donate.findOneAndUpdate({ userID: findMember.id }, { duration: donatur.duration + time });
 
                 // check time is negative
-                if (time < 0) {
+                if (time < 1) {
                     this.client.emit('donaturManager', {
                         type: 'addDonatur',
                         member: findMember,
