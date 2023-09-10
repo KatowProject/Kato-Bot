@@ -146,12 +146,17 @@ class Donatur extends T {
             const allDonatur = await donate.find({});
             if (allDonatur.length < 1) return message.channel.send('Tidak ada data yang ditemukan!');
             const member = await message.guild.members.fetch({ force: true });
+
             const mapDonatur = allDonatur.map((a, i) => {
-                const mem = member.find(b => b.id == a.userID);
-                if (!a.now || !a.duration) return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`Booster Duration\``;
+                const mem = member.find(b => b.user.id == a.userID);
+                if (!mem) {
+                    return `**${i + 1}**. <@${a.userID}> - **${a.userID}**\n\`Member tidak ditemukan\``;
+                }
+
+                if (!a.now || !a.duration) return `**${i + 1}**. <@${mem.user.id}> - **${mem.user.tag}**\n\`Booster Duration\``;
                 const timeLeft = a.duration - (Date.now() - a.now);
                 if (!mem) return;
-                return `**${i + 1}**. <@${mem.id}> - **${mem.user.tag}**\n\`${this.client.util.parseDur(timeLeft)}\``;
+                return `**${i + 1}**. <@${mem.user.id}> - **${mem.user.tag}**\n\`${this.client.util.parseDur(timeLeft)}\``;
             });
             const chunkDonatur = this.client.util.chunk(mapDonatur, 10);
 
