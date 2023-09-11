@@ -49,7 +49,7 @@ class AxiosRequest {
             try {
                 const bs64 = Buffer.from(`${this.BASE_URL}${endpoint}?${new URLSearchParams(params).toString()}`).toString("base64");
                 const response = yield this.self({
-                    url: `https://bypass.katowproject.my.id/trakteer.php?q=${bs64}`,
+                    url: `https://bypass.katowproject.dev/trakteer.php?q=${bs64}`,
                     method: method,
                     headers: headers,
                     data: data
