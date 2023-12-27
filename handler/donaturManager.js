@@ -246,15 +246,22 @@ class DonaturManager {
             const _data = this.client.util.isJSON(message.content) ? JSON.parse(message.content) : null;
             if (!_data) return;
 
-            const data = await this.client.trakteer.getOrderDetail(_data.id);
+            // console.log(_data);
+            // const data = await this.client.trakteer.getOrderDetail(_data.id);
+            // return;
 
-            const name = data.nama;
+            const name = _data.supporter_name;
             const value = _data.quantity;
-            const nominal = data.nominal.split("v")[0].trim();
+            const nominal = _data.price;
             const duration = value * 28;
             const toMS = require('ms')(`${duration}d`);
-            const msg = data.message.split("\n").join(" ");
-            const date = _data.created_at;
+            const msg = _data.supporter_message;
+            const date = new Date(_data.created_at);
+
+            // date with format DD/MM/YYYY
+            const dateNow = moment(date).format('DD/MM/YYYY');
+            // get time HH:mm
+            const time = moment(date).format('HH:mm');
 
             const u_d = name.split("#");
             const username = u_d[0];
@@ -271,8 +278,8 @@ class DonaturManager {
             canvas.setUsername(name);
             canvas.setDonation(`x${value}`);
             canvas.setSupportMessage(`"${msg}"`);
-            canvas.setDate(date);
-            canvas.setNominal(nominal);
+            canvas.setDate(`${dateNow} ${time}`);
+            canvas.setNominal(`Rp. ${nominal}`);
 
             if (member)
                 await canvas.setAvatar(member.user.displayAvatarURL({ extension: 'png', size: 4096 }));
