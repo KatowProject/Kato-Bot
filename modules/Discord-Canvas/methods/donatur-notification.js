@@ -1,6 +1,5 @@
 const { loadImage, createCanvas, CanvasRenderingContext2D } = require('canvas');
 const path = require('path');
-
 class DonaturNotification {
     constructor() {
         this.username = null;
@@ -11,31 +10,40 @@ class DonaturNotification {
         this.nominal = null;
     }
 
-    /**
-     * Generate text
-     * @param {CanvasRenderingContext2D} ctx CanvasRenderingContext2D
-     * @param {[]} arr  Array of string
-     * @param {Number} height  Height of the text
-     * @param {String} template  Template of the text
-     * @param {Boolean} isLast  Is the last text
-     * @returns {void}
-     */
-    _generateText(ctx, arr, height, template, isLast = false) {
-        let j = 0;
-        let i = 1;
+    // static function fillTextWithSpacing
+    static fillTextWithSpacing(ctx, text, x, y, letterSpacing = 2) {
+        let currentPosition = x;
+        for (let i = 0; i < text.length; i++) {
+            ctx.fillText(text[i], currentPosition, y);
+            currentPosition += ctx.measureText(text[i]).width + letterSpacing;
+        }
+    }
 
-        for (const txt of arr) {
-            ctx.fillStyle = '#000000';
-            ctx.textAlign = 'center';
+    static wrapText(context, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+        var lineCount = 0;
+        var lines = [];
 
-            if (i === arr.length && isLast) {
-                ctx.fillText(txt + '..."', template.width / 2, height + j);
-            } else {
-                ctx.fillText(txt, template.width / 2, height + j);
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + ' ';
+            var metrics = context.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                lines.push(line);
+                line = words[n] + ' ';
             }
+            else {
+                line = testLine;
+            }
+        }
+        lines.push(line);
 
-            j += 30;
-            i++;
+        // Adjust y to place text in the middle of the box
+        y = y - (lines.length - 1) * lineHeight / 2;
+
+        for (var i = 0; i < lines.length; i++) {
+            context.fillText(lines[i], x, y + i * lineHeight);
         }
     }
 
@@ -105,99 +113,85 @@ class DonaturNotification {
             !this.avatar
         ) throw new Error('Please set all the required data');
 
-        const template = await loadImage(path.join(__dirname, '..', 'templates', 'trakteer_template.png'));
+        const template = await loadImage(path.join(__dirname, '..', 'templates', 'POSDonation.png'));
         const canvas = createCanvas(template.width, template.height);
 
         const ctx = canvas.getContext('2d');
 
-        const templateSize = (template.width / 2) - 440 / 2;
-        ctx.drawImage(this.avatar, templateSize, 80, 440, 440);
+        // px
+        const avatarX = 270.72 * 0.1654583333;
+        const avatarY = 269.79 * 0.1654583333;
+        const avatarSize = 445;
+
+        ctx.drawImage(this.avatar, avatarX, avatarY, avatarSize, avatarSize);
 
         ctx.drawImage(template, 0, 0, template.width, template.height);
 
-        const dates = this.date.split(' ');
-
-        const tgl = dates[0]
-        ctx.font = "30px Kollektif Bold";
-        ctx.fillStyle = "#000000";
-        ctx.textAlign = 'left'
-        ctx.fillText(tgl.split("/").join(" / "), 30, 40);
-
-        const jm = dates[1];
-        ctx.font = "30px Kollektif";
-        ctx.fillText(jm, 31, 75);
-
-        const username = this.username;
-        if (username.length > 25) {
-            ctx.font = '20px Kollektif Bold';
-        } else if (username.length > 17) {
-            ctx.font = '25px Kollektif Bold';
-        } else {
-            ctx.font = '30px Kollektif Bold';
-        }
-
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
-        ctx.fillText(username, template.width - 662, template.height / 2 + 45);
-
-        ctx.font = "27px Kollektif Bold";
-        ctx.fillStyle = '#000000';
-        ctx.fillText(this.nominal, template.width - 350, template.height / 2 + 45);
-
+        // Monument font
         const donation = this.donation;
-        ctx.font = '70px Kollektif Italic';
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(donation, 715, 150);
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = 'center';
+        // if value is more than 100, resize
+        if (donation >= 100) {
+            ctx.font = "32.5px MonumentExtended Regular";
+            ctx.fillText(donation, 570, 380);
+        } else {
+            ctx.font = "40px MonumentExtended Regular";
+            ctx.fillText(donation, 570, 380);
+        }
+        ctx.textAlign = 'left';
 
+        // Name
+        ctx.font = "30px Montserrat Bold";
+        ctx.fillStyle = "#000000";
+        const username = this.username.toUpperCase();
+        // if text length more than 15, split and give text end with ...
+        // if (username.length > 15) {
+        //     const split = username.split('');
+        //     const first = split.slice(0, 15).join('');
+        //     const last = split.slice(15, username.length).join('');
+        //     ctx.fillText(`${first}...`, 715, 87);
+        // } else {
+        ctx.fillText(username, 715, 87);
+        // }
+
+
+        const nameWidth = ctx.measureText(username).width;
+
+        ctx.font = "30px Montserrat Medium";
+        ctx.fillText("HAS DONATED...", 715 + nameWidth + 10, 87);
+
+
+        // nominal
+        const nominal = this.nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        // if value is 1.000.000 or more, use 70px font size
+        if (nominal.length >= 8) {
+            ctx.font = "80px MonumentExtended Ultrabold";
+        } else {
+            ctx.font = "100px MonumentExtended Ultrabold";
+        }
+        ctx.fillStyle = '#39a0e5';
+        // letter spacing 0.8px
+        DonaturNotification.fillTextWithSpacing(ctx, nominal, 810, 180, 80 * 0.05);
+
+        // support message
         const support_message = this.support_message;
-        const limit = 40;
-        const strArr = [[]];
-        for (const str of support_message.split(' ')) {
-            const temp = strArr[strArr.length - 1];
-            if ([...temp, str].join(' ').length <= limit) {
-                temp.push(str);
-            } else {
-                strArr.push([str]);
-            }
-        }
-        let t = 0;
-        switch (strArr.length) {
-            case 1:
-                t = strArr.slice(0, 1).map(x => x.join(' '));
-                ctx.font = '31px Kollektif';
-                this._generateText(ctx, t, 760, template);
-                break;
-            case 2:
-                t = strArr.slice(0, 2).map(x => x.join(' '));
-                ctx.font = '31px Kollektif';
-                this._generateText(ctx, t, 745, template);
-                break;
-            case 3:
-                t = strArr.slice(0, 3).map(x => x.join(' '));
-                ctx.font = '30px Kollektif';
-                this._generateText(ctx, t, 730, template);
-                break;
-            case 4:
-                t = strArr.slice(0, 4).map(x => x.join(' '));
-                ctx.font = '30px Kollektif';
-                this._generateText(ctx, t, 715, template);
-                break;
-            case 5:
-                t = strArr.slice(0, 5).map(x => x.join(' '));
-                ctx.font = '29px Kollektif';
-                this._generateText(ctx, t, 700, template);
-                break;
-            case 6:
-                t = strArr.slice(0, 6).map(x => x.join(' '));
-                ctx.font = '28px Kollektif';
-                this._generateText(ctx, t, 685, template);
-                break;
-            default:
-                t = strArr.slice(0, 6).map(x => x.join(' '));
-                ctx.font = '27px Kollektif';
-                this._generateText(ctx, t, 685, template, true);
-                break;
-        }
+        ctx.font = "25px Montserrat SemiBold";
+        ctx.fillStyle = "#000000";
+        ctx.textAlign = 'center';
+        DonaturNotification.wrapText(ctx, support_message, 1040, 335, 622, 30);
+
+        const date = this.date;
+        // get with format DD/MM/YYYY
+        const tgl = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' });
+        // get time HH:MM
+        const jam = date.toLocaleTimeString('id-ID', { hour: 'numeric', minute: 'numeric' });
+
+        // date
+        ctx.font = "20px Montserrat Regular";
+        ctx.fillStyle = "#000000";
+        ctx.textAlign = 'center';
+        ctx.fillText(`${tgl} - ${jam}`, 935, template.height - 35);
 
         // generate to buffer
         const buffer = canvas.toBuffer();

@@ -1,5 +1,4 @@
 const { loadImage, createCanvas } = require('canvas');
-const path = require('path');
 const moment = require('moment');
 
 class LeaderboardDonatur {
@@ -59,8 +58,9 @@ class LeaderboardDonatur {
     */
     async generate() {
         if (!this.month) throw new Error('Month is required');
+        if (!this.donaturs.length < 3 && this.donaturs.length > 3) throw new Error('Donatur must be 3');
 
-        const template = await loadImage(path.join(__dirname, '..', 'templates', 'POS_Top_Donations.png'));
+        const template = await loadImage('../templates/POS_Top_Donations.png');
         const canvas = createCanvas(template.width, template.height);
 
         const ctx = canvas.getContext('2d');
@@ -88,24 +88,20 @@ class LeaderboardDonatur {
 
     async _applyAvatarDonatur(ctx, template) {
         const donatur1 = this.donaturs[0];
-        if (!donatur1) return;
         const avatar = await loadImage(donatur1.avatar);
         ctx.drawImage(avatar, template.width / 2 - 120, template.height / 2 - 142, 244, 244);
 
         const donatur2 = this.donaturs[1];
-        if (!donatur2) return;
         const avatar2 = await loadImage(donatur2.avatar);
         ctx.drawImage(avatar2, 78, template.height / 2 - 21, 220, 220);
 
         const donatur3 = this.donaturs[2];
-        if (!donatur3) return;
         const avatar3 = await loadImage(donatur3.avatar);
         ctx.drawImage(avatar3, template.width - 298, template.height / 2 - 21, 220, 220);
     }
 
     _applyText(ctx, template) {
         const donatur1 = this.donaturs[0];
-        if (!donatur1) return;
 
         ctx.font = '26px Montserrat SemiBold';
         ctx.fillStyle = '#000000';
@@ -118,7 +114,6 @@ class LeaderboardDonatur {
         ctx.fillText(donatur1.donation, template.width / 2, template.height / 2 + 187.5);
 
         const donatur2 = this.donaturs[1];
-        if (!donatur2) return;
 
         ctx.font = '26px Montserrat SemiBold';
         ctx.fillStyle = '#000000';
@@ -131,7 +126,6 @@ class LeaderboardDonatur {
         ctx.fillText(donatur2.donation, 185, template.height / 2 + 272);
 
         const donatur3 = this.donaturs[2];
-        if (!donatur3) return;
         ctx.font = '26px Montserrat SemiBold';
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';

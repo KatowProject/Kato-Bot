@@ -60,12 +60,6 @@
     "__v": 0
   },
   {
-    "_id": "6224fd0ff6c62b47b90744d4",
-    "userID": "494091812995072010",
-    "data": "{\"reason\":\"Belajar\",\"time\":1646591247768}",
-    "__v": 0
-  },
-  {
     "_id": "624665df18e78a59fce7f76d",
     "userID": "862922406444269600",
     "data": "{\"reason\":\"contrived coincidence\",\"time\":1648780767302}",
@@ -84,27 +78,15 @@
     "__v": 0
   },
   {
-    "_id": "63c98f0e3a33c75bc4a8bd83",
-    "userID": "858679464513896488",
-    "data": "{\"reason\":\"AFK\",\"time\":1674153742553}",
-    "__v": 0
-  },
-  {
-    "_id": "641b737e3d36dad568edb00a",
+    "_id": "65110a862b0364c84e5d99a8",
     "userID": "472564718750531586",
-    "data": "{\"reason\":\"AFK\",\"time\":1679520638757}",
+    "data": "{\"reason\":\"AFK\",\"time\":1695615622386}",
     "__v": 0
   },
   {
-    "_id": "642ac4ad91ebe561d0b5259b",
-    "userID": "469722446468218880",
-    "data": "{\"reason\":\"https://cdn.discordapp.com/attachments/804727458829565983/1092423348757209088/Screenshot_2023-04-03-20-19-27-184_com.riotgames.league.wildrift.jpg udah gede masih ...\",\"time\":1680524461730}",
-    "__v": 0
-  },
-  {
-    "_id": "64318b930b09a8b5b4595402",
-    "userID": "398461788334718987",
-    "data": "{\"reason\":\"takbiran ya lembur\",\"time\":1680968595512}",
+    "_id": "65380648a61d9a6f77f10a45",
+    "userID": "858679464513896488",
+    "data": "{\"reason\":\"AFK\",\"time\":1698170440376}",
     "__v": 0
   }
 ]

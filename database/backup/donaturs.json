@@ -1,13 +1,13 @@
 [
   {
     "message": {
-      "daily": 5,
-      "base": 752
+      "daily": 3,
+      "base": 6369
     },
     "_id": "62861f8850d790c449710c1c",
     "userID": "480380200031486040",
     "guild": "932997958738268251",
-    "duration": 72576000000,
+    "duration": 177984000000,
     "now": 1652957064096,
     "ticket": 1,
     "isAttend": false,
@@ -16,8 +16,8 @@
   },
   {
     "message": {
-      "daily": 1,
-      "base": 936
+      "daily": 0,
+      "base": 3058
     },
     "_id": "62e9c87c7389ab3a47156fd3",
     "userID": "831458685884694589",
@@ -30,56 +30,17 @@
   {
     "message": {
       "daily": 0,
-      "base": 50
-    },
-    "_id": "63501f104e1f116c83c7e854",
-    "userID": "680900825408733232",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 4,
-      "base": 1626
-    },
-    "_id": "63542c728a157cf05205473f",
-    "userID": "755260945772839035",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 1,
-      "base": 521
-    },
-    "_id": "6360d0965f726dd3ccb42ec4",
-    "userID": "391569168744579084",
-    "guild": "932997958738268251",
-    "ticket": 1,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 50,
-      "base": 5801
+      "base": 17143
     },
     "_id": "63889255a4f5be6a26352f2b",
     "userID": "327357387969134592",
     "guild": "932997958738268251",
+    "duration": 24192000280,
+    "now": 1678520909145,
     "ticket": 13,
     "isAttend": false,
     "isBooster": true,
-    "__v": 0,
-    "duration": 24192000280,
-    "now": 1678520909145
+    "__v": 0
   },
   {
     "message": {
@@ -97,33 +58,7 @@
   {
     "message": {
       "daily": 0,
-      "base": 136
-    },
-    "_id": "63be6e5a3a33c75bc49633f6",
-    "userID": "418394636105809924",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 0,
-      "base": 287
-    },
-    "_id": "63bfe1cb3a33c75bc49891a7",
-    "userID": "764620520838397953",
-    "guild": "932997958738268251",
-    "ticket": 10,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 8,
-      "base": 4019
+      "base": 12490
     },
     "_id": "63cb68ff3a33c75bc4abcfd2",
     "userID": "465114334796709888",
@@ -138,61 +73,7 @@
   {
     "message": {
       "daily": 0,
-      "base": 91
-    },
-    "_id": "63dde33c33dc86c07f338dde",
-    "userID": "422551809500905472",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 0,
-      "base": 591
-    },
-    "_id": "63fa38d668995e98111e3559",
-    "userID": "320607798234710018",
-    "guild": "932997958738268251",
-    "duration": 7257600000,
-    "now": 1677342934586,
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": false,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 11,
-      "base": 1804
-    },
-    "_id": "640d333f1295f3d7960eed62",
-    "userID": "455561235358941184",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 3,
-      "base": 2008
-    },
-    "_id": "640d382df4a3efbd2f56de8f",
-    "userID": "767546118598295573",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 0,
-      "base": 354
+      "base": 1733
     },
     "_id": "640d382df4a3efbd2f56de97",
     "userID": "458770397362520078",
@@ -204,24 +85,11 @@
   },
   {
     "message": {
-      "daily": 26,
-      "base": 628
+      "daily": 0,
+      "base": 10
     },
-    "_id": "640d382df4a3efbd2f56de99",
-    "userID": "361087884175867905",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 4,
-      "base": 2206
-    },
-    "_id": "640d382df4a3efbd2f56de9b",
-    "userID": "439384663262494740",
+    "_id": "644bff85485161408d025655",
+    "userID": "802197609052635136",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -231,10 +99,37 @@
   {
     "message": {
       "daily": 0,
-      "base": 19
+      "base": 1703
     },
-    "_id": "640d382df4a3efbd2f56de9f",
-    "userID": "403450206596890624",
+    "_id": "644e13d0485161408d04345f",
+    "userID": "413986313151184906",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 9,
+      "base": 29740
+    },
+    "_id": "64620dddcaebbc7ffd9f808f",
+    "userID": "391814755251257344",
+    "guild": "932997958738268251",
+    "duration": 5011200000,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 20
+    },
+    "_id": "6474c05af6651e0e85531a6f",
+    "userID": "1010515255782285352",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -244,25 +139,10 @@
   {
     "message": {
       "daily": 0,
-      "base": 61
+      "base": 182
     },
-    "_id": "640eea9a679892d243115632",
-    "userID": "460801035678777346",
-    "guild": "932997958738268251",
-    "duration": 7257600000,
-    "now": 1678699162256,
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 0,
-      "base": 254
-    },
-    "_id": "6416ba91c94a456d2f3cb420",
-    "userID": "497704660715700240",
+    "_id": "6479d87ef6651e0e85597f4d",
+    "userID": "719043325000417300",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -271,49 +151,14 @@
   },
   {
     "message": {
-      "daily": 27,
-      "base": 3548
+      "daily": 3,
+      "base": 13915
     },
-    "_id": "64204d423d36dad568d30dc6",
+    "_id": "64951730f6651e0e857b3c8c",
     "userID": "260050697389604865",
     "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 32,
-      "base": 555
-    },
-    "_id": "642245323d36dad5687b8cdb",
-    "userID": "500882600714567702",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 37,
-      "base": 1164
-    },
-    "_id": "642533f93d36dad56873384c",
-    "userID": "765990551522246707",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "_id": "642717b39c5aabbc5b341c95",
-    "userID": "948555903286788106",
-    "guild": "932997958738268251",
-    "duration": 2419200000,
-    "now": 1680283571689,
+    "duration": 21772800000,
+    "now": 1687492400273,
     "ticket": 0,
     "isAttend": false,
     "isBooster": false,
@@ -322,26 +167,13 @@
   {
     "message": {
       "daily": 0,
-      "base": 38
+      "base": 9756
     },
-    "_id": "64284a029c5aabbc5bbd8ccf",
-    "userID": "478714733818544128",
+    "_id": "64ce6bcf8bd63bfde42c6072",
+    "userID": "666969813901508608",
     "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 0,
-      "base": 3
-    },
-    "_id": "64284c5f9c5aabbc5bc46bb7",
-    "userID": "513916332551438366",
-    "guild": "932997958738268251",
-    "duration": 4838400000,
-    "now": 1680362591910,
+    "duration": 16934400000,
+    "now": 1691249615561,
     "ticket": 0,
     "isAttend": false,
     "isBooster": false,
@@ -349,40 +181,14 @@
   },
   {
     "message": {
-      "daily": 1,
-      "base": 290
+      "daily": 0,
+      "base": 2171
     },
-    "_id": "642a4e5d91ebe561d04849bf",
-    "userID": "470925083167293450",
+    "_id": "64fdad8d54cdb4cbbb7eb868",
+    "userID": "800665454787035216",
     "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 10,
-      "base": 1324
-    },
-    "_id": "642b831691ebe561d0fd816d",
-    "userID": "418373312289177601",
-    "guild": "932997958738268251",
-    "ticket": 0,
-    "isAttend": false,
-    "isBooster": true,
-    "__v": 0
-  },
-  {
-    "message": {
-      "daily": 22,
-      "base": 924
-    },
-    "_id": "642c60d691ebe561d0a74a40",
-    "userID": "825012301953368084",
-    "guild": "932997958738268251",
-    "duration": 4838400000,
-    "now": 1680629974646,
+    "duration": 65318400000,
+    "now": 1694346637578,
     "ticket": 0,
     "isAttend": false,
     "isBooster": true,
@@ -393,8 +199,38 @@
       "daily": 0,
       "base": 7
     },
-    "_id": "642d432391ebe561d05bc3e5",
-    "userID": "418040912824893450",
+    "_id": "64fdb03c54cdb4cbbb7eba6b",
+    "userID": "680900825408733232",
+    "guild": "932997958738268251",
+    "duration": 16070400000,
+    "now": 1694347324040,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": false,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 489
+    },
+    "_id": "64fdb1a154cdb4cbbb7ebb9e",
+    "userID": "921747694731558993",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0,
+    "duration": null,
+    "now": 1694347748527
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 478
+    },
+    "_id": "6501d2b02b0364c84e511a68",
+    "userID": "852748818818007091",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -404,10 +240,10 @@
   {
     "message": {
       "daily": 0,
-      "base": 50
+      "base": 548
     },
-    "_id": "642eb2fe91ebe561d0b29e12",
-    "userID": "205980234078486528",
+    "_id": "6513c51fec48b5b9cc2fbc47",
+    "userID": "439401992398307329",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -417,10 +253,25 @@
   {
     "message": {
       "daily": 0,
-      "base": 5
+      "base": 6
     },
-    "_id": "64312cd3a90eea407c5bcb9d",
-    "userID": "335311469925236747",
+    "_id": "651acdf0bdb0937663545e81",
+    "userID": "512928216667652097",
+    "guild": "932997958738268251",
+    "duration": 48384000000,
+    "now": 1696255472278,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": false,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 330
+    },
+    "_id": "651e4567bdb093766356dc6b",
+    "userID": "338684976805445633",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -429,11 +280,82 @@
   },
   {
     "message": {
-      "daily": 7,
-      "base": 1284
+      "daily": 4,
+      "base": 1559
     },
-    "_id": "6431a6cc0b09a8b5b4a54a60",
-    "userID": "309302069540552706",
+    "_id": "653b1e7aa61d9a6f77f3b372",
+    "userID": "757936331912642642",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0,
+    "duration": 14515200000,
+    "now": 1701353760532
+  },
+  {
+    "message": {
+      "daily": 3,
+      "base": 5103
+    },
+    "_id": "6541d74d943874a307754e50",
+    "userID": "790403712417005568",
+    "guild": "932997958738268251",
+    "duration": 19699200000,
+    "now": 1698813773989,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 114
+    },
+    "_id": "65463600943874a307796142",
+    "userID": "468085081219792917",
+    "guild": "932997958738268251",
+    "duration": 4838400000,
+    "now": 1699100160474,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 250
+    },
+    "_id": "654b9c36943874a3077eb88f",
+    "userID": "960154964234240043",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 24,
+      "base": 16348
+    },
+    "_id": "656de6bfbc7e207955618ba1",
+    "userID": "458059468706676737",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 740
+    },
+    "_id": "656efed6bc7e207955625a33",
+    "userID": "670065254155419669",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
@@ -443,10 +365,159 @@
   {
     "message": {
       "daily": 2,
-      "base": 1593
+      "base": 1835
     },
-    "_id": "6431bda10b09a8b5b4e4f1d4",
-    "userID": "694770620570927185",
+    "_id": "6571b8babc7e207955645f60",
+    "userID": "1169255987950137427",
+    "guild": "932997958738268251",
+    "duration": 9676800000,
+    "now": 1701951674471,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 4,
+      "base": 6341
+    },
+    "_id": "6575aff08b86e9ce8562e03e",
+    "userID": "439384663262494740",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 2
+    },
+    "_id": "6576f12f8b86e9ce8563bab9",
+    "userID": "1160110035196710992",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 175
+    },
+    "_id": "65772a1d8b86e9ce8563e5c3",
+    "userID": "287250390892806146",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 277
+    },
+    "_id": "65788b7e8b86e9ce8564e07e",
+    "userID": "395002653832249345",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 215
+    },
+    "_id": "657989aa8b86e9ce8565908d",
+    "userID": "314589287901429760",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 31
+    },
+    "_id": "65806e188b86e9ce856a8b3e",
+    "userID": "1117807347851612191",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 770
+    },
+    "_id": "65819d878b86e9ce856b6354",
+    "userID": "422551809500905472",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 13,
+      "base": 280
+    },
+    "_id": "6581aae48b86e9ce856b6f71",
+    "userID": "759444551080738866",
+    "guild": "932997958738268251",
+    "duration": 2419200000,
+    "now": 1702996708447,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": false,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 5,
+      "base": 9098
+    },
+    "_id": "658449a28b86e9ce856d6dfb",
+    "userID": "449471016834695168",
+    "guild": "932997958738268251",
+    "duration": 12096000000,
+    "now": 1703168418371,
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": false,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 4
+    },
+    "_id": "658456d68b86e9ce856d787d",
+    "userID": "567336248000380929",
+    "guild": "932997958738268251",
+    "ticket": 0,
+    "isAttend": false,
+    "isBooster": true,
+    "__v": 0
+  },
+  {
+    "message": {
+      "daily": 0,
+      "base": 100
+    },
+    "_id": "658663b88b86e9ce856efc9d",
+    "userID": "649544262467321886",
     "guild": "932997958738268251",
     "ticket": 0,
     "isAttend": false,
