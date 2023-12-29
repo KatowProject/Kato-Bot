@@ -4,6 +4,7 @@ const fs = require('fs');
 
 const LeaderboardDonatur = require('./methods/leaderboard-donatur');
 const DonaturNotification = require('./methods/donatur-notification');
+const BoosterNotification = require('./methods/booster-notification');
 
 const files = fs.readdirSync(path.join(__dirname, 'fonts'));
 for (const file of files) {
@@ -28,6 +29,14 @@ class CanvasManager {
      */
     loadLeaderboardDonatur() {
         return new LeaderboardDonatur();
+    }
+
+    /**
+     * Booster Notification template
+     * @returns {BoosterNotification}
+     */
+    loadBoosterNotification() {
+        return new BoosterNotification();
     }
 }
 
