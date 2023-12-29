@@ -1,5 +1,5 @@
 const { loadImage, createCanvas, CanvasRenderingContext2D } = require('canvas');
-
+const path = require('path');
 class DonaturNotification {
     constructor() {
         this.username = null;
@@ -113,7 +113,7 @@ class DonaturNotification {
             !this.avatar
         ) throw new Error('Please set all the required data');
 
-        const template = await loadImage('../templates/POSDonation.png');
+        const template = await loadImage(path.join(__dirname, '..', 'templates', 'POSDonation.png'));
         const canvas = createCanvas(template.width, template.height);
 
         const ctx = canvas.getContext('2d');

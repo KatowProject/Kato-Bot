@@ -258,11 +258,6 @@ class DonaturManager {
             const msg = _data.supporter_message;
             const date = new Date(_data.created_at);
 
-            // date with format DD/MM/YYYY
-            const dateNow = moment(date).format('DD/MM/YYYY');
-            // get time HH:mm
-            const time = moment(date).format('HH:mm');
-
             const u_d = name.split("#");
             const username = u_d[0];
             const discriminator = u_d[1];
@@ -276,10 +271,10 @@ class DonaturManager {
 
             const canvas = new DiscordCanvas().loadDonaturNotification();
             canvas.setUsername(name);
-            canvas.setDonation(`x${value}`);
             canvas.setSupportMessage(`"${msg}"`);
-            canvas.setDate(`${dateNow} ${time}`);
-            canvas.setNominal(`Rp. ${nominal}`);
+            canvas.setDate(new Date(date));
+            canvas.setDonation(parseInt(value));
+            canvas.setNominal(parseInt(value) * 10000);
 
             if (member)
                 await canvas.setAvatar(member.user.displayAvatarURL({ extension: 'png', size: 4096 }));
