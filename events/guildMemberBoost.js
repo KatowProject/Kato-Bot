@@ -23,7 +23,7 @@ module.exports = async (client, member) => {
         .setAuthor({ name: 'Member Boost', iconURL: 'https://cdn.discordapp.com/emojis/638719606738911236.gif' })
         .setDescription(`Hai <@${member.user.id}>, terima kasih telah boost di server Perkumpulan Orang Santai ヾ(≧▽≦*)o `)
         .setImage(images[random])
-    // client.channels.cache.find(a => a.name === 'chit-chat').send({ embeds: [embed] });
+    client.channels.cache.find(a => a.name === 'chit-chat').send({ embeds: [embed] });
 
     // set username
     const boosterNotification = new DiscordCanvas().loadBoosterNotification();
@@ -42,5 +42,5 @@ module.exports = async (client, member) => {
     const webhook = new WebhookClient({ id, token });
     webhook.send({ files: [attachment] });
 
-    // await client.donaturManager.addDonaturBooster(member);
+    await client.donaturManager.addDonaturBooster(member);
 }
