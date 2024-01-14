@@ -272,14 +272,14 @@ class Trakteer {
             }
         });
     }
-    init(xsrfToken, trakteerSession) {
+    init(xsrfToken, trakteerSession, proxy) {
         if (!xsrfToken)
             throw new Error('xsrfToken is required');
         if (!trakteerSession)
             throw new Error('trakteerSession is required');
         this.XSRF_TOKEN = xsrfToken;
         this.TRAKTEER_SESSION = trakteerSession;
-        this.axios = new tools_1.default({ XSRF_TOKEN: this.XSRF_TOKEN, TRAKTEER_SESSION: this.TRAKTEER_SESSION });
+        this.axios = new tools_1.default({ XSRF_TOKEN: this.XSRF_TOKEN, TRAKTEER_SESSION: this.TRAKTEER_SESSION }, proxy);
         this.ready = true;
     }
 }
