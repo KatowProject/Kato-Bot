@@ -12,6 +12,7 @@ class Trakteer {
     private notificationWebhookUrl: String | any = undefined;
     protected XSRF_TOKEN: String | undefined;
     protected TRAKTEER_SESSION: String | undefined;
+    protected Proxy: String | undefined;
     protected TIME_NOTIFICATION: Number | undefined;
     protected WEBHOOK_URL: String | undefined;
 
@@ -228,7 +229,7 @@ class Trakteer {
         if (!enable) {
             this.notificationEnabled = false;
             this.notificationWebhookUrl = null;
-            if (this.notificationInterval) clearInterval(this.notificationInterval);
+            if (this.notificationInterval) clearInterval(this.notificationInterval as NodeJS.Timeout);
 
             console.log('Trakteer webhook notification disabled');
             return;
@@ -236,7 +237,7 @@ class Trakteer {
 
         if (!timeout) throw new Error('Timeout is required');
         if (!webhookUrl) throw new Error('Webhook URL is required');
-        if (this.notificationInterval) clearInterval(this.notificationInterval);
+        if (this.notificationInterval) clearInterval(this.notificationInterval as NodeJS.Timeout);
 
         this.notificationInterval = setInterval(this.fetchNotification.bind(this), timeout);
         this.notificationEnabled = true;
@@ -278,13 +279,13 @@ class Trakteer {
         }
     }
 
-    init(xsrfToken: String, trakteerSession: String): void {
+    init(xsrfToken: string, trakteerSession: string, proxy?: string): void {
         if (!xsrfToken) throw new Error('xsrfToken is required');
         if (!trakteerSession) throw new Error('trakteerSession is required');
 
         this.XSRF_TOKEN = xsrfToken;
         this.TRAKTEER_SESSION = trakteerSession;
-        this.axios = new Axios({ XSRF_TOKEN: this.XSRF_TOKEN, TRAKTEER_SESSION: this.TRAKTEER_SESSION });
+        this.axios = new Axios({ XSRF_TOKEN: this.XSRF_TOKEN, TRAKTEER_SESSION: this.TRAKTEER_SESSION }, proxy);
 
         this.ready = true;
     }

@@ -13,47 +13,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
+const http_proxy_agent_1 = require("http-proxy-agent");
 class AxiosRequest {
-    constructor(auth) {
+    constructor(auth, proxy) {
         this.self = axios_1.default;
         this.BASE_URL = "https://trakteer.id/";
-        this.request = axios_1.default.create({
-            baseURL: this.BASE_URL,
-            timeout: 10000,
-            headers: {
-                "User-Agent": "Mozilla/5.0 (Linux; Android 10; Redmi Note 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
-                "Accept": "application/json, text/plain, */*",
-                "Referer": "https://trakteer.id/",
-                "Cookie": `XSRF-TOKEN=${auth.XSRF_TOKEN}; trakteer-sess=${auth.TRAKTEER_SESSION}`
-            }
-        });
+        if (proxy)
+            this.request = axios_1.default.create({
+                baseURL: this.BASE_URL,
+                timeout: 10000,
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Linux; Android 10; Redmi Note 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
+                    "Accept": "application/json, text/plain, */*",
+                    "Referer": "https://trakteer.id/",
+                    "cookie": `XSRF-TOKEN=${auth.XSRF_TOKEN}; trakteer-sess=${auth.TRAKTEER_SESSION}`
+                },
+                httpAgent: new http_proxy_agent_1.HttpProxyAgent(proxy)
+            });
+        else
+            this.request = axios_1.default.create({
+                baseURL: this.BASE_URL,
+                timeout: 10000,
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Linux; Android 10; Redmi Note 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
+                    "Accept": "application/json, text/plain, */*",
+                    "Referer": "https://trakteer.id/",
+                    "cookie": `XSRF-TOKEN=${auth.XSRF_TOKEN}; trakteer-sess=${auth.TRAKTEER_SESSION}`
+                }
+            });
     }
     get(endpoint, params = {}) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const response = yield this.request.get(endpoint, { params: params });
-                return resolve(response);
-            }
-            catch (err) {
-                // if 403 bypass the cloudflare
-                if (err.response.status === 403) {
-                    const response = yield this.__bypass(endpoint, "GET", this.request.defaults.headers, {}, params);
-                    return resolve(response);
-                }
-                return reject(err);
-            }
-        }));
-    }
-    __bypass(endpoint, method, headers = {}, data = {}, params = {}) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const bs64 = Buffer.from(`${this.BASE_URL}${endpoint}?${new URLSearchParams(params).toString()}`).toString("base64");
-                const response = yield this.self({
-                    url: `https://bypass.katowproject.dev/trakteer.php?q=${bs64}`,
-                    method: method,
-                    headers: headers,
-                    data: data
-                });
                 return resolve(response);
             }
             catch (err) {
