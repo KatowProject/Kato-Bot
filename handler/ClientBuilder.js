@@ -31,7 +31,7 @@ module.exports = class Kato extends Client {
         this.donaturManager.init();
         this.giveaway.init();
         this.katoShop.init();
-        this.trakteer.init(process.env.TRAKTEER_XSRF_TOKEN, process.env.TRAKTEER_ID_SESSION);
+        this.trakteer.init(process.env.TRAKTEER_XSRF_TOKEN, process.env.TRAKTEER_ID_SESSION, process.env.TRAKTEER_PROXY_URL);
         this.selfbot.init(true);
         this.form.init();
 
