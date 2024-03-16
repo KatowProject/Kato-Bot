@@ -5,6 +5,7 @@ const Xps = require('../database/schemas/Xp');
 const DiscordCanvas = require('../modules/Discord-Canvas');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Jakarta').locale('id');
+const path = require('path');
 
 class DonaturManager {
     /**
@@ -279,7 +280,7 @@ class DonaturManager {
             if (member)
                 await canvas.setAvatar(member.user.displayAvatarURL({ extension: 'png', size: 4096 }));
             else
-                await canvas.setAvatar("https://cdn.discordapp.com/attachments/1013977865756356658/1041700094598193253/santai1.png");
+                await canvas.setAvatar(path.join(__dirname, '../', 'assets', 'santai.png'));
 
             const buffer = await canvas.generate();
             const attachment = new AttachmentBuilder(buffer, { name: 'donatur.png' });
