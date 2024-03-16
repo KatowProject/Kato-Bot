@@ -97,7 +97,7 @@ class DonaturNotification {
      * @returns {Promise<void>}
      */
     async setAvatar(avatar) {
-        if (!avatar.includes('http')) throw new Error('Avatar must be a valid URL');
+        // if (!avatar.includes('http')) throw new Error('Avatar must be a valid URL');
         this.avatar = await loadImage(avatar);
     }
 
