@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { HttpProxyAgent } from "http-proxy-agent";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 class AxiosRequest {
     public request: AxiosInstance;
@@ -17,7 +18,8 @@ class AxiosRequest {
                     "Referer": "https://trakteer.id/",
                     "cookie": `XSRF-TOKEN=${auth.XSRF_TOKEN}; trakteer-sess=${auth.TRAKTEER_SESSION}`
                 },
-                httpAgent: new HttpProxyAgent(proxy)
+                httpAgent: new HttpProxyAgent(proxy),
+                httpsAgent: new HttpsProxyAgent(proxy)
             });
         else
             this.request = axios.create({

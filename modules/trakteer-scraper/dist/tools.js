@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const http_proxy_agent_1 = require("http-proxy-agent");
+const https_proxy_agent_1 = require("https-proxy-agent");
 class AxiosRequest {
     constructor(auth, proxy) {
         this.self = axios_1.default;
@@ -28,7 +29,8 @@ class AxiosRequest {
                     "Referer": "https://trakteer.id/",
                     "cookie": `XSRF-TOKEN=${auth.XSRF_TOKEN}; trakteer-sess=${auth.TRAKTEER_SESSION}`
                 },
-                httpAgent: new http_proxy_agent_1.HttpProxyAgent(proxy)
+                httpAgent: new http_proxy_agent_1.HttpProxyAgent(proxy),
+                httpsAgent: new https_proxy_agent_1.HttpsProxyAgent(proxy)
             });
         else
             this.request = axios_1.default.create({
