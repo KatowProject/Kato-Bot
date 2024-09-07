@@ -1,0 +1,9 @@
+.env
+node_modules
+
+config/*
+!config/*example*
+
+*.env
+*latestDonatur.txt
+env.prod
