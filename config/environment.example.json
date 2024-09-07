@@ -1,0 +1,22 @@
+{
+    "is_production": false,
+    "database": {
+        "uri": "mongodb://localhost:27017/kato",
+        "options": {
+            "useNewUrlParser": true,
+            "useUnifiedTopology": true,
+            "useFindAndModify": false,
+            "useCreateIndex": true
+        }
+    },
+    "discord": {
+        "token": "insert token here",
+        "token_dev": "insert token here",
+        "prefix": ["k#", "k'"],
+        "owners": ["458342161474387999"],
+        "owner_only": false
+    },
+    "giveaway": {
+        "interval": 60000
+    }
+}

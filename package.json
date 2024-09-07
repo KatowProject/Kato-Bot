@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "axios": "^1.7.7",
+    "colors": "^1.4.0",
+    "discord-logs": "^2.2.1",
+    "discord.js": "^14.16.1",
+    "mongoose": "^8.6.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.10.0",
+    "eslint": "^9.10.0",
+    "globals": "^15.9.0",
+    "nodemon": "^3.1.4"
+  },
+  "name": "kato-bot",
+  "version": "1.5.0",
+  "description": "Kato-Bot",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KatowProject"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "KatowProject",
+  "license": "CC-BY-SA-4.0"
+}
