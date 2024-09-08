@@ -7,6 +7,7 @@ export default [
     languageOptions: { sourceType: "commonjs" },
     rules: {
       "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z].*" }],
+      "max-len": ["error", { code: 150 }],
     },
   },
   { languageOptions: { globals: globals.node } },

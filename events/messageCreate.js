@@ -38,6 +38,11 @@ module.exports = async (client, message) => {
     cooldowns.set(command.help.name, new Collection());
   }
 
+  if (!client.config.discord.owners.includes(sender.id)) {
+    const isValid = await require("../handler/command")(client, message, cmd);
+    if (!isValid) return;
+  }
+
   const member = message.member;
   const now = Date.now();
   const timestamps = cooldowns.get(command.help.name);

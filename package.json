@@ -5,7 +5,8 @@
     "dateformat": "^4.6.3",
     "discord-logs": "^2.2.1",
     "discord.js": "^14.16.1",
-    "mongoose": "^8.6.1"
+    "mongoose": "^8.6.1",
+    "snekfetch": "^4.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",

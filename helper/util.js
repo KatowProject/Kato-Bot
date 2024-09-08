@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+const axios = require("axios");
+const snek = require("snekfetch");
+
 class Util {
   constructor() {
     this.numberString = function numberWithCommas(x) {
@@ -185,7 +189,10 @@ class Util {
       // if the image is a gif or not.
       if (dynamicFormat) {
         const { headers } = await axios.head(baseUrl);
-        if (headers && headers.hasOwnProperty("content-type")) {
+        if (
+          headers &&
+          Object.prototype.hasOwnProperty.call(headers, "content-type")
+        ) {
           return (
             baseUrl +
             (headers["content-type"] == "image/gif"

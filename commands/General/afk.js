@@ -12,8 +12,8 @@ exports.run = async (client, message, args) => {
     if (!afk) {
       const nickname = member.nickname ? member.nickname : member.user.username;
 
-      const memberRolePosition = member.roles.highest.position;
-      const meRolePosition = me.roles.highest.position;
+      const memberRolePosition = member.roles.highest.rawPosition;
+      const meRolePosition = me.roles.highest.rawPosition;
       message.channel.send({
         content: `**${message.author.tag}** telah AFK!\n**Alasan:** ${
           reason ? reason : "AFK"
@@ -29,7 +29,11 @@ exports.run = async (client, message, args) => {
         });
       }, 7000);
 
-      if (memberRolePosition > meRolePosition) return;
+      if (
+        (memberRolePosition > meRolePosition) &
+        !me.permissions.has("MANAGE_NICKNAMES")
+      )
+        return;
       if (nickname.length < 26) member.setNickname(`[AFK] ${nickname}`);
     } else {
       await AFK.findOneAndDelete({ userID: message.author.id });
