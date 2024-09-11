@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const colors = require("colors");
 const fs = require("fs");
 
 module.exports = (client) => {
@@ -22,7 +23,12 @@ module.exports = (client) => {
         if (err) console.log(err);
         files.forEach((file) => {
           if (!file.endsWith(".js")) return;
-          let prop = require(`../commands/${category}/${file}`);
+          const prop = require(`../commands/${category}/${file}`);
+          if (!prop.help || !prop.conf)
+            return console.log(
+              colors.red(`Error: ${file} tidak memiliki module.exports`)
+            );
+
           client.commands.set(prop.help.name, prop);
           prop.conf.aliases.forEach((alias) => {
             client.aliases.set(alias, prop.help.name);
