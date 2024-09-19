@@ -5,6 +5,7 @@
     "dateformat": "^4.6.3",
     "discord-logs": "^2.2.1",
     "discord.js": "^14.16.1",
+    "jszip": "^3.10.1",
     "mongoose": "^8.6.1",
     "snekfetch": "^4.0.4"
   },
@@ -19,7 +20,7 @@
   "description": "Kato-Bot",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon index.js",
+    "start:dev": "nodemon index.js --watch '!*.json'",
     "start": "node index.js",
     "lint": "eslint ."
   },
