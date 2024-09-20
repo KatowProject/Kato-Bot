@@ -1,4 +1,3 @@
-const { Guild } = require("discord.js");
 const { Schema, model, models } = require("mongoose");
 
 const cmdChannelSchema = new Schema({

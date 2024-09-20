@@ -20,7 +20,7 @@
   "description": "Kato-Bot",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon index.js --watch '!*.json'",
+    "start:dev": "nodemon index.js --watch '*.js'",
     "start": "node index.js",
     "lint": "eslint ."
   },
