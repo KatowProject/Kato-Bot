@@ -3,6 +3,8 @@ const { Client, Collection } = require("discord.js");
 const Util = require("../helper/util");
 const config = require("../config/environment.json");
 
+const Giveaway = require("../modules/Giveaway");
+
 class Kato extends Client {
   constructor(opt) {
     super(opt);
@@ -14,6 +16,8 @@ class Kato extends Client {
     this.helps = new Collection();
     this.cache = new Collection();
 
+    this.giveaway = new Giveaway(this, this.config.giveaway.interval);
+
     this.init();
   }
 
@@ -22,6 +26,10 @@ class Kato extends Client {
     require("./module")(this);
     require("./database")(this.config.database.uri);
     require("discord-logs")(this);
+
+    this.giveaway.init();
+
+    setInterval(() => require("../modules/mee6")(), 360_000);
   }
 
   async login() {
