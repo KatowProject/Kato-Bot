@@ -31,7 +31,8 @@ module.exports = async (client, message) => {
   const cmd = args.shift().toLowerCase();
   const sender = message.author;
 
-  const command = client.commands.get(cmd) || client.aliases.get(cmd);
+  const command =
+    client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
   if (!command) return;
 
   if (!cooldowns.has(command.help.name)) {

@@ -16,10 +16,16 @@ exports.run = async (client, message, args) => {
         "Kamu tidak memiliki izin untuk menggunakan perintah ini!"
       );
 
-    const request = args.join(" ");
+    const cmdName = args[0];
+    if (!cmdName)
+      return message.reply(
+        "Pilih perintah yang ingin ditentukan `[on / off / list]`\n**Contoh: k!cmd ping on**"
+      );
+
+    const request = args[1];
     if (!request)
       return message.reply(
-        "Pilih Opsi yang ingin ditentukan `[on / off]`\n**Contoh: k!cmd ping on**"
+        "Pilih Opsi yang ingin ditentukan `[on / off / list]`\n**Contoh: k!cmd ping on**"
       );
 
     const cmd = client.commands.get(args[0])?.help;
@@ -31,15 +37,62 @@ exports.run = async (client, message, args) => {
         guild: message.guild.id,
         commands: [],
       });
+    }
+
+    const findCmd = guildCmd.commands.find((c) => c.name === cmd.name);
+    if (!findCmd) {
+      guildCmd.commands.push({
+        name: cmd.name,
+        channels: [],
+      });
 
       await guildCmd.save();
     }
 
-    const command = guildCmd.commands.find((c) => c.name === cmd.name);
-    console.log(command);
+    const cmdIndex = guildCmd.commands.findIndex((c) => c.name === cmd.name);
+    const cmdData = guildCmd.commands[cmdIndex];
+
+    if (request === "on") {
+      if (!cmdData.channels.includes(message.channel.id))
+        return message.reply("Perintah ini tidak dimatikan di channel ini!");
+
+      // remove channel from array
+      cmdData.channels = cmdData.channels.filter(
+        (c) => c !== message.channel.id
+      );
+
+      await guildCmd.save();
+
+      return message.reply(
+        `Perintah \`${cmd.name}\` telah diaktifkan di channel ini!`
+      );
+    } else if (request === "off") {
+      if (cmdData.channels.includes(message.channel.id))
+        return message.reply("Perintah ini sudah dimatikan di channel ini!");
+
+      cmdData.channels.push(message.channel.id);
+
+      await guildCmd.save();
+
+      return message.reply(
+        `Perintah \`${cmd.name}\` telah dimatikan di channel ini!`
+      );
+    } else if (request === "list") {
+      const embed = new EmbedBuilder()
+        .setTitle(
+          `Daftar Channel yang diaktifkan untuk perintah \`${cmd.name}\``
+        )
+        .setDescription(
+          cmdData.channels.map((c) => `<#${c}>`).join(", ") ||
+            "Tidak ada channel yang diaktifkan!"
+        )
+        .setColor("Random")
+        .setTimestamp();
+
+      return message.channel.send({ embeds: [embed] });
+    } 
   } catch (error) {
     return message.reply("sepertinya ada kesalahan:\n" + error.message);
-    // Restart the bot as usual.
   }
 };
 
