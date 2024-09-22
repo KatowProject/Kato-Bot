@@ -29,7 +29,7 @@ class Kato extends Client {
 
     this.giveaway.init();
 
-    setInterval(() => require("../modules/mee6")(), 360_000);
+    setInterval(() => require("../modules/Mee6")(), 360_000);
   }
 
   async login() {
