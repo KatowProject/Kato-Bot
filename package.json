@@ -6,6 +6,7 @@
     "discord-logs": "^2.2.1",
     "discord.js": "^14.16.1",
     "jszip": "^3.10.1",
+    "moment-timezone": "^0.5.45",
     "mongoose": "^8.6.1",
     "snekfetch": "^4.0.4"
   },
