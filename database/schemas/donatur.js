@@ -1,4 +1,4 @@
-const { Schema, model, models } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const DonaturSchema = new Schema({
   userID: {
@@ -36,4 +36,4 @@ const DonaturSchema = new Schema({
   },
 });
 
-module.exports = models.DONATUR || model("DONATUR", DonaturSchema);
+module.exports = model("DONATUR", DonaturSchema);

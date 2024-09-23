@@ -27,7 +27,6 @@ module.exports = class DonaturManager {
   }
 
   /**
-   *
    * @param {GuildMember} member
    */
   async createBooster(member) {
@@ -37,15 +36,23 @@ module.exports = class DonaturManager {
       if (!userXp) return;
 
       const donatur = await Donatur.findOne({ userID: member.id });
-      if (donatur) return;
+      if (donatur) {
+        donatur.isBooster = true;
 
-      await new Donatur({
-        userID: member.id,
-        guildID: member.guild.id,
-        isBooster: true,
-      }).save();
+        await donatur.save();
+      } else {
+        await new Donatur({
+          userID: member.id,
+          guildID: member.guild.id,
+          isBooster: true,
+          message: {
+            daily: 0,
+            base: userXp.message_count,
+          },
+        }).save();
+      }
 
-      this.client.emit("donaturManagerSuccess", {
+      this.client.emit("donaturManager", {
         type: "createBooster",
         status: "success",
         data: {
@@ -55,7 +62,7 @@ module.exports = class DonaturManager {
         },
       });
     } catch (err) {
-      this.client.emit("donaturManagerError", {
+      this.client.emit("donaturManager", {
         type: "createBooster",
         status: "error",
         error: err,
@@ -75,27 +82,45 @@ module.exports = class DonaturManager {
       if (!userXp) return;
 
       const donatur = await Donatur.findOne({ userID: member.id });
-      if (donatur) return;
+      if (donatur) {
+        donatur.time.duration += duration;
 
-      await new Donatur({
-        userID: member.id,
-        guildID: member.guild.id,
-        time: {
-          duration,
-        },
-      }).save();
+        await donatur.save();
 
-      this.client.emit("donaturManagerSuccess", {
-        type: "createDonatur",
-        status: "success",
-        data: {
-          user: member,
-          guild: member.guild,
-          duration,
-        },
-      });
+        this.client.emit("donaturManager", {
+          type: "extendDonatur",
+          status: "success",
+          data: {
+            user: member,
+            guild: member.guild,
+            duration,
+          },
+        });
+      } else {
+        await new Donatur({
+          userID: member.id,
+          guildID: member.guild.id,
+          time: {
+            duration,
+          },
+          message: {
+            daily: 0,
+            base: userXp.message_count,
+          },
+        }).save();
+
+        this.client.emit("donaturManager", {
+          type: "createDonatur",
+          status: "success",
+          data: {
+            user: member,
+            guild: member.guild,
+            duration,
+          },
+        });
+      }
     } catch (err) {
-      this.client.emit("donaturManagerError", {
+      this.client.emit("donaturManager", {
         type: "createDonatur",
         status: "error",
         error: err,
@@ -105,16 +130,118 @@ module.exports = class DonaturManager {
 
   /**
    * Check donatur duration
+   * @return {Promise<void>}
    */
   async checkDonaturDuration() {
     try {
       const donaturs = await Donatur.find();
+      for (const donatur of donaturs) {
+        const guild = this.client.guilds.cache.get(donatur.guildID);
+        const member = guild.members.cache.get(donatur.userID);
+
+        if (!member) {
+          const now = Date.now();
+          const past = donatur.time.now;
+
+          const timeLeft = donatur.time.duration - (now - past);
+
+          if (timeLeft <= 0)
+            await Donatur.deleteOne({ userID: donatur.userID });
+
+          continue;
+        }
+
+        if (member.premiumSince) {
+          donatur.isBooster = true;
+
+          await donatur.save();
+        } else {
+          donatur.isBooster = false;
+        }
+
+        if (donatur.isBooster) continue;
+
+        const now = Date.now();
+        const past = donatur.time.now;
+
+        const timeLeft = donatur.time.duration - (now - past);
+        if (timeLeft <= 0) {
+          await donatur.remove();
+
+          this.client.emit("donaturManager", {
+            type: "donaturDuration",
+            status: "expired",
+            data: {
+              user: member,
+              guild,
+              timeLeft,
+            },
+          });
+        }
+      }
     } catch (err) {
-      this.client.emit("donaturManagerError", {
-        type: "checkDonaturDuration",
+      this.client.emit("donaturManager", {
+        type: "donaturDuration",
         status: "error",
         error: err,
       });
+    }
+  }
+
+  async dailyDonatur(reset = false) {
+    try {
+      const time = moment().format("HH:mm");
+
+      if (time === "00:00" || time === "12:00" || reset) {
+        this.__resetDailyDonatur();
+      } else {
+        this.__xpDonatur();
+      }
+    } catch (err) {
+      this.client.emit("donaturManager", {
+        type: "dailyDonatur",
+        status: "error",
+        error: err,
+      });
+    }
+  }
+
+  async __xpDonatur() {
+    const donaturs = await Donatur.find();
+    const xps = await Xp.findOne();
+
+    for (const donatur of donaturs) {
+      const guild = this.client.guilds.cache.get(donatur.guildID);
+      const member = guild.members.cache.get(donatur.userID);
+
+      if (!member) continue;
+
+      const userXp = xps.data.find((x) => x.id === member.id);
+      if (!userXp) continue;
+
+      donatur.message.daily = userXp.message_count - donatur.message.base;
+
+      await donatur.save();
+    }
+  }
+
+  async __resetDailyDonatur() {
+    const donaturs = await Donatur.find();
+    const xps = await Xp.findOne();
+
+    for (const donatur of donaturs) {
+      const guild = this.client.guilds.cache.get(donatur.guildID);
+      const member = guild.members.cache.get(donatur.userID);
+
+      if (!member) continue;
+
+      const userXp = xps.data.find((x) => x.id === member.id);
+      if (!userXp) continue;
+
+      donatur.message.daily = 0;
+      donatur.message.base = userXp.message_count;
+
+      await donatur.save();
     }
   }
 };
