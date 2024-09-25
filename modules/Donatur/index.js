@@ -36,7 +36,9 @@ module.exports = class DonaturManager {
       if (!userXp) return;
 
       const donatur = await Donatur.findOne({ userID: member.id });
+      
       if (donatur) {
+        if (!donatur.isBooster) throw new Error("User is already a donatur.");
         donatur.isBooster = true;
 
         await donatur.save();
