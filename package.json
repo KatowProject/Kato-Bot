@@ -21,6 +21,8 @@
   "description": "Kato-Bot",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run install:deps",
+    "install:deps": "for d in ./modules/*/; do (cd \"$d\" && [ -f package.json ] && npm install); done",
     "start:dev": "nodemon index.js --watch '*.js'",
     "start": "node index.js",
     "lint": "eslint ."
