@@ -29,6 +29,7 @@ class Kato extends Client {
     require("./database")(this.config.database.uri);
     require("discord-logs")(this);
 
+    this.selfbot.init(true);
     this.giveaway.init();
 
     setInterval(() => require("../modules/Mee6")(), 360_000);
@@ -48,3 +49,4 @@ class Kato extends Client {
 }
 
 module.exports = Kato;
+ 

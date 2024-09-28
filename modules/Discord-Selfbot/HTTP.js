@@ -1,10 +1,8 @@
-const axios = require("axios");
+const axios = require("axios").default;
 const baseURL = "https://discord.com/api/v9";
 
-class HTTP extends axios {
+class HTTP {
   constructor(client) {
-    super();
-
     this.device = client.device;
     this.request = axios.create({
       baseURL,
@@ -19,11 +17,16 @@ class HTTP extends axios {
   }
 
   async get(url, options = {}) {
-    return this.request.get(url, options);
+    return await this.request.get(url, options);
   }
 
   async post(url, data = {}, options = {}) {
-    return this.request.post(url, data, options);
+    this.request.defaults.headers = [
+      ...this.request.defaults.headers,
+      ...options.headers,
+    ];
+
+    return await this.request.post(url, data);
   }
 }
 

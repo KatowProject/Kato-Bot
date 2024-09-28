@@ -252,7 +252,7 @@ module.exports = class DonaturManager {
 
   async giveXpDonatur(xp, id) {
     this.client.selfbot.sendMessage(
-      this.client.config.discord.channel_message,
+      this.client.config.discord.channel_message.bot,
       `!give-xp <@${id}> ${xp}`,
       true
     );
