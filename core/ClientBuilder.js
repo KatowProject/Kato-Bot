@@ -4,6 +4,7 @@ const Util = require("../helper/util");
 const config = require("../config/environment.json");
 
 const Giveaway = require("../modules/Giveaway");
+const Selfbot = require("../modules/Discord-Selfbot");
 
 class Kato extends Client {
   constructor(opt) {
@@ -17,6 +18,7 @@ class Kato extends Client {
     this.cache = new Collection();
 
     this.giveaway = new Giveaway(this, this.config.giveaway.interval);
+    this.selfbot = new Selfbot(this.config.selfbot);
 
     this.init();
   }

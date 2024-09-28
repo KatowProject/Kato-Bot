@@ -18,6 +18,7 @@ class Discord {
       const UAs = await axios
         .get("https://jnrbsn.github.io/user-agents/user-agents.json")
         .then((res) => res.data);
+
       const UserAgent = new UAParser(
         UAs[Math.floor(Math.random() * UAs.length)]
       );
@@ -57,14 +58,14 @@ class Discord {
     if (!this.loaded) throw new Error("Service not loaded");
 
     try {
-      random
-        ? (this.request.defaults.headers.Authorization = this.randomNumber(
-            this.tokens
-          ))
-        : (this.request.defaults.headers.Authorization = this.tokens[0]);
-
       const url = `/channels/${channel}/messages?limit=${limit}`;
-      const response = await this.request.get(url);
+      const response = await this.request.get(url, {
+        headers: {
+          Authorization: random
+            ? this.randomNumber(this.tokens)
+            : this.tokens[0],
+        },
+      });
 
       return response.data;
     } catch (err) {
@@ -75,20 +76,24 @@ class Discord {
   async sendMessage(channel, message, random = false) {
     if (!this.loaded) throw new Error("Service not loaded");
     try {
-      random
-        ? (this.request.defaults.headers.Authorization = this.randomNumber(
-            this.tokens
-          ))
-        : (this.request.defaults.headers.Authorization = this.tokens[0]);
-
       const url = `/channels/${channel}/messages`;
       //generate unix epoch time
       const xxxx = (Date.now() - 1420070400000) * 4194304;
-      const response = await this.request.post(url, {
-        content: message,
-        tts: false,
-        nonce: xxxx,
-      });
+      const response = await this.request.post(
+        url,
+        {
+          content: message,
+          tts: false,
+          nonce: xxxx,
+        },
+        {
+          headers: {
+            Authorization: random
+              ? this.randomNumber(this.tokens)
+              : this.tokens[0],
+          },
+        }
+      );
       return response.data;
     } catch (err) {
       //get status text

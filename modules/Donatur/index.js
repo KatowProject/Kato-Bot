@@ -240,6 +240,9 @@ module.exports = class DonaturManager {
       const userXp = xps.data.find((x) => x.id === member.id);
       if (!userXp) continue;
 
+      const xp = DonaturManager.convertXp(donatur.message.daily);
+      if (xp > 0) this.giveXpDonatur(xp, member.id);
+
       donatur.message.daily = 0;
       donatur.message.base = userXp.message_count;
 
@@ -247,5 +250,11 @@ module.exports = class DonaturManager {
     }
   }
 
-  async giveXpDonatur() {}
+  async giveXpDonatur(xp, id) {
+    this.client.selfbot.sendMessage(
+      this.client.config.discord.channel_message,
+      `!give-xp <@${id}> ${xp}`,
+      true
+    );
+  }
 };

@@ -5,7 +5,6 @@ class HTTP extends axios {
   constructor(client) {
     super();
 
-    this.tokens = client.tokens;
     this.device = client.device;
     this.request = axios.create({
       baseURL,
@@ -17,6 +16,14 @@ class HTTP extends axios {
       },
       responseType: "json",
     });
+  }
+
+  async get(url, options = {}) {
+    return this.request.get(url, options);
+  }
+
+  async post(url, data = {}, options = {}) {
+    return this.request.post(url, data, options);
   }
 }
 
