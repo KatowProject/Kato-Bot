@@ -9,3 +9,6 @@ config/*
 env.prod
 
 database/backup/*
+
+# ignore package-lock.json in modules folder
+modules/*/package-lock.json

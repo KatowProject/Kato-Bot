@@ -14,7 +14,8 @@
     "@eslint/js": "^9.10.0",
     "eslint": "^9.10.0",
     "globals": "^15.9.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "npm-run-all": "^4.1.5"
   },
   "name": "kato-bot",
   "version": "1.5.0",
@@ -22,7 +23,8 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "npm run install:deps",
-    "install:deps": "for d in ./modules/*/; do (cd \"$d\" && [ -f package.json ] && npm install); done",
+    "install:deps": "npm-run-all install:deps:*",
+    "install:deps:modules": "node -e \"require('fs').readdirSync('./modules').forEach(d => { const p = `./modules/${d}/package.json`; if (require('fs').existsSync(p)) { require('child_process').execSync('npm install', { cwd: `./modules/${d}` }); } })\"",
     "start:dev": "nodemon index.js --watch '*.js'",
     "start": "node index.js",
     "lint": "eslint ."
