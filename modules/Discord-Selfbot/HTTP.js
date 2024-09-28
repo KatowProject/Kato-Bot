@@ -21,12 +21,7 @@ class HTTP {
   }
 
   async post(url, data = {}, options = {}) {
-    this.request.defaults.headers = [
-      ...this.request.defaults.headers,
-      ...options.headers,
-    ];
-
-    return await this.request.post(url, data);
+    return await this.request.post(url, data, options);
   }
 }
 

@@ -5,6 +5,7 @@ const config = require("../config/environment.json");
 
 const Giveaway = require("../modules/Giveaway");
 const Selfbot = require("../modules/Discord-Selfbot");
+const DonaturManager = require("../modules/Donatur");
 
 class Kato extends Client {
   constructor(opt) {
@@ -19,6 +20,7 @@ class Kato extends Client {
 
     this.giveaway = new Giveaway(this, this.config.giveaway.interval);
     this.selfbot = new Selfbot(this.config.selfbot);
+    this.donatur = new DonaturManager(this);
 
     this.init();
   }
@@ -31,8 +33,9 @@ class Kato extends Client {
 
     this.selfbot.init(true);
     this.giveaway.init();
+    this.donatur.init();
 
-    setInterval(() => require("../modules/Mee6")(), 360_000);
+    setInterval(() => require("../modules/Mee6")(), 600000);
   }
 
   async login() {
