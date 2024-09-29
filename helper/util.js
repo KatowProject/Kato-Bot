@@ -130,15 +130,24 @@ class Util {
       seconds = seconds % 3600;
       let minutes = parseInt(seconds / 60);
       seconds = parseInt(seconds % 60);
+    
+      let result = [];
 
       if (days) {
-        return `${days} day, ${hours} hours, ${minutes} minutes`;
-      } else if (hours) {
-        return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-      } else if (minutes) {
-        return `${minutes} minutes, ${seconds} seconds`;
+        result.push(`${days} day${days > 1 ? "s" : ""}`);
       }
-      return `${seconds} seconds`;
+      if (hours) {
+        result.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+      }
+      if (minutes) {
+        result.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+      }
+      if (seconds || result.length === 0) {
+        // Show seconds if it's non-zero or if all other units are zero
+        result.push(`${seconds} second${seconds > 1 ? "s" : ""}`);
+      }
+
+      return result.join(", ");
     };
 
     this.trimArray = function trimArray(arr, maxLen = 10) {

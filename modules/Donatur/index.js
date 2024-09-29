@@ -141,8 +141,14 @@ module.exports = class DonaturManager {
     try {
       const donaturs = await Donatur.find();
       for (const donatur of donaturs) {
-        const guild = await this.client.guilds.fetch({ guild: donatur.guildID, force: true });
-        const member = await guild.members.fetch({ user: donatur.userID, force: true });
+        const guild = await this.client.guilds.fetch({
+          guild: donatur.guildID,
+          force: true,
+        });
+        const member = await guild.members.fetch({
+          user: donatur.userID,
+          force: true,
+        });
 
         if (!member) {
           const now = Date.now();
@@ -237,7 +243,7 @@ module.exports = class DonaturManager {
       // check if document exists (because it's possible to be deleted)
       const doc = await Donatur.findOne({ userID: donatur.userID });
       if (!doc) return;
-                                
+
       await donatur.save();
     }
   }
@@ -287,8 +293,18 @@ module.exports = class DonaturManager {
     }
   }
 
+  async getDonaturById(userId) {
+    if (!userId) throw new Error("User ID is required.");
+    try {
+      const donatur = await Donatur.findOne({ userID: userId });
+      return donatur;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   init() {
-    setInterval( async () => {
+    setInterval(async () => {
       await this.dailyDonatur();
       await this.checkDonaturDuration();
     }, 60_000);
