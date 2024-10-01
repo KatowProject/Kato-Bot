@@ -68,7 +68,19 @@ module.exports = (client, donatur) => {
         break;
 
       case "error":
-        console.error(donatur.error);
+        client.channels.cache
+          .get(client.config.discord.channel_message.error)
+          .send({
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("Error")
+                .setColor("Red")
+                .setDescription(
+                  `Error while creating donatur.\n\`\`\`${donatur.error}\`\`\``
+                )
+                .setTimestamp(),
+            ],
+          });
         break;
     }
   } else if (donatur.type === "donaturDuration") {
@@ -124,13 +136,37 @@ module.exports = (client, donatur) => {
         break;
 
       case "error":
-        console.error(donatur.error);
+        client.channels.cache
+          .get(client.config.discord.channel_message.error)
+          .send({
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("Error")
+                .setColor("Red")
+                .setDescription(
+                  `Error while processing donaturs.\n\`\`\`${donatur.error}\`\`\``
+                )
+                .setTimestamp(),
+            ],
+          });
         break;
     }
   } else if (donatur.type === "dailyDonatur") {
     switch (donatur.status) {
       case "error":
-        console.error(donatur.error);
+        client.channels.cache
+          .get(client.config.discord.channel_message.error)
+          .send({
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("Error")
+                .setColor("Red")
+                .setDescription(
+                  `Error while sending daily donatur message in ${donatur.data.guild.name}.\n\`\`\`${donatur.error}\`\`\``
+                )
+                .setTimestamp(),
+            ],
+          });
         break;
     }
   }

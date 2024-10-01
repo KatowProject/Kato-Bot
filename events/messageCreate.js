@@ -25,6 +25,7 @@ module.exports = async (client, message) => {
 
   require("../handler/attachment")(client, message);
   require("../handler/afk")(client, message);
+  require("../handler/donaturPoster")(client, message);
 
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/g);

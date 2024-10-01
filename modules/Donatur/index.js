@@ -80,6 +80,13 @@ module.exports = class DonaturManager {
    */
   async createDonatur(member, duration) {
     try {
+      if (!member)
+        return this.client.emit("donaturManager", {
+          type: "createDonatur",
+          status: "error",
+          error: "Member tidak ditemukan.",
+        });
+      
       const xp = await Xp.findOne({ guild: member.guild.id });
       const userXp = xp.data.find((x) => x.id === member.id);
       if (!userXp) return;

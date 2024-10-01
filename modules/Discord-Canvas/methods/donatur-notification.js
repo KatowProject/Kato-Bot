@@ -20,31 +20,30 @@ class DonaturNotification {
     }
 
     static wrapText(context, text, x, y, maxWidth, lineHeight) {
-        var words = text.split(' ');
-        var line = '';
-        var lineCount = 0;
-        var lines = [];
+      var words = text.split(" ");
+      var line = "";
+      // var lineCount = 0;
+      var lines = [];
 
-        for (var n = 0; n < words.length; n++) {
-            var testLine = line + words[n] + ' ';
-            var metrics = context.measureText(testLine);
-            var testWidth = metrics.width;
-            if (testWidth > maxWidth && n > 0) {
-                lines.push(line);
-                line = words[n] + ' ';
-            }
-            else {
-                line = testLine;
-            }
+      for (var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          lines.push(line);
+          line = words[n] + " ";
+        } else {
+          line = testLine;
         }
-        lines.push(line);
+      }
+      lines.push(line);
 
-        // Adjust y to place text in the middle of the box
-        y = y - (lines.length - 1) * lineHeight / 2;
+      // Adjust y to place text in the middle of the box
+      y = y - ((lines.length - 1) * lineHeight) / 2;
 
-        for (var i = 0; i < lines.length; i++) {
-            context.fillText(lines[i], x, y + i * lineHeight);
-        }
+      for (var i = 0; i < lines.length; i++) {
+        context.fillText(lines[i], x, y + i * lineHeight);
+      }
     }
 
     /**
