@@ -172,7 +172,7 @@ module.exports = class DonaturManager {
         if (member.premiumSince) {
           donatur.isBooster = true;
 
-          await Donatur.updateOne({ userID: donatur.userID }, ...donatur);
+          await donatur.save();
         } else {
           donatur.isBooster = false;
         }
@@ -183,7 +183,6 @@ module.exports = class DonaturManager {
         const past = donatur.time.now;
 
         const timeLeft = donatur.time.duration - (now - past);
-        console.log(timeLeft);
         if (timeLeft <= 0) {
           await Donatur.deleteOne({ userID: donatur.userID });
 
@@ -206,6 +205,7 @@ module.exports = class DonaturManager {
         }
       }
     } catch (err) {
+      console.log(err);
       this.client.emit("donaturManager", {
         type: "donaturDuration",
         status: "error",
