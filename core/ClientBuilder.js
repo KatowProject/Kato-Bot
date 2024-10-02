@@ -6,6 +6,8 @@ const config = require("../config/environment.json");
 const Giveaway = require("../modules/Giveaway");
 const Selfbot = require("../modules/Discord-Selfbot");
 const DonaturManager = require("../modules/Donatur");
+const TrakteerScraper = require("../modules/trakteer-scraper/dist").default;
+const TrakteerWrapper = require("../modules/Trakteer-Wrapper");
 
 class Kato extends Client {
   constructor(opt) {
@@ -21,6 +23,8 @@ class Kato extends Client {
     this.giveaway = new Giveaway(this, this.config.giveaway.interval);
     this.selfbot = new Selfbot(this.config.selfbot);
     this.donatur = new DonaturManager(this);
+    this.trakteer = new TrakteerScraper();
+    this.wTrakteer = new TrakteerWrapper(this.config.trakteer.token);
 
     this.init();
   }
@@ -34,6 +38,10 @@ class Kato extends Client {
     this.selfbot.init(true);
     this.giveaway.init();
     this.donatur.init();
+    this.trakteer.init(
+      this.config.trakteer["xsrf-token"],
+      this.config.trakteer["xsrf-token"]
+    );
 
     setInterval(() => require("../modules/Mee6")(), 600000);
   }
