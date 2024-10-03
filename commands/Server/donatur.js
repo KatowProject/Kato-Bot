@@ -298,11 +298,30 @@ exports.run = async (client, message, args) => {
         }
       }
       break;
+    default:
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Donatur Command")
+            .setDescription(
+              "```js\n" +
+                `apply <duration> <user>\n` +
+                `status [--all]\n` +
+                "```" +
+                "Contoh penggunaan: `donatur apply 1d @user`"
+            )
+            .setColor("Random")
+            .setFooter({
+              text: "Donatur System",
+              iconURL: message.guild.iconURL({ dynamic: true, size: 4096 }),
+            }),
+        ],
+      });
   }
 };
 
 exports.conf = {
-  aliases: [],
+  aliases: ["dn"],
   cooldown: 5,
 };
 

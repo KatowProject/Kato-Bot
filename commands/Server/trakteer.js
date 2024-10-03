@@ -1,5 +1,5 @@
 const Client = require("../../core/ClientBuilder");
-const { Message } = require("discord.js");
+const { Message, EmbedBuilder } = require("discord.js");
 
 /**
  *
@@ -26,7 +26,26 @@ exports.run = async (client, message, args) => {
         client.trakteer.cekHistoryKas(message);
         break;
       default:
-        return message.reply("Tidak ada opsi yang ditemukan!");
+        return message.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Trakteer Command")
+              .setDescription(
+                "```js\n" +
+                  `saldo\n` +
+                  `donatur\n` +
+                  `leaderboard\n` +
+                  `kas\n` +
+                  "```" +
+                  "Contoh penggunaan: `trakteer saldo`"
+              )
+              .setColor("Random")
+              .setFooter({
+                text: "trakteer.id/santai",
+                iconURL: message.guild.iconURL(),
+              }),
+          ],
+        });
     }
   } catch (error) {
     console.log(error);
@@ -36,7 +55,7 @@ exports.run = async (client, message, args) => {
 };
 
 exports.conf = {
-  aliases: [],
+  aliases: ["tr"],
   cooldown: 1,
   location: __filename,
 };
