@@ -209,7 +209,7 @@ exports.run = async (client, message, args) => {
           });
 
           let pagination = 1;
-          const chunkDonaturs = client.util.chunk(donaturList, 15);
+          const chunkDonaturs = client.util.chunk(donaturList, 10);
 
           const embed = new EmbedBuilder()
             .setColor("Random")
