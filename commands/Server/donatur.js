@@ -203,9 +203,9 @@ exports.run = async (client, message, args) => {
               donatur.time.duration - (Date.now() - donatur.time.now);
             const durasi = client.util.parseDur(timeLeft);
 
-            return `**${i + 1}. <@${donatur.userID}>** [${
+            return `**${i + 1}. <@${donatur.userID}>** \`[${
               donatur.isBooster ? "Booster" : durasi
-            }]`;
+            }]\``;
           });
 
           let pagination = 1;
@@ -240,6 +240,7 @@ exports.run = async (client, message, args) => {
 
           collector.on("collect", async (i) => {
             i.deferUpdate();
+            console.log(i.customId.split("_")[2]);
             switch (i.customId.split("_")[2]) {
               case "left":
                 if (pagination === 1) return;
@@ -264,6 +265,8 @@ exports.run = async (client, message, args) => {
               text: `Page ${pagination} of ${chunkDonaturs.length}`,
               iconURL: message.guild.iconURL({ dynamic: true, size: 4096 }),
             });
+
+            msg.edit({ embeds: [embed], components: [row] });
           });
         } else {
           const donatur = await client.donatur.getDonaturById(
@@ -300,6 +303,88 @@ exports.run = async (client, message, args) => {
         }
       }
       break;
+
+    case "xp":
+      {
+        const donaturs = await client.donatur.getDonatur(message.guild.id);
+
+        const sort = donaturs.sort((a, b) => b.message.daily - a.message.daily);
+        const map = sort.map(
+          (x, i) =>
+            `**${i + 1}.** <@${x.userID}> | \`${x.userID}\` **[${
+              x.message.daily
+            } Message | ${x.message.daily * 10 * 0.25} XP]**`
+        );
+        const chunk = client.util.chunk(map, 10);
+
+        let pagination = 1;
+        const embed = new EmbedBuilder()
+          .setTitle("XP Bonus List")
+          .setAuthor({
+            name: message.guild.name,
+            iconURL: message.guild.iconURL(),
+          })
+          .setColor("#0099ff")
+          .setDescription(chunk[pagination - 1].join("\n"))
+          .setFooter({ text: `Page ${pagination} of ${chunk.length}` });
+
+        const btn = [
+          new ButtonBuilder()
+            .setLabel("< Back")
+            .setStyle(ButtonStyle.Secondary)
+            .setCustomId(`back-${message.id}`),
+          new ButtonBuilder()
+            .setLabel("🗑️")
+            .setStyle(ButtonStyle.Danger)
+            .setCustomId(`delete-${message.id}`),
+          new ButtonBuilder()
+            .setLabel("> Next")
+            .setStyle(ButtonStyle.Secondary)
+            .setCustomId(`next-${message.id}`),
+        ];
+        const m = await message.channel.send({
+          embeds: [embed],
+          components: [new ActionRowBuilder().addComponents(btn)],
+        });
+        const collector = m.channel.createMessageComponentCollector({
+          filter: (msg) => msg.user.id === message.author.id,
+          time: 60_000,
+        });
+        collector.on("collect", async (msg) => {
+          await msg.deferUpdate();
+
+          switch (msg.customId) {
+            case `back-${message.id}`:
+              if (pagination === 1) return;
+              pagination--;
+              embed.setDescription(chunk[pagination - 1].join("\n"));
+              embed.setFooter({
+                text: `Page ${pagination} of ${chunk.length}`,
+              });
+              m.edit({
+                embeds: [embed],
+                components: [new ActionRowBuilder().addComponents(btn)],
+              });
+              break;
+            case `next-${message.id}`:
+              if (pagination === chunk.length) return;
+              pagination++;
+              embed.setDescription(chunk[pagination - 1].join("\n"));
+              embed.setFooter({
+                text: `Page ${pagination} of ${chunk.length}`,
+              });
+              m.edit({
+                embeds: [embed],
+                components: [new ActionRowBuilder().addComponents(btn)],
+              });
+              break;
+            case `delete-${message.id}`:
+              await m.delete();
+              break;
+          }
+        });
+      }
+      break;
     default:
       return message.reply({
         embeds: [
@@ -309,6 +394,7 @@ exports.run = async (client, message, args) => {
               "```js\n" +
                 `apply <duration> <user>\n` +
                 `status [--all]\n` +
+                `xp\n` +
                 "```" +
                 "Contoh penggunaan: `donatur apply 1d @user`"
             )
