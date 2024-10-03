@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const config = require("../config/environment.json");
 
 /**
  *
  * @param {String} url
  * @param {Boolean} isOnce
  */
-module.exports = async (url, isOnce = false) => {
+module.exports = async (isOnce = false) => {
   if (mongoose.connection.readyState !== 1) {
-    await mongoose.connect(url, {
+    await mongoose.connect(config.database.uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,

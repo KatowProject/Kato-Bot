@@ -27,6 +27,8 @@
     "install:deps:modules": "node -e 'require(\"fs\").readdirSync(\"./modules\").forEach(d => { const p = `./modules/${d}/package.json`; if (require(\"fs\").existsSync(p)) { require(\"child_process\").execSync(\"npm install\", { cwd: `./modules/${d}` }); } })'",
     "start:dev": "nodemon index.js --watch '*.js' --watch 'config/environment.json'",
     "start": "node index.js",
+    "database:restore": "node -e 'require(\"./database/restore.js\")(true)'",
+    "database:backup": "node -e 'require(\"./database/backup.js\")(true)'",
     "lint": "eslint ."
   },
   "repository": {
