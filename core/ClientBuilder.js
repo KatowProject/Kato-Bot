@@ -6,7 +6,7 @@ const config = require("../config/environment.json");
 const Giveaway = require("../modules/Giveaway");
 const Selfbot = require("../modules/Discord-Selfbot");
 const DonaturManager = require("../modules/Donatur");
-const TrakteerScraper = require("../modules/trakteer-scraper/dist").default;
+const TrakteerScraper = require("../handler/trakteer");
 const TrakteerWrapper = require("../modules/Trakteer-Wrapper");
 
 class Kato extends Client {
@@ -40,7 +40,7 @@ class Kato extends Client {
     this.donatur.init();
     this.trakteer.init(
       this.config.trakteer["xsrf-token"],
-      this.config.trakteer["xsrf-token"]
+      this.config.trakteer["trakteer-sess"]
     );
 
     setInterval(() => require("../modules/Mee6")(), 600000);
