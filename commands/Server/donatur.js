@@ -203,7 +203,9 @@ exports.run = async (client, message, args) => {
               donatur.time.duration - (Date.now() - donatur.time.now);
             const durasi = client.util.parseDur(timeLeft);
 
-            return `**${i + 1}. <@${donatur.userID}>** [${durasi}]`;
+            return `**${i + 1}. <@${donatur.userID}>** [${
+              donatur.isBooster ? "Booster" : durasi
+            }]`;
           });
 
           let pagination = 1;
