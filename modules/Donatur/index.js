@@ -23,7 +23,7 @@ module.exports = class DonaturManager {
   }
 
   static convertXp(xp) {
-    return parseInt(xp) * 10 * 0.25;
+    return parseInt(parseInt(xp) * 10 * 0.25);
   }
 
   /**
