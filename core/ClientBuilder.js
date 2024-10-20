@@ -8,6 +8,7 @@ const Selfbot = require("../modules/Discord-Selfbot");
 const DonaturManager = require("../modules/Donatur");
 const TrakteerScraper = require("../handler/trakteer");
 const TrakteerWrapper = require("../modules/Trakteer-Wrapper");
+const KatoShop = require("../modules/Kato-Shop");
 
 class Kato extends Client {
   constructor(opt) {
@@ -25,6 +26,7 @@ class Kato extends Client {
     this.donatur = new DonaturManager(this);
     this.trakteer = new TrakteerScraper();
     this.wTrakteer = new TrakteerWrapper(this.config.trakteer.token);
+    this.katoShop = new KatoShop(this);
 
     this.init();
   }
@@ -32,7 +34,10 @@ class Kato extends Client {
   init() {
     require("./events")(this);
     require("./module")(this);
-    require("./database")(this.config.database.uri);
+    require("./database")(
+      this.config.database.uri,
+      this.config.database.options
+    );
     require("discord-logs")(this);
 
     this.selfbot.init(true);

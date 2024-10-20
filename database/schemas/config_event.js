@@ -14,7 +14,7 @@ const schemaConfig = new Schema({
     type: Number,
   },
   interval: {
-    default: 30_000,
+    default: 60_000,
     type: Number,
   },
   channel: String,

@@ -42,7 +42,7 @@ module.exports = async (client, message) => {
 
   if (!client.config.discord.owners.includes(sender.id)) {
     const isValid = await require("../handler/command")(client, message, cmd);
-    if (!isValid) return;
+    if (isValid) return;
   }
 
   const member = message.member;
