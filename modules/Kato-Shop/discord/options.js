@@ -59,19 +59,17 @@ class OptionManager {
       await interaction.deferUpdate();
       switch (interaction.customId) {
         case "open_shop":
+        case "close_shop":
           this.toogleShop();
           break;
-        case "close_shop":
-          this.option.isOpen = false;
-          break;
         case "message_count":
-          this.option.messageCount = 5;
+          this.changeMessageCount();
           break;
         case "interval":
-          this.option.interval = 60000;
+          this.changeInterval();
           break;
         case "notifications_channel":
-          this.option.channel = "channel_id";
+          this.changeNotificationsChannel();
           break;
       }
     });
@@ -94,6 +92,97 @@ class OptionManager {
           msg.delete();
         }, 5000);
       });
+  }
+
+  async changeMessageCount() {
+    const msg = await this.message.reply("Enter the new message count");
+    const filter = (m) => m.author.id === this.message.author.id;
+    const collector = this.message.channel.createMessageCollector({
+      filter,
+      time: 60000,
+    });
+
+    collector.on("collect", async (m) => {
+      if (isNaN(m.content)) {
+        m.reply("Invalid number");
+        return;
+      }
+
+      this.option.messageCount = parseInt(m.content);
+      await this.client.katoShop.changeOption(this.option);
+
+      this.msg.edit({
+        embeds: [this.createOptionEmbed(this.option)],
+        components: [this.createActionButtons(this.option)],
+      });
+
+      m.reply("Message count has been changed to " + this.option.messageCount);
+      msg.delete();
+      collector.stop();
+    });
+  }
+
+  async changeInterval() {
+    const msg = await this.message.reply(
+      "Enter the new interval (in milliseconds)"
+    );
+    const filter = (m) => m.author.id === this.message.author.id;
+    const collector = this.message.channel.createMessageCollector({
+      filter,
+      time: 60000,
+    });
+
+    collector.on("collect", async (m) => {
+      if (isNaN(m.content)) {
+        m.reply("Invalid number");
+        return;
+      }
+
+      this.option.interval = parseInt(m.content);
+      await this.client.katoShop.changeOption(this.option);
+
+      this.msg.edit({
+        embeds: [this.createOptionEmbed(this.option)],
+        components: [this.createActionButtons(this.option)],
+      });
+
+      m.reply("Interval has been changed to " + this.option.interval);
+      msg.delete();
+      collector.stop();
+    });
+  }
+
+  async changeNotificationsChannel() {
+    const msg = await this.message.reply("Enter the new notifications channel");
+
+    const filter = (m) => m.author.id === this.message.author.id;
+    const collector = this.message.channel.createMessageCollector({
+      filter,
+      time: 60000,
+    });
+
+    collector.on("collect", async (m) => {
+      // using id or mention
+      const channel =
+        m.mentions.channels.first() ||
+        this.message.guild.channels.cache.get(m.content);
+      if (!channel) {
+        m.reply("Invalid channel");
+        return;
+      }
+
+      this.option.channel = channel.id;
+      await this.client.katoShop.changeOption(this.option);
+
+      this.msg.edit({
+        embeds: [this.createOptionEmbed(this.option)],
+        components: [this.createActionButtons(this.option)],
+      });
+
+      m.reply(`Notifications channel has been changed to <#${channel.id}>`);
+      msg.delete();
+      collector.stop();
+    });
   }
 
   createActionButtons(option) {

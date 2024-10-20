@@ -30,8 +30,11 @@ exports.run = async (client, message, args) => {
     default:
       {
         const embed = new EmbedBuilder()
-          .setTitle("Manager List")
-          .setDescription("```fix\n" + "manage product\n" + "```")
+          .setTitle("Manager Command List")
+          .setDescription(`
+            **product** - Manage products
+            **option** - Manage optionss
+            `)
           .setColor("Random")
           .setTimestamp()
           .setFooter({
