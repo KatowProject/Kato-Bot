@@ -4,6 +4,9 @@ const KatoShopUser = require("./user");
 const Client = require("../../core/ClientBuilder");
 const m_option = require("../../database/schemas/config_event");
 
+const moment = require("moment-timezone");
+moment.tz.setDefault("Asia/Jakarta");
+
 class KatoShop {
   /**
    *
@@ -24,8 +27,6 @@ class KatoShop {
 
     if (init) this._init();
   }
-
-  _checkMessage() {}
 
   /**
    * Change the option of the module
@@ -61,7 +62,12 @@ class KatoShop {
       this.user = new KatoShopUser(this.client, this.option);
 
       setInterval(() => {
-        this._checkMessage();
+        const now = moment().format("HH:mm");
+        if (now === "00:00") {
+          this.manager.resetDaily();
+        } else {
+          this.manager.checkMessage();
+        }
       }, this.option.interval || 60_000);
     });
   }

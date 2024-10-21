@@ -1,6 +1,8 @@
 /* eslint-disable no-async-promise-executor */
 const m_shop = require("../../database/schemas/shop_event");
-// const m_user = require("../../database/schemas/user_event");
+const m_user = require("../../database/schemas/user_event");
+const m_xp = require("../../database/schemas/xp");
+
 const Client = require("../../core/ClientBuilder");
 
 class KatoShopManager {
@@ -76,6 +78,42 @@ class KatoShopManager {
         reject(e);
       }
     });
+  }
+
+  async resetDaily() {
+    const Xp = await m_xp.findOne({}).exec();
+    const users = await m_user.find({}).exec();
+
+    for (const user of users) {
+      const userXp = Xp.find((x) => x.id === user.userID);
+      user.messageBase = userXp.message_count;
+      user.messageCount = 0;
+      user.isComplete = false;
+      user.isAttend = false;
+
+      await user.save();
+    }
+
+    return true;
+  }
+
+  async checkMessage() {
+    const Xp = await m_xp.findOne({}).exec();
+    const users = await m_user.find({}).exec();
+
+    for (const user of users) {
+      const userXp = Xp.find((x) => x.id === user.userID);
+
+      user.messageCount = userXp.message_count - user.messageBase;
+      user.isComplete = user.messageCount >= this.option.messageCount;
+
+      if (user.isComplete) {
+        const u = await this.client.users.fetch(user.userID, { force: true });
+        u.send(`Selamat, kamu telah menyelesaikan event harian. kamu mendapatkan 1 ticket`);
+      }
+
+      await user.save();
+    }
   }
 }
 

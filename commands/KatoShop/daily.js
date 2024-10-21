@@ -6,7 +6,16 @@ const Client = require("../../core/ClientBuilder");
  * @param {Message} message
  * @param {Array} args
  */
-exports.run = async (client, message, args) => {};
+exports.run = async (client, message) => {
+  const user = message.author;
+
+  try {
+    await client.katoShop.user.daily(user);
+    message.reply(`Berhasil mendapatkan daily reward!`);
+  } catch (e) {
+    message.reply(`Gagal mendapatkan daily reward, \`${e}\``);
+  }
+};
 
 exports.conf = {
   aliases: [],
