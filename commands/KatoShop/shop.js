@@ -54,6 +54,20 @@ exports.run = async (client, message) => {
                         embeds: [generateProductEmbed(products)],
                         components: [buttons],
                     });
+
+                    message.guild.channels.cache.get(client.katoShop.option.channel).send({
+                        content: `🎉 **${message.author.tag}** telah membeli produk **${product.name}**`,
+                        embeds: [
+                            new EmbedBuilder()
+                                .setAuthor({
+                                    name: message.author.tag,
+                                    iconURL: message.author.displayAvatarURL(),
+                                })
+                                .setDescription(`**${product.name}** - ${product.price} Tickets`)
+                                .setColor("Random")
+                                .setTimestamp(),
+                        ],
+                    });
                 } catch (e) {
                     message.reply(`Gagal membeli produk, \`${e}\``);
                 }
