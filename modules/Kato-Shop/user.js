@@ -1,6 +1,7 @@
 /* eslint-disable no-async-promise-executor */
 const m_product = require("../../database/schemas/shop_event");
 const m_user = require("../../database/schemas/user_event");
+const m_donatur = require("../../database/schemas/donatur");
 const xp_user = require("../../database/schemas/xp");
 
 const Client = require("../../core/ClientBuilder");
@@ -50,6 +51,9 @@ class KatoShopUser {
     return new Promise(async (resolve, reject) => {
       if (!this.option.isOpen) return reject("Event sudah ditutup");
       try {
+        const ud = await m_donatur.findOne({ userID: user.id });
+        if (!ud) return reject("User not registered as donatur");
+
         const u = await m_user.findOne({ userID: user.id });
         if (!u) return reject("User not registered");
 
